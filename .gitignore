@@ -1,0 +1,40 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+
+# IDE / tool configs
+.codex/
+.qoder/
+.release-config.json
+
+# PRD drafts & internal docs
+huanyin-website-prd_副本.md
+huanyin-website-prd_副本2.md
+案例库和文案正文表格/
+
+# screenshots
+screenshot-*.png
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# env files
+.env*
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts

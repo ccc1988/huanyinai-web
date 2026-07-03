@@ -1,0 +1,253 @@
+@import "tailwindcss";
+
+/* ===== Tailwind v4 @theme 配置 — 设计令牌 ===== */
+@theme {
+  /* 字体 */
+  --font-heading: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+
+  /* 背景色 */
+  --color-bg-base: #0f1117;
+  --color-bg-elevated: #1a1d27;
+  --color-bg-footer: #0a0c12;
+
+  /* 文字色 */
+  --color-text-primary: #f8fafc;
+  --color-text-body: #cbd5e1;
+  --color-text-muted: #94a3b8;
+  --color-text-logo: #64748b;
+  --color-text-copyright: #475569;
+
+  /* 强调色 */
+  --color-accent: #6366f1;
+  --color-accent-light: #c7d2fe;
+
+  /* 边框色 */
+  --color-border-default: rgba(255, 255, 255, 0.08);
+  --color-border-hover: rgba(99, 102, 241, 0.4);
+
+  /* CTA */
+  --color-cta-bg: #f8fafc;
+  --color-cta-text: #0f172a;
+
+  /* 圆角 */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* 阴影 */
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-hover: 0 0 20px rgba(99, 102, 241, 0.1), 0 1px 3px rgba(0, 0, 0, 0.4);
+
+  /* 字号阶梯 */
+  --text-hero: 64px;
+  --text-h1: 48px;
+  --text-h2: 32px;
+  --text-h3: 24px;
+  --text-body-lg: 18px;
+  --text-metric: 56px;
+}
+
+/* ===== 全局样式 ===== */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg-base);
+  color: var(--color-text-body);
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  color: var(--color-text-primary);
+  line-height: 1.2;
+}
+
+/* 焦点可见样式 — 可访问性 */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* 选中文本颜色 */
+::selection {
+  background-color: rgba(99, 102, 241, 0.3);
+  color: var(--color-text-primary);
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-base);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.3);
+}
+
+/* ===== 动效偏好 — 可访问性 ===== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ===== 通用工具类 ===== */
+.container-max {
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .container-max {
+    padding-inline: 2rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container-max {
+    padding-inline: 3rem;
+  }
+}
+
+/* 网格背景线 */
+.grid-bg {
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.02) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* 紫色径向光晕 */
+.accent-glow {
+  background: radial-gradient(
+    ellipse at top center,
+    rgba(99, 102, 241, 0.15) 0%,
+    transparent 60%
+  );
+}
+
+/* 玻璃态卡片 */
+.glass-card {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--color-border-default);
+  transition: border-color 200ms ease, background-color 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.glass-card:hover {
+  border-color: var(--color-border-hover);
+  background-color: rgba(255, 255, 255, 0.07);
+  box-shadow: var(--shadow-hover);
+}
+
+/* 胶囊标签 */
+.pill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: var(--radius-full);
+  background-color: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  color: var(--color-accent-light);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* 主 CTA 按钮 */
+.cta-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background-color: var(--color-cta-bg);
+  color: var(--color-cta-text);
+  font-weight: 700;
+  font-size: 16px;
+  border-radius: var(--radius-sm);
+  transition: transform 150ms ease, background-color 150ms ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.cta-primary:hover {
+  transform: translateY(-1px);
+  background-color: #ffffff;
+}
+
+/* 次 CTA 按钮 */
+.cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background-color: transparent;
+  color: var(--color-text-body);
+  font-weight: 500;
+  font-size: 16px;
+  border: 1px solid rgba(203, 213, 225, 0.3);
+  border-radius: var(--radius-sm);
+  transition: transform 150ms ease, border-color 150ms ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.cta-secondary:hover {
+  transform: translateY(-1px);
+  border-color: rgba(203, 213, 225, 0.6);
+}
+
+/* 文章内容排版 */
+.prose-content p {
+  margin-bottom: 1.5rem;
+  color: var(--color-text-body);
+}
+
+.prose-content h2 {
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.prose-content ul,
+.prose-content ol {
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.prose-content li {
+  margin-bottom: 0.5rem;
+  color: var(--color-text-body);
+}
