@@ -1,8 +1,8 @@
 import Link from "next/link";
 import Logo from "./Logo";
-import type { Contact, StatItem } from "@/lib/data";
+import type { Contact, StatItem, IndustrySolution } from "@/lib/data";
 
-export default function Footer({ company, contacts, stats }: { company: Record<string, string>; contacts: Contact[]; stats: StatItem[] }) {
+export default function Footer({ company, contacts, stats, industries }: { company: Record<string, string>; contacts: Contact[]; stats: StatItem[]; industries: IndustrySolution[] }) {
   return (
     <footer
       className="border-t pt-16 pb-8"
@@ -66,40 +66,25 @@ export default function Footer({ company, contacts, stats }: { company: Record<s
               解决方案
             </h3>
             <ul className="space-y-3">
+              {industries.filter((ind) => ind.slug !== "ecommerce-service").map((ind) => (
+                <li key={ind.slug}>
+                  <Link
+                    href={`/solutions/${ind.slug}`}
+                    className="text-sm cursor-pointer transition-colors hover:text-[var(--color-text-body)]"
+                    style={{ color: "var(--color-text-muted)" }}
+                  >
+                    {ind.title}
+                  </Link>
+                </li>
+              ))}
               <li>
                 <Link
-                  href="/solutions/customs"
-                  className="text-sm cursor-pointer transition-colors hover:text-[var(--color-text-body)]"
-                  style={{ color: "var(--color-text-muted)" }}
+                  href="/solutions"
+                  className="text-sm cursor-pointer font-medium transition-colors inline-flex items-center gap-1"
+                  style={{ color: "var(--color-accent-light)" }}
                 >
-                  报关 AI 解决方案
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/solutions/cross-border-logistics"
-                  className="text-sm cursor-pointer transition-colors hover:text-[var(--color-text-body)]"
-                  style={{ color: "var(--color-text-muted)" }}
-                >
-                  跨境物流 AI 解决方案
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/solutions/cross-border-ecommerce"
-                  className="text-sm cursor-pointer transition-colors hover:text-[var(--color-text-body)]"
-                  style={{ color: "var(--color-text-muted)" }}
-                >
-                  跨境电商 AI 解决方案
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/solutions/supply-chain"
-                  className="text-sm cursor-pointer transition-colors hover:text-[var(--color-text-body)]"
-                  style={{ color: "var(--color-text-muted)" }}
-                >
-                  供应链 AI 解决方案
+                  查看全部
+                  <span aria-hidden="true">→</span>
                 </Link>
               </li>
             </ul>

@@ -2,6 +2,17 @@
 
 本项目所有重要变更记录于此文件。
 
+## v1.3.0 — 2026-07-05
+
+### 新功能
+- **解决方案总览页**：新增 `/solutions` 路由，6 大行业方案以卡片网格展示（图标 + 痛点 + 方案摘要 + 关联案例数），点击进入各行业详情页
+- **Footer 解决方案列动态化**：从硬编码 4 个链接改为动态读取 industries.json 全部行业（过滤电商客服），新增"查看全部"入口
+- **导航链接修正**：Navbar 和面包屑"解决方案"指向 `/solutions` 总览页（原指向 `/solutions/customs` 单页）
+
+### 架构变更
+- **数据链路扩展**：`layout.tsx` → `AppShell.tsx` → `Footer.tsx` 新增 `industries` 数据透传
+- **Footer 组件接口**：新增 `industries: IndustrySolution[]` prop，替代硬编码链接
+
 ## v1.2.0 — 2026-07-05
 
 ### 新功能

@@ -70,7 +70,7 @@ export default async function SolutionPage({
           <nav className="inline-flex items-center gap-2 text-sm mb-8 px-4 py-2 rounded-full" style={{ color: "var(--color-text-muted)", backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
             <Link href="/" className="hover:text-[var(--color-text-body)] transition-colors">首页</Link>
             <ChevronRight size={14} />
-            <Link href="/solutions/customs" className="hover:text-[var(--color-text-body)] transition-colors">解决方案</Link>
+            <Link href="/solutions" className="hover:text-[var(--color-text-body)] transition-colors">解决方案</Link>
             <ChevronRight size={14} />
             <span style={{ color: "var(--color-text-body)" }}>{industry!.title.replace(/ AI 解决方案.*/, "")}</span>
           </nav>
