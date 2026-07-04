@@ -1,7 +1,11 @@
 import type { MetadataRoute } from "next";
-import { company, industries, cases, blogPosts } from "@/lib/data";
+import { getCompany, getIndustries, getCases, getBlogPosts } from "@/lib/data";
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  const company = getCompany();
+  const industries = getIndustries();
+  const cases = getCases();
+  const blogPosts = getBlogPosts();
   const baseUrl = company.website;
   const now = new Date();
 

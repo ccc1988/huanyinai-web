@@ -11,9 +11,9 @@ export default function Footer({ company }: { company: Record<string, string> })
       }}
     >
       <div className="container-max">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
-          {/* Brand */}
-          <div>
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-10 mb-12">
+          {/* Brand — 占 2 列宽，内容更充实 */}
+          <div className="col-span-2 lg:col-span-2">
             <Logo size="footer" />
             <p
               className="mt-4 text-sm leading-relaxed"
@@ -21,9 +21,17 @@ export default function Footer({ company }: { company: Record<string, string> })
             >
               {company.fullName}
             </p>
+            {company.description && (
+              <p
+                className="mt-2 text-sm leading-relaxed max-w-xs"
+                style={{ color: "var(--color-text-copyright)" }}
+              >
+                {company.description}
+              </p>
+            )}
           </div>
 
-          {/* Links */}
+          {/* 解决方案 — 独立一列 */}
           <div>
             <h3
               className="text-sm font-semibold mb-4"
@@ -35,7 +43,7 @@ export default function Footer({ company }: { company: Record<string, string> })
               <li>
                 <Link
                   href="/solutions/customs"
-                  className="text-sm transition-colors hover:text-[var(--color-text-body)]"
+                  className="text-sm cursor-pointer transition-colors hover:text-[var(--color-text-body)]"
                   style={{ color: "var(--color-text-muted)" }}
                 >
                   报关 AI 解决方案
@@ -44,7 +52,7 @@ export default function Footer({ company }: { company: Record<string, string> })
               <li>
                 <Link
                   href="/solutions/cross-border-logistics"
-                  className="text-sm transition-colors hover:text-[var(--color-text-body)]"
+                  className="text-sm cursor-pointer transition-colors hover:text-[var(--color-text-body)]"
                   style={{ color: "var(--color-text-muted)" }}
                 >
                   跨境物流 AI 解决方案
@@ -53,7 +61,7 @@ export default function Footer({ company }: { company: Record<string, string> })
               <li>
                 <Link
                   href="/solutions/cross-border-ecommerce"
-                  className="text-sm transition-colors hover:text-[var(--color-text-body)]"
+                  className="text-sm cursor-pointer transition-colors hover:text-[var(--color-text-body)]"
                   style={{ color: "var(--color-text-muted)" }}
                 >
                   跨境电商 AI 解决方案
@@ -62,16 +70,19 @@ export default function Footer({ company }: { company: Record<string, string> })
               <li>
                 <Link
                   href="/solutions/supply-chain"
-                  className="text-sm transition-colors hover:text-[var(--color-text-body)]"
+                  className="text-sm cursor-pointer transition-colors hover:text-[var(--color-text-body)]"
                   style={{ color: "var(--color-text-muted)" }}
                 >
                   供应链 AI 解决方案
                 </Link>
               </li>
             </ul>
+          </div>
 
+          {/* 公司 — 独立一列 */}
+          <div>
             <h3
-              className="text-sm font-semibold mb-4 mt-6"
+              className="text-sm font-semibold mb-4"
               style={{ color: "var(--color-text-muted)" }}
             >
               公司
@@ -80,7 +91,7 @@ export default function Footer({ company }: { company: Record<string, string> })
               <li>
                 <Link
                   href="/"
-                  className="text-sm transition-colors hover:text-[var(--color-text-body)]"
+                  className="text-sm cursor-pointer transition-colors hover:text-[var(--color-text-body)]"
                   style={{ color: "var(--color-text-muted)" }}
                 >
                   首页
@@ -89,7 +100,7 @@ export default function Footer({ company }: { company: Record<string, string> })
               <li>
                 <Link
                   href="/about"
-                  className="text-sm transition-colors hover:text-[var(--color-text-body)]"
+                  className="text-sm cursor-pointer transition-colors hover:text-[var(--color-text-body)]"
                   style={{ color: "var(--color-text-muted)" }}
                 >
                   关于我们
@@ -98,7 +109,7 @@ export default function Footer({ company }: { company: Record<string, string> })
               <li>
                 <Link
                   href="/cases/customs-document-ai"
-                  className="text-sm transition-colors hover:text-[var(--color-text-body)]"
+                  className="text-sm cursor-pointer transition-colors hover:text-[var(--color-text-body)]"
                   style={{ color: "var(--color-text-muted)" }}
                 >
                   案例
@@ -107,7 +118,7 @@ export default function Footer({ company }: { company: Record<string, string> })
               <li>
                 <Link
                   href="/blog"
-                  className="text-sm transition-colors hover:text-[var(--color-text-body)]"
+                  className="text-sm cursor-pointer transition-colors hover:text-[var(--color-text-body)]"
                   style={{ color: "var(--color-text-muted)" }}
                 >
                   博客
@@ -116,7 +127,7 @@ export default function Footer({ company }: { company: Record<string, string> })
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* 联系我们 — 独立一列 */}
           <div>
             <h3
               className="text-sm font-semibold mb-4"
@@ -124,34 +135,34 @@ export default function Footer({ company }: { company: Record<string, string> })
             >
               联系我们
             </h3>
-            <div
-              className="space-y-3 text-sm"
-              style={{ color: "var(--color-text-muted)" }}
-            >
-              <p>
-                邮箱：<span style={{ color: "var(--color-text-body)" }}>{company.email}</span>
-              </p>
-              <p>
-                电话：<span style={{ color: "var(--color-text-body)" }}>{company.phone}</span>
-              </p>
-              <p>
-                微信：<span style={{ color: "var(--color-text-body)" }}>{company.wechat}</span>
-              </p>
-              <div className="flex items-center gap-3 mt-4">
-                <div
-                  className="w-20 h-20 rounded-[var(--radius-md)] flex items-center justify-center"
-                  style={{
-                    backgroundColor: "rgba(255,255,255,0.05)",
-                    border: "1px solid rgba(255,255,255,0.08)",
-                  }}
+            <ul className="space-y-3 text-sm" style={{ color: "var(--color-text-muted)" }}>
+              <li className="flex flex-col gap-0.5">
+                <span className="text-xs" style={{ color: "var(--color-text-copyright)" }}>邮箱</span>
+                <a
+                  href={`mailto:${company.email}`}
+                  className="cursor-pointer transition-colors hover:text-[var(--color-text-primary)]"
+                  style={{ color: "var(--color-text-body)" }}
                 >
-                  <span className="text-xs text-center" style={{ color: "var(--color-text-logo)" }}>
-                    微信二维码
-                    <br />
-                    (占位)
-                  </span>
-                </div>
-              </div>
+                  {company.email}
+                </a>
+              </li>
+              <li className="flex flex-col gap-0.5">
+                <span className="text-xs" style={{ color: "var(--color-text-copyright)" }}>微信</span>
+                <span style={{ color: "var(--color-text-body)" }}>{company.wechat}</span>
+              </li>
+            </ul>
+            <div
+              className="mt-6 w-24 h-24 rounded-[var(--radius-md)] flex items-center justify-center"
+              style={{
+                backgroundColor: "rgba(255,255,255,0.03)",
+                border: "1px solid rgba(255,255,255,0.06)",
+              }}
+            >
+              <span className="text-xs text-center leading-relaxed" style={{ color: "var(--color-text-copyright)" }}>
+                微信
+                <br />
+                二维码
+              </span>
             </div>
           </div>
         </div>

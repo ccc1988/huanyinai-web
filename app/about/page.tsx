@@ -2,15 +2,23 @@ import Link from "next/link";
 import { ArrowRight, Building2, Award, Users, Briefcase } from "lucide-react";
 import type { Metadata } from "next";
 import { createMetadata } from "@/lib/seo";
-import { company, stats, customers, industries } from "@/lib/data";
+import { getCompany, getStats, getCustomers, getIndustries } from "@/lib/data";
 
-export const metadata: Metadata = createMetadata({
-  title: "关于我们",
-  description: `${company.fullName}，面向企业的 AI 转型落地服务商。已服务 ${stats[0].value}+ 企业客户，交付 ${stats[1].value}+ 智能化系统，覆盖 ${stats[2].value} 大行业解决方案。`,
-  path: "/about",
-});
+export function generateMetadata(): Metadata {
+  const company = getCompany();
+  const stats = getStats();
+  return createMetadata({
+    title: "关于我们",
+    description: `${company.fullName}，面向企业的 AI 转型落地服务商。已服务 ${stats[0].value}+ 企业客户，交付 ${stats[1].value}+ 智能化系统，覆盖 ${stats[2].value} 大行业解决方案。`,
+    path: "/about",
+  });
+}
 
 export default function AboutPage() {
+  const company = getCompany();
+  const stats = getStats();
+  const customers = getCustomers();
+  const industries = getIndustries();
   return (
     <div className="pt-24">
       {/* Hero */}

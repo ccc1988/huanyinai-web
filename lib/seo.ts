@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import { company, settings } from "./data";
-
-const SITE_URL = company.website;
+import { getCompany } from "./data";
 
 /** 生成基础 metadata */
 export function createMetadata({
@@ -15,7 +13,8 @@ export function createMetadata({
   path?: string;
   keywords?: string[];
 }): Metadata {
-  const url = `${SITE_URL}${path}`;
+  const company = getCompany();
+  const url = `${company.website}${path}`;
   return {
     title,
     description,
@@ -38,11 +37,3 @@ export function createMetadata({
     },
   };
 }
-
-/** 首页 metadata */
-export const homeMetadata: Metadata = createMetadata({
-  title: settings.seoTitle,
-  description: settings.seoDescription,
-  path: "/",
-  keywords: settings.seoKeywords,
-});

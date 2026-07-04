@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { ArrowRight, Mail, MessageCircle, Phone } from "lucide-react";
-import { company } from "@/lib/data";
+import { getCompany } from "@/lib/data";
 
 export default function FinalCTA() {
+  const company = getCompany();
   return (
     <section
       className="py-28 relative overflow-hidden"

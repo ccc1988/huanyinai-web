@@ -1,7 +1,8 @@
-import { company, industries, cases } from "./data";
+import { getCompany, getIndustries, getCases } from "./data";
 
 /** Organization JSON-LD */
 export function getOrganizationJsonLd() {
+  const company = getCompany();
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -29,7 +30,8 @@ export function getOrganizationJsonLd() {
 
 /** Service JSON-LD for industry pages */
 export function getServiceJsonLd(slug: string) {
-  const industry = industries.find((i) => i.slug === slug);
+  const company = getCompany();
+  const industry = getIndustries().find((i) => i.slug === slug);
   if (!industry) return null;
 
   return {
@@ -48,7 +50,8 @@ export function getServiceJsonLd(slug: string) {
 
 /** CaseStudy JSON-LD for case detail pages */
 export function getCaseStudyJsonLd(slug: string) {
-  const caseItem = cases.find((c) => c.slug === slug);
+  const company = getCompany();
+  const caseItem = getCases().find((c) => c.slug === slug);
   if (!caseItem) return null;
 
   return {
@@ -92,6 +95,7 @@ export function getBlogPostJsonLd(post: {
   author: string;
   slug: string;
 }) {
+  const company = getCompany();
   return {
     "@context": "https://schema.org",
     "@type": "BlogPosting",

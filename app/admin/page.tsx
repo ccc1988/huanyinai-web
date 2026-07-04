@@ -1,8 +1,12 @@
 import Link from "next/link";
 import { Briefcase, FileText, Globe, Building2, Settings, ArrowRight } from "lucide-react";
-import { cases, blogPosts, industries, customers } from "@/lib/data";
+import { getCases, getBlogPosts, getIndustries, getCustomers } from "@/lib/data";
 
 export default function AdminDashboard() {
+  const cases = getCases();
+  const blogPosts = getBlogPosts();
+  const industries = getIndustries();
+  const customers = getCustomers();
   const cards = [
     { label: "案例", count: cases.length, href: "/admin/cases", icon: Briefcase, desc: "管理所有案例" },
     { label: "博客", count: blogPosts.length, href: "/admin/blog", icon: FileText, desc: "管理博客文章" },

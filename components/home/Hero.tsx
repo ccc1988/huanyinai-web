@@ -4,18 +4,16 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, ChevronDown } from "lucide-react";
+import type { StatItem } from "@/lib/data";
 
-/* HUD 实时指标条数据 */
-const hudMetrics = [
-  { label: "企业客户", value: "10+" },
-  { label: "落地系统", value: "11+" },
-  { label: "行业覆盖", value: "6" },
-  { label: "人效提升", value: "10x" },
-];
-
-export default function Hero() {
+export default function Hero({ stats }: { stats: StatItem[] }) {
+  const hudMetrics = stats.map((s) => ({
+    label: s.label,
+    value: `${s.value}${s.suffix || ""}`,
+  }));
   const shouldReduceMotion = useReducedMotion();
   const [mounted, setMounted] = useState(false);
+  // ponytail: hudMetrics derived from props above
 
   useEffect(() => {
     setMounted(true);

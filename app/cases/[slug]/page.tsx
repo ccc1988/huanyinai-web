@@ -1,13 +1,13 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowRight, ChevronRight, Target, Lightbulb, TrendingUp, Wrench } from "lucide-react";
-import { cases, getCaseBySlug, company } from "@/lib/data";
+import { getCases, getCaseBySlug, getCompany } from "@/lib/data";
 import { createMetadata } from "@/lib/seo";
 import { getCaseStudyJsonLd } from "@/lib/geo";
 import { getCaseVisual } from "@/lib/caseVisuals";
 
 export function generateStaticParams() {
-  return cases.filter((c) => c.hasDetailPage).map((c) => ({ slug: c.slug }));
+  return getCases().filter((c) => c.hasDetailPage).map((c) => ({ slug: c.slug }));
 }
 
 export function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {

@@ -1,6 +1,6 @@
 import { Bot, FileText, Workflow, BarChart3 } from "lucide-react";
 import SectionTitle from "@/components/ui/SectionTitle";
-import { capabilities } from "@/lib/data";
+import { getCapabilities } from "@/lib/data";
 
 const iconMap: Record<string, React.ElementType> = {
   Bot,
@@ -25,6 +25,7 @@ const iconBgGradients = [
 ];
 
 export default function CapabilityMatrix() {
+  const capabilities = getCapabilities();
   return (
     <section className="section-decor py-24 relative" style={{ backgroundColor: "var(--color-bg-base)" }}>
       {/* 背景网格装饰 */}

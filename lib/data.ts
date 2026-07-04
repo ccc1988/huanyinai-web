@@ -82,44 +82,62 @@ export interface Settings {
   navItems: { label: string; href: string }[];
 }
 
-// ===== 运行时读取数据 =====
+// ===== 运行时读取数据（每次调用读磁盘，确保后台修改即时生效） =====
 
-export const company = loadJson<Record<string, string>>("company.json");
+export function getCompany() {
+  return loadJson<Record<string, string>>("company.json");
+}
 
-export const customers = loadJson<Customer[]>("customers.json");
+export function getCustomers() {
+  return loadJson<Customer[]>("customers.json");
+}
 
-export const capabilities = loadJson<CapabilityItem[]>("capabilities.json");
+export function getCapabilities() {
+  return loadJson<CapabilityItem[]>("capabilities.json");
+}
 
-export const stats = loadJson<StatItem[]>("stats.json");
+export function getStats() {
+  return loadJson<StatItem[]>("stats.json");
+}
 
-export const cases = loadJson<CaseItem[]>("cases.json");
+export function getCases() {
+  return loadJson<CaseItem[]>("cases.json");
+}
 
-export const industries = loadJson<IndustrySolution[]>("industries.json");
+export function getIndustries() {
+  return loadJson<IndustrySolution[]>("industries.json");
+}
 
-export const blogPosts = loadJson<BlogPost[]>("blog-posts.json");
+export function getBlogPosts() {
+  return loadJson<BlogPost[]>("blog-posts.json");
+}
 
-export const settings = loadJson<Settings>("settings.json");
+export function getSettings() {
+  return loadJson<Settings>("settings.json");
+}
 
-export const navItems = settings.navItems;
+export function getNavItems() {
+  return getSettings().navItems;
+}
 
 // ===== 辅助函数 =====
 
 export function getCaseBySlug(slug: string): CaseItem | undefined {
-  return cases.find((c) => c.slug === slug);
+  return getCases().find((c) => c.slug === slug);
 }
 
 export function getCasesByIndustry(industrySlug: string): CaseItem[] {
-  const industry = industries.find((i) => i.slug === industrySlug);
+  const industry = getIndustries().find((i) => i.slug === industrySlug);
   if (!industry) return [];
   return industry.relatedCases
-    .map((slug) => cases.find((c) => c.slug === slug))
+    .map((slug) => getCases().find((c) => c.slug === slug))
     .filter(Boolean) as CaseItem[];
 }
 
 export function getIndustryBySlug(slug: string): IndustrySolution | undefined {
-  return industries.find((i) => i.slug === slug);
+  return getIndustries().find((i) => i.slug === slug);
 }
 
 export function getBlogPostBySlug(slug: string): BlogPost | undefined {
-  return blogPosts.find((p) => p.slug === slug);
+  return getBlogPosts().find((p) => p.slug === slug);
 }

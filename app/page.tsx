@@ -5,15 +5,18 @@ import IndustryTabs from "@/components/home/IndustryTabs";
 import CaseHighlights from "@/components/home/CaseHighlights";
 import StatsWall from "@/components/home/StatsWall";
 import FinalCTA from "@/components/home/FinalCTA";
-import { customers, industries, stats } from "@/lib/data";
+import { getCustomers, getIndustries, getStats } from "@/lib/data";
 
 // 强制动态渲染，确保后台修改即时生效
 export const dynamic = "force-dynamic";
 
 export default function HomePage() {
+  const customers = getCustomers();
+  const industries = getIndustries();
+  const stats = getStats();
   return (
     <>
-      <Hero />
+      <Hero stats={stats} />
       <ClientLogos customers={customers} />
       <CapabilityMatrix />
       <IndustryTabs industries={industries} />

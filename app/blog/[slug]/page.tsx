@@ -1,12 +1,12 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowRight, ChevronRight, Calendar, Tag } from "lucide-react";
-import { blogPosts, getBlogPostBySlug, company } from "@/lib/data";
+import { getBlogPosts, getBlogPostBySlug, getCompany } from "@/lib/data";
 import { createMetadata } from "@/lib/seo";
 import { getBlogPostJsonLd } from "@/lib/geo";
 
 export function generateStaticParams() {
-  return blogPosts.map((post) => ({ slug: post.slug }));
+  return getBlogPosts().map((post) => ({ slug: post.slug }));
 }
 
 export function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
@@ -34,6 +34,7 @@ export default async function BlogDetailPage({
     notFound();
   }
 
+  const blogPosts = getBlogPosts();
   const jsonLd = getBlogPostJsonLd(post!);
   const relatedPosts = blogPosts.filter((p) => p.slug !== slug).slice(0, 2);
 

@@ -3,7 +3,7 @@ import { Space_Grotesk, DM_Sans } from "next/font/google";
 import "./globals.css";
 import AppShell from "@/components/ui/AppShell";
 import { getOrganizationJsonLd } from "@/lib/geo";
-import { company, navItems, settings } from "@/lib/data";
+import { getCompany, getNavItems, getSettings } from "@/lib/data";
 
 // 强制动态渲染，确保后台修改即时生效
 export const dynamic = "force-dynamic";
@@ -20,41 +20,47 @@ const dmSans = DM_Sans({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: settings.seoTitle,
-    template: `%s | ${company.shortName}`,
-  },
-  description: settings.seoDescription,
-  keywords: settings.seoKeywords,
-  metadataBase: new URL(company.website),
-  alternates: {
-    canonical: "/",
-  },
-  openGraph: {
-    title: settings.ogTitle,
-    description: settings.ogDescription,
-    siteName: company.shortName,
-    locale: "zh_CN",
-    type: "website",
-    images: [{ url: "/og/default.svg", width: 1200, height: 630, alt: company.shortName }],
-  },
-  icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
-    apple: "/favicon.svg",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
+export function generateMetadata(): Metadata {
+  const company = getCompany();
+  const settings = getSettings();
+  return {
+    title: {
+      default: settings.seoTitle,
+      template: `%s | ${company.shortName}`,
+    },
+    description: settings.seoDescription,
+    keywords: settings.seoKeywords,
+    metadataBase: new URL(company.website),
+    alternates: {
+      canonical: "/",
+    },
+    openGraph: {
+      title: settings.ogTitle,
+      description: settings.ogDescription,
+      siteName: company.shortName,
+      locale: "zh_CN",
+      type: "website",
+      images: [{ url: "/og/default.svg", width: 1200, height: 630, alt: company.shortName }],
+    },
+    icons: {
+      icon: "/favicon.svg",
+      shortcut: "/favicon.svg",
+      apple: "/favicon.svg",
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
+  };
+}
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const company = getCompany();
+  const navItems = getNavItems();
   return (
     <html lang="zh-CN" data-scroll-behavior="smooth" className={`${spaceGrotesk.variable} ${dmSans.variable}`}>
       <body>

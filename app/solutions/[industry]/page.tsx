@@ -1,14 +1,14 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowRight, ChevronRight } from "lucide-react";
-import { industries, getIndustryBySlug, getCasesByIndustry, company } from "@/lib/data";
+import { getIndustries, getIndustryBySlug, getCasesByIndustry, getCompany } from "@/lib/data";
 import { createMetadata } from "@/lib/seo";
 import { getServiceJsonLd, getFaqJsonLd } from "@/lib/geo";
 import { getIndustryIcon } from "@/lib/industryIcons";
 import CaseCard from "@/components/shared/CaseCard";
 
 export function generateStaticParams() {
-  return industries.map((ind) => ({ industry: ind.slug }));
+  return getIndustries().map((ind) => ({ industry: ind.slug }));
 }
 
 export function generateMetadata({ params }: { params: Promise<{ industry: string }> }) {

@@ -2,15 +2,18 @@ import Link from "next/link";
 import { ArrowRight, ChevronRight, Calendar } from "lucide-react";
 import type { Metadata } from "next";
 import { createMetadata } from "@/lib/seo";
-import { blogPosts } from "@/lib/data";
+import { getBlogPosts } from "@/lib/data";
 
-export const metadata: Metadata = createMetadata({
-  title: "行业洞察与 AI 落地实践",
-  description: "寰引智能分享 AI 落地实践经验，涵盖跨境物流 AI、报关文件智能处理、物流轨迹追踪、企微 AI 客服等真实案例。",
-  path: "/blog",
-});
+export function generateMetadata(): Metadata {
+  return createMetadata({
+    title: "行业洞察与 AI 落地实践",
+    description: "寰引智能分享 AI 落地实践经验，涵盖跨境物流 AI、报关文件智能处理、物流轨迹追踪、企微 AI 客服等真实案例。",
+    path: "/blog",
+  });
+}
 
 export default function BlogPage() {
+  const blogPosts = getBlogPosts();
   const sortedPosts = [...blogPosts].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );

@@ -1,16 +1,20 @@
 import type { Metadata } from "next";
 import { Mail, Phone, MessageCircle, MapPin } from "lucide-react";
 import { createMetadata } from "@/lib/seo";
-import { company } from "@/lib/data";
+import { getCompany } from "@/lib/data";
 import ContactForm from "@/components/shared/ContactForm";
 
-export const metadata: Metadata = createMetadata({
-  title: "联系我们",
-  description: `联系${company.shortName}，预约 AI 解决方案咨询。微信号 ${company.wechat}，邮箱 ${company.email}。`,
-  path: "/contact",
-});
+export function generateMetadata(): Metadata {
+  const company = getCompany();
+  return createMetadata({
+    title: "联系我们",
+    description: `联系${company.shortName}，预约 AI 解决方案咨询。微信号 ${company.wechat}，邮箱 ${company.email}。`,
+    path: "/contact",
+  });
+}
 
 export default function ContactPage() {
+  const company = getCompany();
   return (
     <div className="pt-24">
       {/* Hero */}
