@@ -4,6 +4,7 @@ import { ArrowRight, ChevronRight, Target, Lightbulb, TrendingUp, Wrench } from 
 import { cases, getCaseBySlug, company } from "@/lib/data";
 import { createMetadata } from "@/lib/seo";
 import { getCaseStudyJsonLd } from "@/lib/geo";
+import { getCaseVisual } from "@/lib/caseVisuals";
 
 export function generateStaticParams() {
   return cases.filter((c) => c.hasDetailPage).map((c) => ({ slug: c.slug }));
@@ -43,8 +44,13 @@ export default async function CaseDetailPage({
       />
 
       {/* Hero */}
-      <section className="py-20" style={{ backgroundColor: "var(--color-bg-base)" }}>
-        <div className="container-max">
+      <section className="py-20 relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-base)" }}>
+        {/* Decorative glow */}
+        <div
+          className="absolute top-0 right-0 w-96 h-96 rounded-full opacity-50"
+          style={{ background: "radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 70%)", transform: "translate(30%, -30%)" }}
+        />
+        <div className="container-max relative z-10">
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-sm mb-8" style={{ color: "var(--color-text-muted)" }}>
             <Link href="/" className="hover:text-[var(--color-text-body)] transition-colors">首页</Link>
@@ -53,6 +59,22 @@ export default async function CaseDetailPage({
             <ChevronRight size={14} />
             <span style={{ color: "var(--color-text-body)" }}>{caseItem!.industry}</span>
           </nav>
+
+          {/* Icon */}
+          {(() => {
+            const { icon: Icon } = getCaseVisual(slug);
+            return (
+              <div
+                className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6"
+                style={{
+                  backgroundColor: "rgba(99,102,241,0.15)",
+                  border: "1px solid rgba(99,102,241,0.3)",
+                }}
+              >
+                <Icon size={32} style={{ color: "var(--color-accent-light)" }} />
+              </div>
+            );
+          })()}
 
           <span className="pill-tag mb-4">{caseItem!.industry}</span>
           <h1

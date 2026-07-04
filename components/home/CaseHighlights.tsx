@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import SectionTitle from "@/components/ui/SectionTitle";
+import CaseIllustration from "@/components/shared/CaseIllustration";
 import { cases } from "@/lib/data";
 
 const highlightSlugs = ["customs-document-ai", "ecommerce-ai-production", "logistics-tracking-ai"];
@@ -15,44 +16,52 @@ export default function CaseHighlights() {
 
         <div className="grid md:grid-cols-3 gap-6">
           {highlights.map((item) => (
-            <div key={item.slug} className="glass-card rounded-[var(--radius-lg)] p-8 flex flex-col group cursor-pointer">
-              {/* Title */}
-              <h3
-                className="text-xl font-bold mb-3"
-                style={{ color: "var(--color-text-primary)" }}
-              >
-                {item.title}
-              </h3>
+            <Link
+              key={item.slug}
+              href={`/cases/${item.slug}`}
+              className="glass-card rounded-[var(--radius-lg)] flex flex-col group cursor-pointer overflow-hidden"
+            >
+              {/* Illustration header */}
+              <CaseIllustration slug={item.slug} />
 
-              {/* Tag */}
-              {item.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {item.tags.map((tag) => (
-                    <span key={tag} className="pill-tag text-xs">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
+              <div className="p-8 flex flex-col flex-1">
+                {/* Title */}
+                <h3
+                  className="text-xl font-bold mb-3"
+                  style={{ color: "var(--color-text-primary)" }}
+                >
+                  {item.title}
+                </h3>
 
-              {/* Summary */}
-              <p
-                className="text-sm leading-relaxed flex-1 mb-4"
-                style={{ color: "var(--color-text-body)" }}
-              >
-                {item.oneLiner}
-              </p>
+                {/* Tag */}
+                {item.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {item.tags.map((tag) => (
+                      <span key={tag} className="pill-tag text-xs">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
 
-              {/* Link */}
-              <Link
-                href={`/cases/${item.slug}`}
-                className="inline-flex items-center gap-1 text-sm font-medium transition-colors"
-                style={{ color: "var(--color-accent-light)" }}
-              >
-                了解更多
-                <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-              </Link>
-            </div>
+                {/* Summary */}
+                <p
+                  className="text-sm leading-relaxed flex-1 mb-4"
+                  style={{ color: "var(--color-text-body)" }}
+                >
+                  {item.oneLiner}
+                </p>
+
+                {/* Link */}
+                <span
+                  className="inline-flex items-center gap-1 text-sm font-medium transition-colors"
+                  style={{ color: "var(--color-accent-light)" }}
+                >
+                  了解更多
+                  <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+                </span>
+              </div>
+            </Link>
           ))}
         </div>
       </div>

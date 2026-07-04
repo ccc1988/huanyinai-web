@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#6366F1" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#0F1117" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(255,255,255,0.02)" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="#0F1117"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <!-- Hexagon logo -->
+  <g transform="translate(600, 200)">
+    <path d="M0 -60 L52 -30 L52 30 L0 60 L-52 30 L-52 -30 Z" stroke="#6366F1" stroke-width="2" fill="none"/>
+    <circle cx="0" cy="0" r="20" fill="#6366F1" opacity="0.8"/>
+    <circle cx="0" cy="0" r="10" fill="#C7D2FE"/>
+  </g>
+  <!-- Company name -->
+  <text x="600" y="340" text-anchor="middle" font-family="'Space Grotesk', sans-serif" font-size="36" fill="#94A3B8" font-weight="400">寰引智能科技（深圳）有限公司</text>
+  <!-- Main title -->
+  <text x="600" y="430" text-anchor="middle" font-family="'Space Grotesk', sans-serif" font-size="56" fill="#F8FAFC" font-weight="700">AI 智能体 与 RPA 自动化</text>
+  <text x="600" y="500" text-anchor="middle" font-family="'Space Grotesk', sans-serif" font-size="56" fill="#F8FAFC" font-weight="700">重构企业每一个业务环节</text>
+  <!-- Stats -->
+  <text x="600" y="580" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="24" fill="#94A3B8">10+ 企业客户 · 11+ 落地系统 · 6 大行业 · 人效提升 10 倍+</text>
+</svg>

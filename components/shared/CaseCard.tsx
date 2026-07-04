@@ -1,10 +1,15 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { CaseItem } from "@/lib/data";
+import CaseIllustration from "./CaseIllustration";
 
 export default function CaseCard({ item }: { item: CaseItem }) {
   return (
-    <div className="glass-card rounded-[var(--radius-lg)] p-8 flex flex-col group">
+    <div className="glass-card rounded-[var(--radius-lg)] flex flex-col group overflow-hidden">
+      {/* Illustration header */}
+      <CaseIllustration slug={item.slug} />
+
+      <div className="p-8 flex flex-col flex-1">
       {/* Industry badge */}
       <span
         className="text-xs font-medium mb-3"
@@ -58,6 +63,7 @@ export default function CaseCard({ item }: { item: CaseItem }) {
           关联客户：{item.relatedCustomers.join("、")}
         </span>
       )}
+      </div>
     </div>
   );
 }

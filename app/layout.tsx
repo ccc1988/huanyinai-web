@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, DM_Sans } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/ui/Navbar";
-import Footer from "@/components/ui/Footer";
+import AppShell from "@/components/ui/AppShell";
 import { getOrganizationJsonLd } from "@/lib/geo";
 import { company } from "@/lib/data";
 
@@ -36,6 +35,12 @@ export const metadata: Metadata = {
     siteName: "寰引智能",
     locale: "zh_CN",
     type: "website",
+    images: [{ url: "/og/default.svg", width: 1200, height: 630, alt: "寰引智能" }],
+  },
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
   },
   robots: {
     index: true,
@@ -57,9 +62,7 @@ export default function RootLayout({
             __html: JSON.stringify(getOrganizationJsonLd()),
           }}
         />
-        <Navbar />
-        <main className="min-h-screen">{children}</main>
-        <Footer />
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );

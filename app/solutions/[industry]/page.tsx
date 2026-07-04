@@ -4,6 +4,7 @@ import { ArrowRight, ChevronRight } from "lucide-react";
 import { industries, getIndustryBySlug, getCasesByIndustry, company } from "@/lib/data";
 import { createMetadata } from "@/lib/seo";
 import { getServiceJsonLd, getFaqJsonLd } from "@/lib/geo";
+import { getIndustryIcon } from "@/lib/industryIcons";
 import CaseCard from "@/components/shared/CaseCard";
 
 export function generateStaticParams() {
@@ -51,16 +52,38 @@ export default async function SolutionPage({
       />
 
       {/* Hero */}
-      <section className="py-20" style={{ backgroundColor: "var(--color-bg-base)" }}>
-        <div className="container-max">
+      <section className="py-20 relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-base)" }}>
+        {/* Decorative glow */}
+        <div
+          className="absolute top-0 right-0 w-96 h-96 rounded-full opacity-50"
+          style={{ background: "radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 70%)", transform: "translate(30%, -30%)" }}
+        />
+        <div className="container-max relative z-10">
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-sm mb-8" style={{ color: "var(--color-text-muted)" }}>
             <Link href="/" className="hover:text-[var(--color-text-body)] transition-colors">首页</Link>
             <ChevronRight size={14} />
-            <span style={{ color: "var(--color-text-body)" }}>解决方案</span>
+            <Link href="/solutions/customs" className="hover:text-[var(--color-text-body)] transition-colors">解决方案</Link>
+            <ChevronRight size={14} />
+            <span style={{ color: "var(--color-text-body)" }}>{industry!.title.replace(/ AI 解决方案.*/, "")}</span>
           </nav>
 
-          <span className="pill-tag mb-4">{industry!.title.replace(/ AI 解决方案.*/, "")}</span>
+          {/* Icon */}
+          {(() => {
+            const Icon = getIndustryIcon(slug);
+            return (
+              <div
+                className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6"
+                style={{
+                  backgroundColor: "rgba(99,102,241,0.15)",
+                  border: "1px solid rgba(99,102,241,0.3)",
+                }}
+              >
+                <Icon size={32} style={{ color: "var(--color-accent-light)" }} />
+              </div>
+            );
+          })()}
+
           <h1
             className="font-bold mb-4"
             style={{

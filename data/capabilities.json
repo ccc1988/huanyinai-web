@@ -1,0 +1,6 @@
+[
+  { "module": "AI 智能体", "products": ["客服智能体", "订单智能体", "报价智能体", "质检智能体"], "scenarios": "客户服务自动化、订单处理、质量检测", "icon": "Bot" },
+  { "module": "AI 文档处理", "products": ["报关文件 AI", "商品 AI 生产", "财务凭证生成"], "scenarios": "单证识别、内容生成、数据自动化", "icon": "FileText" },
+  { "module": "RPA 自动化", "products": ["表格录入", "模板转换", "电子签章", "流程衔接"], "scenarios": "重复操作替代、多系统数据流转", "icon": "Workflow" },
+  { "module": "数据智能", "products": ["物流轨迹追踪", "商品采集监控", "异常预警", "经营看板"], "scenarios": "实时监控、风险预警、决策支持", "icon": "BarChart3" }
+]

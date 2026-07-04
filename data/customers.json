@@ -1,0 +1,12 @@
+[
+  { "name": "海格物流股份", "industry": "综合物流", "solutions": ["AI 智能客服", "AI 订单智能体", "AI 知识库", "发票助手"] },
+  { "name": "达九州供应链", "industry": "供应链", "solutions": ["AI 智能客服", "AI 报价智能体", "AI 订单智能体", "AI 物流轨迹"] },
+  { "name": "三陌跨境", "industry": "跨境电商", "solutions": ["跨境商品 AI 智能生产系统"] },
+  { "name": "启航跨境物流", "industry": "跨境物流", "solutions": ["物流订单 AI 智能系统", "应付单录入与往来核销"] },
+  { "name": "三洋电商", "industry": "跨境电商", "solutions": ["跨境商品 AI 智能生产系统", "电商收款流水对账"] },
+  { "name": "佰瑞纳家具", "industry": "外贸制造", "solutions": ["AI 数字员工外贸业务员", "AI 客服智能体"] },
+  { "name": "万汉制药", "industry": "制药", "solutions": ["AI 质检智能体"] },
+  { "name": "海纳供应链", "industry": "供应链", "solutions": ["AI 销售智能体", "AI 电商客服智能体"] },
+  { "name": "翱航供应链", "industry": "供应链", "solutions": ["AI 报关文件系统", "财务凭证批量生成与日记账"] },
+  { "name": "Anker", "industry": "跨境电商", "solutions": ["Anker 商品采集与监控平台"] }
+]

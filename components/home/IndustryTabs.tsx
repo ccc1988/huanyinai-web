@@ -6,6 +6,7 @@ import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import SectionTitle from "@/components/ui/SectionTitle";
 import { industries } from "@/lib/data";
+import { getIndustryIcon } from "@/lib/industryIcons";
 
 export default function IndustryTabs() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -19,17 +20,26 @@ export default function IndustryTabs() {
 
         {/* Tabs */}
         <div className="flex flex-wrap justify-center gap-2 mb-10">
-          {industries.map((ind, idx) => (
+          {industries.map((ind, idx) => {
+            const Icon = getIndustryIcon(ind.slug);
+            return (
             <button
               key={ind.slug}
               onClick={() => setActiveIndex(idx)}
-              className="cursor-pointer px-5 py-2 text-sm font-medium transition-all duration-300 relative"
+              className="cursor-pointer px-5 py-2.5 text-sm font-medium transition-all duration-300 relative flex items-center gap-2 rounded-full"
               style={{
                 color: idx === activeIndex
                   ? "var(--color-text-primary)"
                   : "var(--color-text-muted)",
+                backgroundColor: idx === activeIndex
+                  ? "rgba(99,102,241,0.1)"
+                  : "transparent",
+                border: idx === activeIndex
+                  ? "1px solid rgba(99,102,241,0.3)"
+                  : "1px solid transparent",
               }}
             >
+              <Icon size={16} />
               {ind.title.replace(/ AI 解决方案.*/, "")}
               {idx === activeIndex && (
                 <motion.span
@@ -39,7 +49,8 @@ export default function IndustryTabs() {
                 />
               )}
             </button>
-          ))}
+            );
+          })}
         </div>
 
         {/* Content */}

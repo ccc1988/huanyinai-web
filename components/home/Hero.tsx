@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { customers } from "@/lib/data";
+import { getCustomerIcon } from "@/lib/customerIcons";
 
 const heroLogos = customers.slice(0, 6);
 
@@ -25,6 +26,20 @@ export default function Hero() {
       <div className="absolute inset-0 -z-10" style={{ backgroundColor: "var(--color-bg-base)" }} />
       <div className="absolute inset-0 -z-10 accent-glow" />
       <div className="absolute inset-0 -z-10 grid-bg" />
+
+      {/* Floating orbs */}
+      <motion.div
+        animate={shouldReduceMotion ? undefined : { y: [0, -20, 0], opacity: [0.3, 0.5, 0.3] }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-1/4 left-[10%] w-64 h-64 rounded-full -z-10"
+        style={{ background: "radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 70%)" }}
+      />
+      <motion.div
+        animate={shouldReduceMotion ? undefined : { y: [0, 30, 0], opacity: [0.2, 0.4, 0.2] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+        className="absolute bottom-1/4 right-[10%] w-80 h-80 rounded-full -z-10"
+        style={{ background: "radial-gradient(circle, rgba(139,92,246,0.06) 0%, transparent 70%)" }}
+      />
 
       <div className="container-max flex flex-col items-center text-center">
         {/* Pill tag */}
@@ -84,16 +99,29 @@ export default function Hero() {
           >
             ─ ─ ─ 已合作企业 ─ ─ ─
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
-            {heroLogos.map((customer) => (
-              <span
-                key={customer.name}
-                className="text-sm font-medium transition-colors duration-200 hover:text-[var(--color-text-body)] cursor-default"
-                style={{ color: "var(--color-text-logo)" }}
-              >
-                {customer.name}
-              </span>
-            ))}
+          <div className="flex flex-wrap items-center justify-center gap-6">
+            {heroLogos.map((customer) => {
+              const { icon: Icon, color } = getCustomerIcon(customer.name);
+              return (
+                <div
+                  key={customer.name}
+                  className="flex items-center gap-2 transition-all duration-200 hover:scale-105 cursor-default"
+                >
+                  <div
+                    className="w-8 h-8 rounded-lg flex items-center justify-center"
+                    style={{ backgroundColor: `${color}1A`, border: `1px solid ${color}25` }}
+                  >
+                    <Icon size={16} style={{ color }} />
+                  </div>
+                  <span
+                    className="text-sm font-medium transition-colors duration-200 hover:text-[var(--color-text-body)]"
+                    style={{ color: "var(--color-text-logo)" }}
+                  >
+                    {customer.name}
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </motion.div>
       </div>
