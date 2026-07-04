@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Logo from "./Logo";
 import type { Contact } from "@/lib/data";
 
 export default function Footer({ company, contacts }: { company: Record<string, string>; contacts: Contact[] }) {
@@ -12,16 +11,53 @@ export default function Footer({ company, contacts }: { company: Record<string, 
       }}
     >
       <div className="container-max">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 mb-12">
-          {/* Brand — 占 2 列宽，最左侧 */}
-          <div className="col-span-2 lg:col-span-2">
-            <Logo size="footer" />
-            <p
-              className="mt-4 text-sm leading-relaxed"
-              style={{ color: "var(--color-text-logo)" }}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 lg:gap-10 mb-12">
+          {/* 公司 */}
+          <div>
+            <h3
+              className="text-sm font-semibold mb-4"
+              style={{ color: "var(--color-text-muted)" }}
             >
-              {company.fullName}
-            </p>
+              公司
+            </h3>
+            <ul className="space-y-3">
+              <li>
+                <Link
+                  href="/"
+                  className="text-sm cursor-pointer transition-colors hover:text-[var(--color-text-body)]"
+                  style={{ color: "var(--color-text-muted)" }}
+                >
+                  首页
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/about"
+                  className="text-sm cursor-pointer transition-colors hover:text-[var(--color-text-body)]"
+                  style={{ color: "var(--color-text-muted)" }}
+                >
+                  关于我们
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/cases"
+                  className="text-sm cursor-pointer transition-colors hover:text-[var(--color-text-body)]"
+                  style={{ color: "var(--color-text-muted)" }}
+                >
+                  案例
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/blog"
+                  className="text-sm cursor-pointer transition-colors hover:text-[var(--color-text-body)]"
+                  style={{ color: "var(--color-text-muted)" }}
+                >
+                  博客
+                </Link>
+              </li>
+            </ul>
           </div>
 
           {/* 解决方案 */}
