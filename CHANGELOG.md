@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.4.1 — 2026-07-05
+
+### 基础设施
+- **域名正式上线**：huanyinai.com 通过 Cloudflare DNS 绑定到服务器 115.190.115.201
+- **HTTPS 配置**：Nginx 新增 443 SSL 监听，使用自签名证书（Cloudflare Full 模式）
+- **SSL 证书**：用户侧由 Cloudflare 签发正规证书（Google Trust Services）
+
+### 验证
+- `https://huanyinai.com` → 200 ✅
+- `https://www.huanyinai.com` → 200 ✅
+- `https://huanyinai.com/cases` → 200 ✅
+
+
 本项目所有重要变更记录于此文件。
 
 ## v1.4.0 — 2026-07-05
