@@ -22,6 +22,11 @@ export default function Footer({ company, contacts }: { company: Record<string, 
             >
               {company.fullName}
             </p>
+            {company.description && (
+              <p className="mt-1.5 text-xs" style={{ color: "var(--color-text-copyright)" }}>
+                {company.description}
+              </p>
+            )}
           </div>
 
           {/* 解决方案 */}
@@ -128,7 +133,7 @@ export default function Footer({ company, contacts }: { company: Record<string, 
           </div>
         </div>
 
-        {/* Copyright + 描述 */}
+        {/* Copyright */}
         <div
           className="pt-6 border-t text-center"
           style={{
@@ -138,11 +143,6 @@ export default function Footer({ company, contacts }: { company: Record<string, 
           <p className="text-xs" style={{ color: "var(--color-text-copyright)" }}>
             © {new Date().getFullYear()} {company.fullName}
           </p>
-          {company.description && (
-            <p className="mt-1.5 text-xs" style={{ color: "var(--color-text-copyright)" }}>
-              {company.description}
-            </p>
-          )}
         </div>
       </div>
     </footer>

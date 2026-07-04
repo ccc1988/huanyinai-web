@@ -7,7 +7,7 @@
 import fs from "fs";
 import path from "path";
 
-const dataDir = path.join(process.cwd(), "data");
+const dataDir = process.env.DATA_DIR || path.join(process.cwd(), "data");
 
 function loadJson<T>(filename: string): T {
   const filePath = path.join(dataDir, filename);
