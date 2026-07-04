@@ -1,8 +1,7 @@
 import Link from "next/link";
 import Logo from "./Logo";
-import { company } from "@/lib/data";
 
-export default function Footer() {
+export default function Footer({ company }: { company: Record<string, string> }) {
   return (
     <footer
       className="border-t pt-16 pb-8"
@@ -39,7 +38,7 @@ export default function Footer() {
                   className="text-sm transition-colors hover:text-[var(--color-text-body)]"
                   style={{ color: "var(--color-text-muted)" }}
                 >
-                  AI 智能体
+                  报关 AI 解决方案
                 </Link>
               </li>
               <li>
@@ -48,7 +47,7 @@ export default function Footer() {
                   className="text-sm transition-colors hover:text-[var(--color-text-body)]"
                   style={{ color: "var(--color-text-muted)" }}
                 >
-                  AI 文档处理
+                  跨境物流 AI 解决方案
                 </Link>
               </li>
               <li>
@@ -57,7 +56,7 @@ export default function Footer() {
                   className="text-sm transition-colors hover:text-[var(--color-text-body)]"
                   style={{ color: "var(--color-text-muted)" }}
                 >
-                  RPA 自动化
+                  跨境电商 AI 解决方案
                 </Link>
               </li>
               <li>
@@ -66,7 +65,7 @@ export default function Footer() {
                   className="text-sm transition-colors hover:text-[var(--color-text-body)]"
                   style={{ color: "var(--color-text-muted)" }}
                 >
-                  数据智能
+                  供应链 AI 解决方案
                 </Link>
               </li>
             </ul>
@@ -78,6 +77,15 @@ export default function Footer() {
               公司
             </h3>
             <ul className="space-y-3">
+              <li>
+                <Link
+                  href="/"
+                  className="text-sm transition-colors hover:text-[var(--color-text-body)]"
+                  style={{ color: "var(--color-text-muted)" }}
+                >
+                  首页
+                </Link>
+              </li>
               <li>
                 <Link
                   href="/about"
@@ -156,7 +164,7 @@ export default function Footer() {
           }}
         >
           <p className="text-xs" style={{ color: "var(--color-text-copyright)" }}>
-            © 2025 {company.fullName}
+            © {new Date().getFullYear()} {company.fullName}
           </p>
         </div>
       </div>

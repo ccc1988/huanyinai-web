@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, TrendingUp } from "lucide-react";
 import SectionTitle from "@/components/ui/SectionTitle";
 import CaseIllustration from "@/components/shared/CaseIllustration";
 import { cases } from "@/lib/data";
@@ -10,21 +10,41 @@ export default function CaseHighlights() {
   const highlights = cases.filter((c) => highlightSlugs.includes(c.slug));
 
   return (
-    <section className="py-24" style={{ backgroundColor: "var(--color-bg-base)" }}>
-      <div className="container-max">
+    <section className="section-decor py-24 relative" style={{ backgroundColor: "var(--color-bg-base)" }}>
+      {/* 背景装饰 */}
+      <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none" />
+      <div className="container-max relative">
         <SectionTitle>用真实交付说话</SectionTitle>
 
         <div className="grid md:grid-cols-3 gap-6">
-          {highlights.map((item) => (
+          {highlights.map((item) => {
+            const firstMetric = item.metrics?.[0];
+            return (
             <Link
               key={item.slug}
               href={`/cases/${item.slug}`}
-              className="glass-card rounded-[var(--radius-lg)] flex flex-col group cursor-pointer overflow-hidden"
+              className="glass-card rounded-[var(--radius-lg)] flex flex-col group cursor-pointer overflow-hidden hover:border-[var(--color-border-hover)]"
             >
               {/* Illustration header */}
               <CaseIllustration slug={item.slug} />
 
               <div className="p-8 flex flex-col flex-1">
+                {/* 数据指标亮点 */}
+                {firstMetric && (
+                  <div
+                    className="flex items-center gap-2 mb-4 px-3 py-2 rounded-lg"
+                    style={{
+                      backgroundColor: "rgba(99,102,241,0.06)",
+                      border: "1px solid rgba(99,102,241,0.12)",
+                    }}
+                  >
+                    <TrendingUp size={14} style={{ color: "var(--color-accent-light)" }} />
+                    <span className="text-xs font-medium" style={{ color: "var(--color-accent-light)" }}>
+                      {firstMetric.length > 30 ? firstMetric.slice(0, 30) + "…" : firstMetric}
+                    </span>
+                  </div>
+                )}
+
                 {/* Title */}
                 <h3
                   className="text-xl font-bold mb-3"
@@ -33,7 +53,7 @@ export default function CaseHighlights() {
                   {item.title}
                 </h3>
 
-                {/* Tag */}
+                {/* Tags */}
                 {item.tags.length > 0 && (
                   <div className="flex flex-wrap gap-2 mb-4">
                     {item.tags.map((tag) => (
@@ -62,7 +82,8 @@ export default function CaseHighlights() {
                 </span>
               </div>
             </Link>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

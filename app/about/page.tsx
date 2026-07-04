@@ -14,7 +14,13 @@ export default function AboutPage() {
   return (
     <div className="pt-24">
       {/* Hero */}
-      <section className="py-20" style={{ backgroundColor: "var(--color-bg-base)" }}>
+      <section className="py-20 relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-base)" }}>
+        <div className="absolute inset-0 -z-0 grid-bg" />
+        <div className="absolute inset-0 -z-0 starfield" />
+        <div
+          className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full opacity-50"
+          style={{ background: "radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%)", transform: "translate(30%, -30%)" }}
+        />
         <div className="container-max">
           <span className="pill-tag mb-4">关于寰引智能</span>
           <h1
@@ -38,14 +44,19 @@ export default function AboutPage() {
       </section>
 
       {/* Stats */}
-      <section className="py-16" style={{ backgroundColor: "var(--color-bg-elevated)" }}>
-        <div className="container-max">
+      <section className="py-16 relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-elevated)" }}>
+        <div className="absolute inset-0 -z-0 section-decor" />
+        <div className="container-max relative z-10">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {stats.map((stat) => (
-              <div key={stat.label} className="text-center">
+              <div key={stat.label} className="glass-card hud-corners rounded-[var(--radius-lg)] p-6 text-center">
                 <span
-                  className="font-[family-name:var(--font-heading)] font-bold text-[clamp(2.5rem,5vw,3.5rem)]"
-                  style={{ color: "var(--color-text-primary)" }}
+                  className="font-[family-name:var(--font-heading)] font-bold text-[clamp(2.5rem,5vw,3.5rem)] block"
+                  style={{
+                    background: "linear-gradient(135deg, #F8FAFC 0%, #C7D2FE 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                  }}
                 >
                   {stat.value}{stat.suffix}
                 </span>
@@ -59,7 +70,8 @@ export default function AboutPage() {
       </section>
 
       {/* Core advantages */}
-      <section className="py-20" style={{ backgroundColor: "var(--color-bg-base)" }}>
+      <section className="py-20 relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-base)" }}>
+        <div className="absolute inset-0 -z-0 grid-bg" />
         <div className="container-max">
           <h2
             className="text-3xl font-bold mb-12 text-center"
@@ -76,7 +88,7 @@ export default function AboutPage() {
             ].map((item) => {
               const Icon = item.icon;
               return (
-                <div key={item.title} className="glass-card rounded-[var(--radius-lg)] p-8">
+                <div key={item.title} className="glass-card hud-corners rounded-[var(--radius-lg)] p-8">
                   <div
                     className="w-12 h-12 rounded-full flex items-center justify-center mb-6"
                     style={{ backgroundColor: "rgba(99,102,241,0.15)" }}
@@ -100,7 +112,8 @@ export default function AboutPage() {
       </section>
 
       {/* Industry coverage */}
-      <section className="py-20" style={{ backgroundColor: "var(--color-bg-elevated)" }}>
+      <section className="py-20 relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-elevated)" }}>
+        <div className="absolute inset-0 -z-0 section-decor" />
         <div className="container-max">
           <h2
             className="text-3xl font-bold mb-8"
@@ -131,7 +144,8 @@ export default function AboutPage() {
       </section>
 
       {/* Trust signals */}
-      <section className="py-20" style={{ backgroundColor: "var(--color-bg-base)" }}>
+      <section className="py-20 relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-base)" }}>
+        <div className="absolute inset-0 -z-0 grid-bg" />
         <div className="container-max">
           <h2
             className="text-3xl font-bold mb-4"
@@ -164,8 +178,13 @@ export default function AboutPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 text-center" style={{ backgroundColor: "var(--color-bg-base)" }}>
-        <div className="container-max">
+      <section className="py-20 text-center relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-base)" }}>
+        <div className="absolute inset-0 -z-0 grid-bg" />
+        <div
+          className="absolute top-1/2 left-1/2 w-[500px] h-[300px] rounded-full opacity-30 -z-0"
+          style={{ background: "radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%)", transform: "translate(-50%, -50%)" }}
+        />
+        <div className="container-max relative z-10">
           <Link href="/contact" className="cta-primary">
             预约免费咨询
             <ArrowRight size={18} />

@@ -3,8 +3,17 @@
 import { usePathname } from "next/navigation";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import type { Settings } from "@/lib/data";
 
-export default function AppShell({ children }: { children: React.ReactNode }) {
+export default function AppShell({
+  children,
+  navItems,
+  company,
+}: {
+  children: React.ReactNode;
+  navItems: Settings["navItems"];
+  company: Record<string, string>;
+}) {
   const pathname = usePathname();
   const isAdmin = pathname.startsWith("/admin");
 
@@ -14,9 +23,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <Navbar />
+      <Navbar navItems={navItems} />
       <main className="min-h-screen">{children}</main>
-      <Footer />
+      <Footer company={company} />
     </>
   );
 }

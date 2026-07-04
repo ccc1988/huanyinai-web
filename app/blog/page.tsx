@@ -18,7 +18,13 @@ export default function BlogPage() {
   return (
     <div className="pt-24">
       {/* Hero */}
-      <section className="py-20" style={{ backgroundColor: "var(--color-bg-base)" }}>
+      <section className="py-20 relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-base)" }}>
+        <div className="absolute inset-0 -z-0 grid-bg" />
+        <div className="absolute inset-0 -z-0 starfield" />
+        <div
+          className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full opacity-50"
+          style={{ background: "radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%)", transform: "translate(30%, -30%)" }}
+        />
         <div className="container-max">
           <span className="pill-tag mb-4">行业洞察</span>
           <h1
@@ -40,14 +46,15 @@ export default function BlogPage() {
       </section>
 
       {/* Blog list */}
-      <section className="py-20" style={{ backgroundColor: "var(--color-bg-elevated)" }}>
+      <section className="py-20 relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-elevated)" }}>
+        <div className="absolute inset-0 -z-0 section-decor" />
         <div className="container-max">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {sortedPosts.map((post) => (
               <Link
                 key={post.slug}
                 href={`/blog/${post.slug}`}
-                className="glass-card rounded-[var(--radius-lg)] p-8 flex flex-col group cursor-pointer"
+                className="glass-card hud-corners rounded-[var(--radius-lg)] p-8 flex flex-col group cursor-pointer"
               >
                 {/* Category */}
                 <span

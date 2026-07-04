@@ -140,14 +140,97 @@ h6 {
   }
 }
 
-/* 网格背景线 */
+/* 网格背景线 — 增强版 */
 .grid-bg {
   background-image: linear-gradient(
-      rgba(255, 255, 255, 0.02) 1px,
+      rgba(255, 255, 255, 0.03) 1px,
       transparent 1px
     ),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
   background-size: 60px 60px;
+}
+
+/* 星空粒子效果 — 多层径向渐变模拟星点 */
+.starfield {
+  background-image:
+    radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.4) 50%, transparent 50%),
+    radial-gradient(1px 1px at 25% 45%, rgba(255,255,255,0.3) 50%, transparent 50%),
+    radial-gradient(1px 1px at 40% 15%, rgba(255,255,255,0.25) 50%, transparent 50%),
+    radial-gradient(1px 1px at 55% 70%, rgba(255,255,255,0.35) 50%, transparent 50%),
+    radial-gradient(1px 1px at 70% 35%, rgba(255,255,255,0.2) 50%, transparent 50%),
+    radial-gradient(1px 1px at 85% 60%, rgba(255,255,255,0.3) 50%, transparent 50%),
+    radial-gradient(1px 1px at 15% 80%, rgba(255,255,255,0.25) 50%, transparent 50%),
+    radial-gradient(1px 1px at 50% 90%, rgba(255,255,255,0.15) 50%, transparent 50%),
+    radial-gradient(1px 1px at 90% 10%, rgba(255,255,255,0.3) 50%, transparent 50%),
+    radial-gradient(1px 1px at 35% 55%, rgba(255,255,255,0.2) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 5% 50%, rgba(255,255,255,0.5) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 60% 25%, rgba(255,255,255,0.4) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 80% 80%, rgba(255,255,255,0.35) 50%, transparent 50%),
+    radial-gradient(1px 1px at 95% 45%, rgba(255,255,255,0.25) 50%, transparent 50%),
+    radial-gradient(1px 1px at 20% 65%, rgba(255,255,255,0.3) 50%, transparent 50%);
+}
+
+/* 扫描线效果 */
+.scanline-overlay {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.008) 2px,
+    rgba(255, 255, 255, 0.008) 4px
+  );
+  pointer-events: none;
+}
+
+/* 地平线光效 — Hero 底部极光过渡 */
+.horizon-glow {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(99, 102, 241, 0.06) 40%,
+    rgba(139, 92, 246, 0.04) 60%,
+    rgba(6, 182, 212, 0.03) 80%,
+    transparent 100%
+  );
+}
+
+/* HUD 装饰角标 */
+.hud-corners {
+  position: relative;
+}
+
+.hud-corners::before,
+.hud-corners::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-color: rgba(99, 102, 241, 0.25);
+  border-style: solid;
+  pointer-events: none;
+}
+
+.hud-corners::before {
+  top: -1px;
+  left: -1px;
+  border-width: 1px 0 0 1px;
+}
+
+.hud-corners::after {
+  bottom: -1px;
+  right: -1px;
+  border-width: 0 1px 1px 0;
+}
+
+/* 渐变分隔线 */
+.gradient-divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(99, 102, 241, 0.3) 50%,
+    transparent 100%
+  );
 }
 
 /* 紫色径向光晕 */
@@ -159,18 +242,129 @@ h6 {
   );
 }
 
-/* 玻璃态卡片 */
+/* 玻璃态卡片 — 增强版 */
 .glass-card {
   background-color: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--color-border-default);
   transition: border-color 200ms ease, background-color 200ms ease,
-    box-shadow 200ms ease;
+    box-shadow 200ms ease, transform 200ms ease;
 }
 
 .glass-card:hover {
   border-color: var(--color-border-hover);
   background-color: rgba(255, 255, 255, 0.07);
   box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+}
+
+/* 顶部渐变色条卡片 */
+.glass-card-accent {
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card-accent::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-accent), #8b5cf6, #06b6d4);
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.glass-card-accent:hover::before {
+  opacity: 1;
+}
+
+/* 脉冲光点动画 */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+/* 向下滚动指示动画 */
+@keyframes scroll-bounce {
+  0%, 100% { transform: translateY(0); opacity: 0.6; }
+  50% { transform: translateY(8px); opacity: 1; }
+}
+
+.scroll-indicator {
+  animation: scroll-bounce 2s ease-in-out infinite;
+}
+
+/* 区块背景装饰层 */
+.section-decor {
+  position: relative;
+}
+
+.section-decor::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(99,102,241,0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* ===== Logo Cloud 动态滚动 ===== */
+@keyframes marquee-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes marquee-right {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+
+.marquee-track-left {
+  animation: marquee-left 50s linear infinite;
+  width: max-content;
+}
+
+.marquee-track-right {
+  animation: marquee-right 60s linear infinite;
+  width: max-content;
+}
+
+.marquee-paused {
+  animation-play-state: paused !important;
+}
+
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+}
+
+.logo-cloud-item {
+  background-color: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: background-color 300ms ease, border-color 300ms ease,
+    box-shadow 300ms ease, transform 300ms ease;
+}
+
+.logo-cloud-item:hover {
+  background-color: rgba(99, 102, 241, 0.10);
+  border-color: rgba(99, 102, 241, 0.35);
+  box-shadow: 0 0 24px rgba(99, 102, 241, 0.15);
+  transform: translateY(-3px);
+}
+
+.logo-cloud-item:hover .logo-cloud-name {
+  color: var(--color-text-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track-left,
+  .marquee-track-right {
+    animation: none;
+  }
 }
 
 /* 胶囊标签 */

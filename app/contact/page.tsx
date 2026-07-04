@@ -14,7 +14,13 @@ export default function ContactPage() {
   return (
     <div className="pt-24">
       {/* Hero */}
-      <section className="py-20" style={{ backgroundColor: "var(--color-bg-base)" }}>
+      <section className="py-20 relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-base)" }}>
+        <div className="absolute inset-0 -z-0 grid-bg" />
+        <div className="absolute inset-0 -z-0 starfield" />
+        <div
+          className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full opacity-50"
+          style={{ background: "radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%)", transform: "translate(30%, -30%)" }}
+        />
         <div className="container-max text-center">
           <span className="pill-tag mb-4">联系我们</span>
           <h1
@@ -36,7 +42,8 @@ export default function ContactPage() {
       </section>
 
       {/* Contact info + form */}
-      <section className="py-20" style={{ backgroundColor: "var(--color-bg-elevated)" }}>
+      <section className="py-20 relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-elevated)" }}>
+        <div className="absolute inset-0 -z-0 section-decor" />
         <div className="container-max">
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Contact info */}
@@ -47,6 +54,7 @@ export default function ContactPage() {
               >
                 联系方式
               </h2>
+              <div className="glass-card hud-corners rounded-[var(--radius-lg)] p-8">
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
                   <div
@@ -136,6 +144,7 @@ export default function ContactPage() {
                   </span>
                 </div>
               </div>
+              </div>
             </div>
 
             {/* Contact form */}
@@ -146,7 +155,9 @@ export default function ContactPage() {
               >
                 预约咨询
               </h2>
-              <ContactForm />
+              <div className="glass-card hud-corners rounded-[var(--radius-lg)] p-8">
+                <ContactForm />
+              </div>
             </div>
           </div>
         </div>

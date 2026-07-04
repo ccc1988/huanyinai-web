@@ -9,9 +9,9 @@ export default function CaseIllustration({ slug }: { slug: string }) {
 
   return (
     <div
-      className="relative h-32 overflow-hidden rounded-t-[var(--radius-lg)] flex items-center justify-center"
+      className="relative h-40 overflow-hidden rounded-t-[var(--radius-lg)] flex items-center justify-center"
       style={{
-        background: "linear-gradient(135deg, rgba(99,102,241,0.08), rgba(26,29,39,0.6))",
+        background: "linear-gradient(135deg, rgba(99,102,241,0.12), rgba(139,92,246,0.06), rgba(26,29,39,0.6))",
         borderBottom: "1px solid rgba(255,255,255,0.06)",
       }}
     >
@@ -48,7 +48,15 @@ export default function CaseIllustration({ slug }: { slug: string }) {
       <div
         className="absolute -top-12 -right-12 w-32 h-32 rounded-full"
         style={{
-          background: "radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(99,102,241,0.2) 0%, transparent 70%)",
+        }}
+      />
+
+      {/* Bottom gradient overlay */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-12"
+        style={{
+          background: "linear-gradient(to top, rgba(15,17,23,0.6), transparent)",
         }}
       />
     </div>

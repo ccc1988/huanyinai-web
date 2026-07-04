@@ -1,16 +1,19 @@
 // ============================================================
 // 寰引智能官网 — 集中数据管理
 // 数据源：/data/*.json（可通过管理后台在线编辑）
+// 注意：生产环境使用 fs 运行时读取，确保后台修改即时生效
 // ============================================================
 
-import companyData from "../data/company.json";
-import customersData from "../data/customers.json";
-import capabilitiesData from "../data/capabilities.json";
-import statsData from "../data/stats.json";
-import casesData from "../data/cases.json";
-import industriesData from "../data/industries.json";
-import blogPostsData from "../data/blog-posts.json";
-import settingsData from "../data/settings.json";
+import fs from "fs";
+import path from "path";
+
+const dataDir = path.join(process.cwd(), "data");
+
+function loadJson<T>(filename: string): T {
+  const filePath = path.join(dataDir, filename);
+  const raw = fs.readFileSync(filePath, "utf-8");
+  return JSON.parse(raw) as T;
+}
 
 // ===== 核心类型定义 =====
 
@@ -69,23 +72,7 @@ export interface StatItem {
   label: string;
 }
 
-// ===== 导出数据 =====
-
-export const company = companyData as Record<string, string>;
-
-export const customers = customersData as Customer[];
-
-export const capabilities = capabilitiesData as CapabilityItem[];
-
-export const stats = statsData as StatItem[];
-
-export const cases = casesData as CaseItem[];
-
-export const industries = industriesData as IndustrySolution[];
-
-export const blogPosts = blogPostsData as BlogPost[];
-
-export const settings = settingsData as {
+export interface Settings {
   seoTitle: string;
   seoDescription: string;
   seoKeywords: string[];
@@ -93,7 +80,25 @@ export const settings = settingsData as {
   ogDescription: string;
   llmsTxtDescription: string;
   navItems: { label: string; href: string }[];
-};
+}
+
+// ===== 运行时读取数据 =====
+
+export const company = loadJson<Record<string, string>>("company.json");
+
+export const customers = loadJson<Customer[]>("customers.json");
+
+export const capabilities = loadJson<CapabilityItem[]>("capabilities.json");
+
+export const stats = loadJson<StatItem[]>("stats.json");
+
+export const cases = loadJson<CaseItem[]>("cases.json");
+
+export const industries = loadJson<IndustrySolution[]>("industries.json");
+
+export const blogPosts = loadJson<BlogPost[]>("blog-posts.json");
+
+export const settings = loadJson<Settings>("settings.json");
 
 export const navItems = settings.navItems;
 

@@ -45,14 +45,21 @@ export default async function CaseDetailPage({
 
       {/* Hero */}
       <section className="py-20 relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-base)" }}>
+        {/* Background layers */}
+        <div className="absolute inset-0 -z-0 grid-bg" />
+        <div className="absolute inset-0 -z-0 starfield" />
         {/* Decorative glow */}
         <div
-          className="absolute top-0 right-0 w-96 h-96 rounded-full opacity-50"
-          style={{ background: "radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 70%)", transform: "translate(30%, -30%)" }}
+          className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full opacity-60"
+          style={{ background: "radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%)", transform: "translate(30%, -30%)" }}
+        />
+        <div
+          className="absolute bottom-0 left-0 w-96 h-96 rounded-full opacity-40"
+          style={{ background: "radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 70%)", transform: "translate(-20%, 30%)" }}
         />
         <div className="container-max relative z-10">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-sm mb-8" style={{ color: "var(--color-text-muted)" }}>
+          <nav className="inline-flex items-center gap-2 text-sm mb-8 px-4 py-2 rounded-full" style={{ color: "var(--color-text-muted)", backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
             <Link href="/" className="hover:text-[var(--color-text-body)] transition-colors">首页</Link>
             <ChevronRight size={14} />
             <Link href="/cases/customs-document-ai" className="hover:text-[var(--color-text-body)] transition-colors">案例</Link>
@@ -60,47 +67,42 @@ export default async function CaseDetailPage({
             <span style={{ color: "var(--color-text-body)" }}>{caseItem!.industry}</span>
           </nav>
 
-          {/* Icon */}
-          {(() => {
-            const { icon: Icon } = getCaseVisual(slug);
-            return (
-              <div
-                className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6"
+          {/* Title with Icon - Same line layout */}
+          <div className="flex items-start gap-4 mb-4">
+            {(() => {
+              const { icon: Icon } = getCaseVisual(slug);
+              return (
+                <div
+                  className="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0"
+                  style={{
+                    backgroundColor: "rgba(99,102,241,0.15)",
+                    border: "1px solid rgba(99,102,241,0.3)",
+                  }}
+                >
+                  <Icon size={32} style={{ color: "var(--color-accent-light)" }} />
+                </div>
+              );
+            })()}
+            
+            <div className="flex-1 pt-2">
+              <h1
+                className="font-bold leading-tight"
                 style={{
-                  backgroundColor: "rgba(99,102,241,0.15)",
-                  border: "1px solid rgba(99,102,241,0.3)",
+                  color: "var(--color-text-primary)",
+                  fontSize: "clamp(2rem, 4vw, 3rem)",
                 }}
               >
-                <Icon size={32} style={{ color: "var(--color-accent-light)" }} />
-              </div>
-            );
-          })()}
-
-          <span className="pill-tag mb-4">{caseItem!.industry}</span>
-          <h1
-            className="font-bold mb-4"
-            style={{
-              color: "var(--color-text-primary)",
-              fontSize: "clamp(2rem, 4vw, 3rem)",
-            }}
-          >
-            {caseItem!.title}
-          </h1>
-          <p
-            className="text-xl max-w-3xl"
-            style={{ color: "var(--color-text-body)" }}
-          >
-            {caseItem!.oneLiner}
-          </p>
-
-          {/* Tags */}
-          {caseItem!.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2 mt-6">
-              {caseItem!.tags.map((tag) => (
-                <span key={tag} className="pill-tag">{tag}</span>
-              ))}
+                {caseItem!.title}
+              </h1>
+              <p
+                className="text-xl mt-3 max-w-3xl"
+                style={{ color: "var(--color-text-body)" }}
+              >
+                {caseItem!.oneLiner}
+              </p>
             </div>
-          )}
+          </div>
+
 
           {/* Customers */}
           <p className="mt-6 text-sm" style={{ color: "var(--color-text-muted)" }}>
@@ -110,7 +112,8 @@ export default async function CaseDetailPage({
       </section>
 
       {/* Pain points */}
-      <section className="py-20" style={{ backgroundColor: "var(--color-bg-elevated)" }}>
+      <section className="py-20 relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-elevated)" }}>
+        <div className="absolute inset-0 -z-0 section-decor" />
         <div className="container-max max-w-4xl">
           <div className="flex items-center gap-3 mb-8">
             <div
@@ -141,7 +144,8 @@ export default async function CaseDetailPage({
       </section>
 
       {/* Solution */}
-      <section className="py-20" style={{ backgroundColor: "var(--color-bg-base)" }}>
+      <section className="py-20 relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-base)" }}>
+        <div className="absolute inset-0 -z-0 grid-bg" />
         <div className="container-max max-w-4xl">
           <div className="flex items-center gap-3 mb-8">
             <div
@@ -166,7 +170,8 @@ export default async function CaseDetailPage({
       </section>
 
       {/* Customer value */}
-      <section className="py-20" style={{ backgroundColor: "var(--color-bg-elevated)" }}>
+      <section className="py-20 relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-elevated)" }}>
+        <div className="absolute inset-0 -z-0 section-decor" />
         <div className="container-max max-w-4xl">
           <div className="flex items-center gap-3 mb-8">
             <div
@@ -183,11 +188,15 @@ export default async function CaseDetailPage({
             {caseItem!.customerValue.map((value, i) => (
               <div
                 key={i}
-                className="glass-card rounded-[var(--radius-md)] p-6"
+                className="glass-card hud-corners rounded-[var(--radius-md)] p-6"
               >
                 <span
-                  className="text-3xl font-bold block mb-2"
-                  style={{ color: "var(--color-accent-light)" }}
+                  className="text-3xl font-bold block mb-2 font-[family-name:var(--font-heading)]"
+                  style={{
+                    background: "linear-gradient(135deg, #F8FAFC 0%, #C7D2FE 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                  }}
                 >
                   {String(i + 1).padStart(2, "0")}
                 </span>
@@ -245,8 +254,13 @@ export default async function CaseDetailPage({
       </section>
 
       {/* CTA */}
-      <section className="py-20 text-center" style={{ backgroundColor: "var(--color-bg-base)" }}>
-        <div className="container-max">
+      <section className="py-20 text-center relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-base)" }}>
+        <div className="absolute inset-0 -z-0 grid-bg" />
+        <div
+          className="absolute top-1/2 left-1/2 w-[600px] h-[400px] rounded-full opacity-30 -z-0"
+          style={{ background: "radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%)", transform: "translate(-50%, -50%)" }}
+        />
+        <div className="container-max relative z-10">
           <h2
             className="text-3xl font-bold mb-4"
             style={{ color: "var(--color-text-primary)" }}

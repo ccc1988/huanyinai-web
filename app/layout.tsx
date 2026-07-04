@@ -3,7 +3,10 @@ import { Space_Grotesk, DM_Sans } from "next/font/google";
 import "./globals.css";
 import AppShell from "@/components/ui/AppShell";
 import { getOrganizationJsonLd } from "@/lib/geo";
-import { company } from "@/lib/data";
+import { company, navItems } from "@/lib/data";
+
+// 强制动态渲染，确保后台修改即时生效
+export const dynamic = "force-dynamic";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -62,7 +65,7 @@ export default function RootLayout({
             __html: JSON.stringify(getOrganizationJsonLd()),
           }}
         />
-        <AppShell>{children}</AppShell>
+        <AppShell navItems={navItems} company={company}>{children}</AppShell>
       </body>
     </html>
   );

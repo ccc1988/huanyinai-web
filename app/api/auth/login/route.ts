@@ -15,9 +15,10 @@ export async function POST(request: NextRequest) {
 
     const session = createSession();
     const response = NextResponse.json({ success: true });
+    const isHttps = request.headers.get("x-forwarded-proto") === "https";
     response.cookies.set(SESSION_COOKIE, session, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: isHttps,
       sameSite: "lax",
       path: "/",
       maxAge: 60 * 60 * 24 * 7, // 7 天

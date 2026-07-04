@@ -53,14 +53,21 @@ export default async function SolutionPage({
 
       {/* Hero */}
       <section className="py-20 relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-base)" }}>
+        {/* Background layers */}
+        <div className="absolute inset-0 -z-0 grid-bg" />
+        <div className="absolute inset-0 -z-0 starfield" />
         {/* Decorative glow */}
         <div
-          className="absolute top-0 right-0 w-96 h-96 rounded-full opacity-50"
-          style={{ background: "radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 70%)", transform: "translate(30%, -30%)" }}
+          className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full opacity-60"
+          style={{ background: "radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%)", transform: "translate(30%, -30%)" }}
+        />
+        <div
+          className="absolute bottom-0 left-0 w-96 h-96 rounded-full opacity-40"
+          style={{ background: "radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 70%)", transform: "translate(-20%, 30%)" }}
         />
         <div className="container-max relative z-10">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-sm mb-8" style={{ color: "var(--color-text-muted)" }}>
+          <nav className="inline-flex items-center gap-2 text-sm mb-8 px-4 py-2 rounded-full" style={{ color: "var(--color-text-muted)", backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
             <Link href="/" className="hover:text-[var(--color-text-body)] transition-colors">首页</Link>
             <ChevronRight size={14} />
             <Link href="/solutions/customs" className="hover:text-[var(--color-text-body)] transition-colors">解决方案</Link>
@@ -68,42 +75,47 @@ export default async function SolutionPage({
             <span style={{ color: "var(--color-text-body)" }}>{industry!.title.replace(/ AI 解决方案.*/, "")}</span>
           </nav>
 
-          {/* Icon */}
-          {(() => {
-            const Icon = getIndustryIcon(slug);
-            return (
-              <div
-                className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6"
+          {/* Title with Icon - Same line layout */}
+          <div className="flex items-start gap-4 mb-4">
+            {(() => {
+              const Icon = getIndustryIcon(slug);
+              return (
+                <div
+                  className="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0"
+                  style={{
+                    backgroundColor: "rgba(99,102,241,0.15)",
+                    border: "1px solid rgba(99,102,241,0.3)",
+                  }}
+                >
+                  <Icon size={32} style={{ color: "var(--color-accent-light)" }} />
+                </div>
+              );
+            })()}
+            
+            <div className="flex-1 pt-2">
+              <h1
+                className="font-bold leading-tight"
                 style={{
-                  backgroundColor: "rgba(99,102,241,0.15)",
-                  border: "1px solid rgba(99,102,241,0.3)",
+                  color: "var(--color-text-primary)",
+                  fontSize: "clamp(2rem, 4vw, 3rem)",
                 }}
               >
-                <Icon size={32} style={{ color: "var(--color-accent-light)" }} />
-              </div>
-            );
-          })()}
-
-          <h1
-            className="font-bold mb-4"
-            style={{
-              color: "var(--color-text-primary)",
-              fontSize: "clamp(2rem, 4vw, 3rem)",
-            }}
-          >
-            {industry!.title}
-          </h1>
-          <p
-            className="text-xl max-w-3xl"
-            style={{ color: "var(--color-text-body)" }}
-          >
-            {industry!.subtitle}
-          </p>
+                {industry!.title}
+              </h1>
+              <p
+                className="text-xl mt-3 max-w-3xl"
+                style={{ color: "var(--color-text-body)" }}
+              >
+                {industry!.subtitle}
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Pain points */}
-      <section className="py-20" style={{ backgroundColor: "var(--color-bg-elevated)" }}>
+      <section className="py-20 relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-elevated)" }}>
+        <div className="absolute inset-0 -z-0 section-decor" />
         <div className="container-max">
           <h2
             className="text-3xl font-bold mb-8"
@@ -115,7 +127,7 @@ export default async function SolutionPage({
             {industry!.painPoints.map((point, i) => (
               <div
                 key={i}
-                className="glass-card rounded-[var(--radius-md)] p-6 flex items-start gap-4"
+                className="glass-card hud-corners rounded-[var(--radius-md)] p-6 flex items-start gap-4"
               >
                 <span
                   className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-sm font-bold"
@@ -134,7 +146,8 @@ export default async function SolutionPage({
       </section>
 
       {/* Solution */}
-      <section className="py-20" style={{ backgroundColor: "var(--color-bg-base)" }}>
+      <section className="py-20 relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-base)" }}>
+        <div className="absolute inset-0 -z-0 grid-bg" />
         <div className="container-max">
           <h2
             className="text-3xl font-bold mb-8"
@@ -157,7 +170,8 @@ export default async function SolutionPage({
 
       {/* Related cases */}
       {relatedCases.length > 0 && (
-        <section className="py-20" style={{ backgroundColor: "var(--color-bg-elevated)" }}>
+        <section className="py-20 relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-elevated)" }}>
+          <div className="absolute inset-0 -z-0 section-decor" />
           <div className="container-max">
             <h2
               className="text-3xl font-bold mb-8"
@@ -175,7 +189,8 @@ export default async function SolutionPage({
       )}
 
       {/* FAQ */}
-      <section className="py-20" style={{ backgroundColor: "var(--color-bg-base)" }}>
+      <section className="py-20 relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-base)" }}>
+        <div className="absolute inset-0 -z-0 grid-bg" />
         <div className="container-max max-w-4xl">
           <h2
             className="text-3xl font-bold mb-8"
@@ -187,7 +202,7 @@ export default async function SolutionPage({
             {industry!.faq.map((item, i) => (
               <div
                 key={i}
-                className="glass-card rounded-[var(--radius-md)] p-6"
+                className="glass-card hud-corners rounded-[var(--radius-md)] p-6"
               >
                 <h3
                   className="font-semibold mb-2"
@@ -209,10 +224,15 @@ export default async function SolutionPage({
 
       {/* CTA */}
       <section
-        className="py-20 text-center"
+        className="py-20 text-center relative overflow-hidden"
         style={{ backgroundColor: "var(--color-bg-base)" }}
       >
-        <div className="container-max">
+        <div className="absolute inset-0 -z-0 grid-bg" />
+        <div
+          className="absolute top-1/2 left-1/2 w-[600px] h-[400px] rounded-full opacity-30 -z-0"
+          style={{ background: "radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%)", transform: "translate(-50%, -50%)" }}
+        />
+        <div className="container-max relative z-10">
           <h2
             className="text-3xl font-bold mb-4"
             style={{ color: "var(--color-text-primary)" }}

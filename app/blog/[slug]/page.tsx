@@ -46,10 +46,16 @@ export default async function BlogDetailPage({
 
       {/* Hero */}
       <article>
-        <header className="py-20" style={{ backgroundColor: "var(--color-bg-base)" }}>
+        <header className="py-20 relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-base)" }}>
+          <div className="absolute inset-0 -z-0 grid-bg" />
+          <div className="absolute inset-0 -z-0 starfield" />
+          <div
+            className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full opacity-50"
+            style={{ background: "radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%)", transform: "translate(30%, -30%)" }}
+          />
           <div className="container-max max-w-3xl">
             {/* Breadcrumb */}
-            <nav className="flex items-center gap-2 text-sm mb-8" style={{ color: "var(--color-text-muted)" }}>
+            <nav className="inline-flex items-center gap-2 text-sm mb-8 px-4 py-2 rounded-full" style={{ color: "var(--color-text-muted)", backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
               <Link href="/" className="hover:text-[var(--color-text-body)] transition-colors">首页</Link>
               <ChevronRight size={14} />
               <Link href="/blog" className="hover:text-[var(--color-text-body)] transition-colors">博客</Link>
@@ -106,7 +112,8 @@ export default async function BlogDetailPage({
         </header>
 
         {/* Body */}
-        <section className="py-20" style={{ backgroundColor: "var(--color-bg-elevated)" }}>
+        <section className="py-20 relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-elevated)" }}>
+          <div className="absolute inset-0 -z-0 section-decor" />
           <div className="container-max max-w-3xl">
             <div className="prose-content">
               {post!.sections.map((section, i) => (
@@ -129,7 +136,7 @@ export default async function BlogDetailPage({
 
             {/* CTA */}
             <div
-              className="glass-card rounded-[var(--radius-lg)] p-8 mt-12 text-center"
+              className="glass-card hud-corners rounded-[var(--radius-lg)] p-8 mt-12 text-center"
             >
               <h3
                 className="text-xl font-bold mb-3"
@@ -150,7 +157,8 @@ export default async function BlogDetailPage({
       </article>
 
       {/* Related posts */}
-      <section className="py-20" style={{ backgroundColor: "var(--color-bg-base)" }}>
+      <section className="py-20 relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-base)" }}>
+        <div className="absolute inset-0 -z-0 grid-bg" />
         <div className="container-max max-w-4xl">
           <h2
             className="text-2xl font-bold mb-8"
@@ -163,7 +171,7 @@ export default async function BlogDetailPage({
               <Link
                 key={rp.slug}
                 href={`/blog/${rp.slug}`}
-                className="glass-card rounded-[var(--radius-md)] p-6 group cursor-pointer"
+                className="glass-card hud-corners rounded-[var(--radius-md)] p-6 group cursor-pointer"
               >
                 <span
                   className="text-xs font-medium mb-2 block"

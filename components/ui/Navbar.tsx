@@ -5,9 +5,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import Logo from "./Logo";
-import { navItems } from "@/lib/data";
+import type { Settings } from "@/lib/data";
 
-export default function Navbar() {
+export default function Navbar({ navItems }: { navItems: Settings["navItems"] }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
@@ -48,16 +48,23 @@ export default function Navbar() {
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="text-sm font-medium transition-colors hover:text-[var(--color-text-primary)]"
-              style={{ color: "var(--color-text-muted)" }}
-            >
-              {item.label}
-            </Link>
-          ))}
+          {navItems.map((item) => {
+            const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="text-sm font-medium transition-colors hover:text-[var(--color-text-primary)]"
+                style={{
+                  color: isActive ? "var(--color-text-primary)" : "var(--color-text-muted)",
+                  borderBottom: isActive ? "2px solid var(--color-accent)" : "2px solid transparent",
+                  paddingBottom: "2px",
+                }}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
           <Link href="/contact" className="cta-primary text-sm">
             预约咨询
           </Link>
