@@ -1,8 +1,8 @@
 import Link from "next/link";
 import Logo from "./Logo";
-import type { Contact } from "@/lib/data";
+import type { Contact, StatItem } from "@/lib/data";
 
-export default function Footer({ company, contacts }: { company: Record<string, string>; contacts: Contact[] }) {
+export default function Footer({ company, contacts, stats }: { company: Record<string, string>; contacts: Contact[]; stats: StatItem[] }) {
   return (
     <footer
       className="border-t pt-16 pb-8"
@@ -13,7 +13,7 @@ export default function Footer({ company, contacts }: { company: Record<string, 
     >
       <div className="container-max">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 lg:gap-10 mb-12">
-          {/* 品牌 */}
+          {/* 品牌区 */}
           <div>
             <Logo size="footer" />
             <p
@@ -23,9 +23,37 @@ export default function Footer({ company, contacts }: { company: Record<string, 
               {company.fullName}
             </p>
             {company.description && (
-              <p className="mt-1.5 text-xs" style={{ color: "var(--color-text-copyright)" }}>
+              <p className="mt-2 text-xs leading-relaxed max-w-xs" style={{ color: "var(--color-text-copyright)" }}>
                 {company.description}
               </p>
+            )}
+            {/* 核心数据 — 信任背书 */}
+            {stats.length > 0 && (
+              <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2">
+                {stats.map((stat, idx) => (
+                  <div key={idx} className="flex items-baseline gap-1">
+                    <span className="text-sm font-bold" style={{ color: "var(--color-accent-light)" }}>
+                      {stat.value}{stat.suffix || ""}
+                    </span>
+                    <span className="text-xs" style={{ color: "var(--color-text-copyright)" }}>
+                      {stat.label}
+                    </span>
+                    {idx < stats.length - 1 && (
+                      <span className="ml-3 text-xs" style={{ color: "rgba(255,255,255,0.1)" }}>|</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+            {/* 地理位置 */}
+            {company.location && (
+              <div className="mt-4 flex items-center gap-1.5">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--color-text-copyright)" }}>
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+                <span className="text-xs" style={{ color: "var(--color-text-copyright)" }}>{company.location}</span>
+              </div>
             )}
           </div>
 
