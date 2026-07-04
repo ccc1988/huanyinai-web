@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import type { Customer, CaseItem, IndustrySolution, CapabilityItem, StatItem, BlogPost, Settings } from "./data";
+import type { Customer, CaseItem, IndustrySolution, CapabilityItem, StatItem, BlogPost, Settings, Contact } from "./data";
 
 const dataDir = path.join(process.cwd(), "data");
 
@@ -23,6 +23,7 @@ export const readData = {
   industries: () => readJson<IndustrySolution[]>("industries.json"),
   capabilities: () => readJson<CapabilityItem[]>("capabilities.json"),
   stats: () => readJson<StatItem[]>("stats.json"),
+  contacts: () => readJson<Contact[]>("contacts.json"),
   blogPosts: () => readJson<BlogPost[]>("blog-posts.json"),
   settings: () => readJson<Settings>("settings.json"),
 };
@@ -35,6 +36,7 @@ export const writeData = {
   industries: (data: IndustrySolution[]) => writeJson("industries.json", data),
   capabilities: (data: CapabilityItem[]) => writeJson("capabilities.json", data),
   stats: (data: StatItem[]) => writeJson("stats.json", data),
+  contacts: (data: Contact[]) => writeJson("contacts.json", data),
   blogPosts: (data: BlogPost[]) => writeJson("blog-posts.json", data),
   settings: (data: Settings) => writeJson("settings.json", data),
 };

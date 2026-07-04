@@ -6,7 +6,8 @@ export async function GET() {
   const customers = readData.customers();
   const capabilities = readData.capabilities();
   const stats = readData.stats();
-  return NextResponse.json({ company, customers, capabilities, stats });
+  const contacts = readData.contacts();
+  return NextResponse.json({ company, customers, capabilities, stats, contacts });
 }
 
 export async function PUT(request: NextRequest) {
@@ -26,6 +27,9 @@ export async function PUT(request: NextRequest) {
         break;
       case "stats":
         writeData.stats(data);
+        break;
+      case "contacts":
+        writeData.contacts(data);
         break;
       default:
         return NextResponse.json({ error: "未知的数据类型" }, { status: 400 });

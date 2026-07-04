@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Mail, Phone, MessageCircle, MapPin } from "lucide-react";
 import { createMetadata } from "@/lib/seo";
-import { getCompany } from "@/lib/data";
+import { getCompany, getContacts } from "@/lib/data";
 import ContactForm from "@/components/shared/ContactForm";
 
 export function generateMetadata(): Metadata {
@@ -15,6 +15,7 @@ export function generateMetadata(): Metadata {
 
 export default function ContactPage() {
   const company = getCompany();
+  const contacts = getContacts();
   return (
     <div className="pt-24">
       {/* Hero */}
@@ -132,22 +133,38 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              {/* Wechat QR placeholder */}
-              <div className="mt-8">
-                <div
-                  className="w-32 h-32 rounded-[var(--radius-md)] flex items-center justify-center"
-                  style={{
-                    backgroundColor: "rgba(255,255,255,0.05)",
-                    border: "1px solid var(--color-border-default)",
-                  }}
-                >
-                  <span className="text-xs text-center" style={{ color: "var(--color-text-logo)" }}>
-                    微信二维码
-                    <br />
-                    (占位)
-                  </span>
+              {/* 联系人二维码 */}
+              {contacts.length > 0 && (
+                <div className="mt-8 flex flex-wrap gap-6">
+                  {contacts.map((contact, idx) => (
+                    <div key={idx} className="flex flex-col items-center">
+                      <div
+                        className="w-32 h-32 rounded-[var(--radius-md)] flex items-center justify-center overflow-hidden"
+                        style={{ backgroundColor: "rgba(255,255,255,0.05)", border: "1px solid var(--color-border-default)" }}
+                      >
+                        {contact.qrCode ? (
+                          <img src={contact.qrCode} alt={`${contact.name || "联系人"}二维码`} className="w-full h-full object-cover" />
+                        ) : (
+                          <span className="text-xs text-center" style={{ color: "var(--color-text-logo)" }}>
+                            {contact.name || "微信"}二维码
+                          </span>
+                        )}
+                      </div>
+                      {(contact.name || contact.role) && (
+                        <p className="mt-2 text-sm font-medium" style={{ color: "var(--color-text-body)" }}>
+                          {contact.name}{contact.name && contact.role && " · "}{contact.role}
+                        </p>
+                      )}
+                      {contact.phone && (
+                        <p className="text-xs" style={{ color: "var(--color-text-muted)" }}>{contact.phone}</p>
+                      )}
+                      {contact.wechat && (
+                        <p className="text-xs" style={{ color: "var(--color-text-muted)" }}>微信：{contact.wechat}</p>
+                      )}
+                    </div>
+                  ))}
                 </div>
-              </div>
+              )}
               </div>
             </div>
 

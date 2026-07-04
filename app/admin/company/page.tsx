@@ -1,15 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Save, Plus, Trash2 } from "lucide-react";
+import { Save, Plus, Trash2, Upload } from "lucide-react";
 import { FormField, ArrayEditor, Toast } from "@/components/admin/AdminShared";
-import type { Customer, CapabilityItem, StatItem } from "@/lib/data";
+import type { Customer, CapabilityItem, StatItem, Contact } from "@/lib/data";
 
 type CompanyData = {
   company: Record<string, string>;
   customers: Customer[];
   capabilities: CapabilityItem[];
   stats: StatItem[];
+  contacts: Contact[];
 };
 
 export default function AdminCompanyPage() {
@@ -71,6 +72,33 @@ export default function AdminCompanyPage() {
     } catch {
       showToast("保存失败", "error");
     } finally { setSaving(false); }
+  };
+
+  const saveContacts = async () => {
+    if (!data) return;
+    setSaving(true);
+    try {
+      await fetch("/api/admin/company", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type: "contacts", data: data.contacts }),
+      });
+      showToast("联系人信息已保存", "success");
+    } catch {
+      showToast("保存失败", "error");
+    } finally { setSaving(false); }
+  };
+
+  // ponytail: base64 直存 JSON，省掉文件上传基础设施；QR 图很小足够用
+  const handleQrUpload = (idx: number, file: File | undefined) => {
+    if (!file || !data) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const newContacts = [...data.contacts];
+      newContacts[idx] = { ...newContacts[idx], qrCode: reader.result as string };
+      setData({ ...data, contacts: newContacts });
+    };
+    reader.readAsDataURL(file);
   };
 
   if (!data) return <div className="py-20 text-center" style={{ color: "var(--color-text-muted)" }}>加载中...</div>;
@@ -189,6 +217,118 @@ export default function AdminCompanyPage() {
                   className="form-input"
                 />
               </FormField>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 联系人 / 二维码 */}
+      <section className="glass-card rounded-[var(--radius-lg)] p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-bold" style={{ color: "var(--color-text-primary)" }}>联系人 & 微信二维码</h2>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setData({ ...data, contacts: [...data.contacts, { name: "", role: "商务经理", phone: "", wechat: "", qrCode: "" }] })}
+              className="flex items-center gap-1 text-xs cursor-pointer px-3 py-1.5 rounded-[var(--radius-sm)]"
+              style={{ backgroundColor: "rgba(99,102,241,0.15)", color: "var(--color-accent-light)" }}
+            >
+              <Plus size={14} /> 新增联系人
+            </button>
+            <SaveButton onClick={saveContacts} saving={saving} />
+          </div>
+        </div>
+        <div className="space-y-4">
+          {data.contacts.map((contact, idx) => (
+            <div key={idx} className="glass-card rounded-[var(--radius-sm)] p-4">
+              <div className="flex gap-4">
+                {/* 二维码预览 */}
+                <div className="shrink-0">
+                  <div
+                    className="w-28 h-28 rounded-[var(--radius-md)] flex items-center justify-center overflow-hidden"
+                    style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid var(--color-border-default)" }}
+                  >
+                    {contact.qrCode ? (
+                      // ponytail: next/image 在 base64 动态 src 下收益低，原生 img 更省事
+                      <img src={contact.qrCode} alt={`${contact.name || "联系人"}二维码`} className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-xs text-center px-2" style={{ color: "var(--color-text-copyright)" }}>未上传二维码</span>
+                    )}
+                  </div>
+                  <label className="mt-2 flex items-center justify-center gap-1 text-xs cursor-pointer px-2 py-1.5 rounded-[var(--radius-sm)] transition-colors" style={{ backgroundColor: "rgba(99,102,241,0.1)", color: "var(--color-accent-light)" }}>
+                    <Upload size={12} /> {contact.qrCode ? "更换" : "上传"}
+                    <input type="file" accept="image/*" className="hidden" onChange={(e) => handleQrUpload(idx, e.target.files?.[0])} />
+                  </label>
+                  {contact.qrCode && (
+                    <button
+                      onClick={() => {
+                        const newContacts = [...data.contacts];
+                        newContacts[idx] = { ...contact, qrCode: "" };
+                        setData({ ...data, contacts: newContacts });
+                      }}
+                      className="mt-1 w-full text-xs cursor-pointer" style={{ color: "rgb(248,113,113)" }}
+                    >移除二维码</button>
+                  )}
+                </div>
+                {/* 文本字段 */}
+                <div className="flex-1 grid grid-cols-2 gap-3">
+                  <FormField label="姓名">
+                    <input
+                      value={contact.name}
+                      onChange={(e) => {
+                        const newContacts = [...data.contacts];
+                        newContacts[idx] = { ...contact, name: e.target.value };
+                        setData({ ...data, contacts: newContacts });
+                      }}
+                      placeholder="如 张三"
+                      className="form-input"
+                    />
+                  </FormField>
+                  <FormField label="职务">
+                    <input
+                      value={contact.role}
+                      onChange={(e) => {
+                        const newContacts = [...data.contacts];
+                        newContacts[idx] = { ...contact, role: e.target.value };
+                        setData({ ...data, contacts: newContacts });
+                      }}
+                      placeholder="如 商务经理"
+                      className="form-input"
+                    />
+                  </FormField>
+                  <FormField label="电话">
+                    <input
+                      value={contact.phone}
+                      onChange={(e) => {
+                        const newContacts = [...data.contacts];
+                        newContacts[idx] = { ...contact, phone: e.target.value };
+                        setData({ ...data, contacts: newContacts });
+                      }}
+                      placeholder="如 138-xxxx-xxxx"
+                      className="form-input"
+                    />
+                  </FormField>
+                  <FormField label="微信号">
+                    <input
+                      value={contact.wechat}
+                      onChange={(e) => {
+                        const newContacts = [...data.contacts];
+                        newContacts[idx] = { ...contact, wechat: e.target.value };
+                        setData({ ...data, contacts: newContacts });
+                      }}
+                      placeholder="微信号"
+                      className="form-input"
+                    />
+                  </FormField>
+                </div>
+                {/* 删除 */}
+                <button
+                  onClick={() => setData({ ...data, contacts: data.contacts.filter((_, i) => i !== idx) })}
+                  className="self-start p-2 cursor-pointer"
+                  style={{ color: "rgb(248,113,113)" }}
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
             </div>
           ))}
         </div>

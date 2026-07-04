@@ -1,7 +1,8 @@
 import Link from "next/link";
 import Logo from "./Logo";
+import type { Contact } from "@/lib/data";
 
-export default function Footer({ company }: { company: Record<string, string> }) {
+export default function Footer({ company, contacts }: { company: Record<string, string>; contacts: Contact[] }) {
   return (
     <footer
       className="border-t pt-16 pb-8"
@@ -151,19 +152,35 @@ export default function Footer({ company }: { company: Record<string, string> })
                 <span style={{ color: "var(--color-text-body)" }}>{company.wechat}</span>
               </li>
             </ul>
-            <div
-              className="mt-6 w-24 h-24 rounded-[var(--radius-md)] flex items-center justify-center"
-              style={{
-                backgroundColor: "rgba(255,255,255,0.03)",
-                border: "1px solid rgba(255,255,255,0.06)",
-              }}
-            >
-              <span className="text-xs text-center leading-relaxed" style={{ color: "var(--color-text-copyright)" }}>
-                微信
-                <br />
-                二维码
-              </span>
-            </div>
+            {/* 联系人二维码 */}
+            {contacts.length > 0 && (
+              <div className="mt-6 flex flex-wrap gap-4">
+                {contacts.map((contact, idx) => (
+                  <div key={idx} className="flex flex-col items-center">
+                    <div
+                      className="w-24 h-24 rounded-[var(--radius-md)] flex items-center justify-center overflow-hidden"
+                      style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}
+                    >
+                      {contact.qrCode ? (
+                        <img src={contact.qrCode} alt={`${contact.name || "联系人"}二维码`} className="w-full h-full object-cover" />
+                      ) : (
+                        <span className="text-xs text-center leading-relaxed px-1" style={{ color: "var(--color-text-copyright)" }}>
+                          {contact.name || "微信"}<br />二维码
+                        </span>
+                      )}
+                    </div>
+                    {(contact.name || contact.role) && (
+                      <span className="mt-1.5 text-xs text-center" style={{ color: "var(--color-text-copyright)" }}>
+                        {contact.name}{contact.name && contact.role && " · "}{contact.role}
+                      </span>
+                    )}
+                    {contact.phone && (
+                      <span className="text-xs" style={{ color: "var(--color-text-copyright)" }}>{contact.phone}</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 

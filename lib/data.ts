@@ -72,6 +72,14 @@ export interface StatItem {
   label: string;
 }
 
+export interface Contact {
+  name: string;
+  role: string;
+  phone: string;
+  wechat: string;
+  qrCode: string; // base64 data URL
+}
+
 export interface Settings {
   seoTitle: string;
   seoDescription: string;
@@ -98,6 +106,10 @@ export function getCapabilities() {
 
 export function getStats() {
   return loadJson<StatItem[]>("stats.json");
+}
+
+export function getContacts() {
+  return loadJson<Contact[]>("contacts.json");
 }
 
 export function getCases() {
