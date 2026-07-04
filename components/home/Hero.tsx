@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import type { StatItem } from "@/lib/data";
+import NeuralBackground from "./NeuralBackground";
 
 export default function Hero({ stats }: { stats: StatItem[] }) {
   const hudMetrics = stats.map((s) => ({
@@ -30,86 +31,32 @@ export default function Hero({ stats }: { stats: StatItem[] }) {
 
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-24">
-      {/* ===== Background Layers (5 layers) ===== */}
+      {/* ===== Background Layers ===== */}
 
       {/* Layer 1: Solid base */}
       <div className="absolute inset-0 -z-10" style={{ backgroundColor: "var(--color-bg-base)" }} />
 
-      {/* Layer 2: Enhanced radial gradients — larger and more vivid */}
+      {/* Layer 2: Radial gradients (透明度略降，避免与新粒子层抢戏) */}
       <div
         className="absolute inset-0 -z-10"
         style={{
           background: `
-            radial-gradient(ellipse 80% 50% at 50% 0%, rgba(99,102,241,0.2) 0%, transparent 50%),
-            radial-gradient(ellipse 60% 40% at 80% 15%, rgba(139,92,246,0.12) 0%, transparent 45%),
-            radial-gradient(ellipse 50% 30% at 20% 25%, rgba(6,182,212,0.06) 0%, transparent 40%)
+            radial-gradient(ellipse 80% 50% at 50% 0%, rgba(99,102,241,0.12) 0%, transparent 50%),
+            radial-gradient(ellipse 60% 40% at 80% 15%, rgba(139,92,246,0.07) 0%, transparent 45%),
+            radial-gradient(ellipse 50% 30% at 20% 25%, rgba(6,182,212,0.04) 0%, transparent 40%)
           `,
         }}
       />
 
-      {/* Layer 3: Grid lines (enhanced opacity) */}
+      {/* Layer 3: Grid lines */}
       <div className="absolute inset-0 -z-10 accent-glow" />
       <div className="absolute inset-0 -z-10 grid-bg" />
 
-      {/* Layer 4: Starfield particles */}
-      <div className="absolute inset-0 -z-10 starfield" />
+      {/* Layer 4-5: Neural field (星尘 + 神经网络 + 数据流 + 鼠标交互) */}
+      <NeuralBackground />
 
-      {/* Layer 5: Scanline overlay */}
+      {/* Scanline overlay */}
       <div className="absolute inset-0 -z-10 scanline-overlay" />
-
-      {/* ===== Floating orbs — 5 orbs, larger, more dynamic ===== */}
-      <motion.div
-        animate={shouldReduceMotion ? undefined : {
-          y: [0, -40, 0],
-          x: [0, 15, 0],
-          opacity: [0.3, 0.7, 0.3],
-          scale: [1, 1.08, 1],
-        }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-[12%] left-[6%] w-80 h-80 rounded-full -z-10 blur-3xl"
-        style={{ background: "radial-gradient(circle, rgba(99,102,241,0.14) 0%, transparent 70%)" }}
-      />
-      <motion.div
-        animate={shouldReduceMotion ? undefined : {
-          y: [0, 50, 0],
-          x: [0, -20, 0],
-          opacity: [0.2, 0.55, 0.2],
-          scale: [1, 1.1, 1],
-        }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-        className="absolute bottom-[15%] right-[5%] w-[28rem] h-[28rem] rounded-full -z-10 blur-3xl"
-        style={{ background: "radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%)" }}
-      />
-      <motion.div
-        animate={shouldReduceMotion ? undefined : {
-          y: [0, 30, 0],
-          opacity: [0.15, 0.4, 0.15],
-        }}
-        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 3 }}
-        className="absolute top-[55%] left-[12%] w-56 h-56 rounded-full -z-10 blur-2xl"
-        style={{ background: "radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%)" }}
-      />
-      {/* New orb — top-right cyan accent */}
-      <motion.div
-        animate={shouldReduceMotion ? undefined : {
-          y: [0, -20, 0],
-          x: [0, -10, 0],
-          opacity: [0.1, 0.3, 0.1],
-        }}
-        transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        className="absolute top-[20%] right-[12%] w-44 h-44 rounded-full -z-10 blur-2xl"
-        style={{ background: "radial-gradient(circle, rgba(6,182,212,0.08) 0%, transparent 70%)" }}
-      />
-      {/* New orb — bottom-left warm accent */}
-      <motion.div
-        animate={shouldReduceMotion ? undefined : {
-          y: [0, 20, 0],
-          opacity: [0.1, 0.25, 0.1],
-        }}
-        transition={{ duration: 11, repeat: Infinity, ease: "easeInOut", delay: 4 }}
-        className="absolute bottom-[30%] left-[25%] w-40 h-40 rounded-full -z-10 blur-2xl"
-        style={{ background: "radial-gradient(circle, rgba(168,85,247,0.08) 0%, transparent 70%)" }}
-      />
 
       {/* ===== Main Content ===== */}
       <div className="container-max flex flex-col items-center text-center">

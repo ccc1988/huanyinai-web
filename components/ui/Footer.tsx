@@ -1,8 +1,8 @@
 import Link from "next/link";
 import Logo from "./Logo";
-import type { Contact, StatItem, IndustrySolution } from "@/lib/data";
+import type { Contact, StatItem, IndustrySolution, CaseItem } from "@/lib/data";
 
-export default function Footer({ company, contacts, stats, industries }: { company: Record<string, string>; contacts: Contact[]; stats: StatItem[]; industries: IndustrySolution[] }) {
+export default function Footer({ company, contacts, stats, industries, cases }: { company: Record<string, string>; contacts: Contact[]; stats: StatItem[]; industries: IndustrySolution[]; cases: CaseItem[] }) {
   return (
     <footer
       className="border-t pt-16 pb-8"
@@ -12,7 +12,7 @@ export default function Footer({ company, contacts, stats, industries }: { compa
       }}
     >
       <div className="container-max">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 lg:gap-10 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 mb-12">
           {/* 品牌区 */}
           <div>
             <Logo size="footer" />
@@ -80,6 +80,39 @@ export default function Footer({ company, contacts, stats, industries }: { compa
               <li>
                 <Link
                   href="/solutions"
+                  className="text-sm cursor-pointer font-medium transition-colors inline-flex items-center gap-1"
+                  style={{ color: "var(--color-accent-light)" }}
+                >
+                  查看全部
+                  <span aria-hidden="true">→</span>
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* 客户案例 */}
+          <div>
+            <h3
+              className="text-sm font-semibold mb-4"
+              style={{ color: "var(--color-text-muted)" }}
+            >
+              客户案例
+            </h3>
+            <ul className="space-y-3">
+              {cases.slice(0, 5).map((c) => (
+                <li key={c.slug}>
+                  <Link
+                    href={`/cases/${c.slug}`}
+                    className="text-sm cursor-pointer transition-colors hover:text-[var(--color-text-body)]"
+                    style={{ color: "var(--color-text-muted)" }}
+                  >
+                    {c.title}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link
+                  href="/cases"
                   className="text-sm cursor-pointer font-medium transition-colors inline-flex items-center gap-1"
                   style={{ color: "var(--color-accent-light)" }}
                 >

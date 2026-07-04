@@ -3,7 +3,7 @@ import { Space_Grotesk, DM_Sans } from "next/font/google";
 import "./globals.css";
 import AppShell from "@/components/ui/AppShell";
 import { getOrganizationJsonLd } from "@/lib/geo";
-import { getCompany, getNavItems, getSettings, getContacts, getStats, getIndustries } from "@/lib/data";
+import { getCompany, getNavItems, getSettings, getContacts, getStats, getIndustries, getCases } from "@/lib/data";
 
 // 强制动态渲染，确保后台修改即时生效
 export const dynamic = "force-dynamic";
@@ -64,6 +64,7 @@ export default function RootLayout({
   const contacts = getContacts();
   const stats = getStats();
   const industries = getIndustries();
+  const cases = getCases();
   return (
     <html lang="zh-CN" data-scroll-behavior="smooth" className={`${spaceGrotesk.variable} ${dmSans.variable}`}>
       <body>
@@ -73,7 +74,7 @@ export default function RootLayout({
             __html: JSON.stringify(getOrganizationJsonLd()),
           }}
         />
-        <AppShell navItems={navItems} company={company} contacts={contacts} stats={stats} industries={industries}>{children}</AppShell>
+        <AppShell navItems={navItems} company={company} contacts={contacts} stats={stats} industries={industries} cases={cases}>{children}</AppShell>
       </body>
     </html>
   );

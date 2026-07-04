@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import type { Settings, Contact, StatItem, IndustrySolution } from "@/lib/data";
+import type { Settings, Contact, StatItem, IndustrySolution, CaseItem } from "@/lib/data";
 
 export default function AppShell({
   children,
@@ -12,6 +12,7 @@ export default function AppShell({
   contacts,
   stats,
   industries,
+  cases,
 }: {
   children: React.ReactNode;
   navItems: Settings["navItems"];
@@ -19,6 +20,7 @@ export default function AppShell({
   contacts: Contact[];
   stats: StatItem[];
   industries: IndustrySolution[];
+  cases: CaseItem[];
 }) {
   const pathname = usePathname();
   const isAdmin = pathname.startsWith("/admin");
@@ -31,7 +33,7 @@ export default function AppShell({
     <>
       <Navbar navItems={navItems} />
       <main className="min-h-screen">{children}</main>
-      <Footer company={company} contacts={contacts} stats={stats} industries={industries} />
+      <Footer company={company} contacts={contacts} stats={stats} industries={industries} cases={cases} />
     </>
   );
 }

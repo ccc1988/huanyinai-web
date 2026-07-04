@@ -7,7 +7,7 @@ import { getCaseStudyJsonLd } from "@/lib/geo";
 import { getCaseVisual } from "@/lib/caseVisuals";
 
 export function generateStaticParams() {
-  return getCases().filter((c) => c.hasDetailPage).map((c) => ({ slug: c.slug }));
+  return getCases().map((c) => ({ slug: c.slug }));
 }
 
 export function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
@@ -30,7 +30,7 @@ export default async function CaseDetailPage({
   const { slug } = await params;
   const caseItem = getCaseBySlug(slug);
 
-  if (!caseItem || !caseItem!.hasDetailPage) {
+  if (!caseItem) {
     notFound();
   }
 
@@ -62,7 +62,7 @@ export default async function CaseDetailPage({
           <nav className="inline-flex items-center gap-2 text-sm mb-8 px-4 py-2 rounded-full" style={{ color: "var(--color-text-muted)", backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
             <Link href="/" className="hover:text-[var(--color-text-body)] transition-colors">首页</Link>
             <ChevronRight size={14} />
-            <Link href="/cases/customs-document-ai" className="hover:text-[var(--color-text-body)] transition-colors">案例</Link>
+            <Link href="/cases" className="hover:text-[var(--color-text-body)] transition-colors">案例</Link>
             <ChevronRight size={14} />
             <span style={{ color: "var(--color-text-body)" }}>{caseItem!.industry}</span>
           </nav>

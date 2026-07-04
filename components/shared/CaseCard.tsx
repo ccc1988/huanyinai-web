@@ -46,7 +46,7 @@ export default function CaseCard({ item }: { item: CaseItem }) {
       </p>
 
       {/* Link */}
-      {item.hasDetailPage ? (
+      <div className="flex items-center justify-between">
         <Link
           href={`/cases/${item.slug}`}
           className="inline-flex items-center gap-1 text-sm font-medium transition-colors"
@@ -55,14 +55,10 @@ export default function CaseCard({ item }: { item: CaseItem }) {
           了解更多
           <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
         </Link>
-      ) : (
-        <span
-          className="text-sm font-medium"
-          style={{ color: "var(--color-text-muted)" }}
-        >
-          关联客户：{item.relatedCustomers.join("、")}
+        <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>
+          {item.relatedCustomers.join("、")}
         </span>
-      )}
+      </div>
       </div>
     </div>
   );
