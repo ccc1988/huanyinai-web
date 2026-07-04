@@ -2,6 +2,43 @@
 
 本项目所有重要变更记录于此文件。
 
+## v1.1.0 — 2026-07-04
+
+### UI/UX 增强
+- 新增 `favicon.svg` 和 OG 分享图（`public/og/default.svg`）
+- 客户 Logo 墙重构：品牌风格图标卡片替代纯文字
+- 案例卡片增加 SVG 可视化插画头部（`CaseIllustration` 组件，8 种 pattern）
+- 行业方案页增加流程图示和行业图标
+- 案例详情页增加解决方案架构图
+- 首页 Hero 增加浮动光球视觉深度（Framer Motion 6s/8s 循环）
+- 行业 Tab 增加行业图标和胶囊选中态
+
+### 管理员后台系统（新增）
+- **数据层**：8 个 JSON 文件（`data/*.json`）从代码中解耦，`lib/dataStore.ts` 读写
+- **认证**：密码登录 + HMAC 签名 session（7天有效），`middleware.ts` 路由保护
+- **案例管理**：列表/搜索/新增/编辑/删除，全字段编辑
+- **博客管理**：列表/搜索/新增/编辑/删除，分段落编辑
+- **行业方案管理**：列表/搜索/新增/编辑/删除，FAQ 编辑
+- **公司信息管理**：基本信息/数据指标/客户列表增删改
+- **站点设置管理**：SEO 标题/描述/关键词、OG 社交分享、GEO llms.txt、导航菜单
+- **API 路由**：`/api/admin/{cases,blog,industries,company,settings}` + `/api/auth/{login,logout}`
+- **AppShell**：管理后台页面隔离前台 Navbar/Footer
+
+### 配置变更
+- 开发端口从 `3000` 改为 **`18500**
+- 新增 `.env.local` 管理员密码和 Session 密钥配置
+- 新增 `turbopack.root` 配置消除构建警告
+
+### Bug 修复
+- 修复 `lib/data.ts` 重复的硬编码数据（JSON 导入与旧数据共存）
+- 修复 `lib/auth.ts` `timingSafeEqual` 密码长度不一致时崩溃
+- 修复 `middleware.ts` Edge Runtime 不兼容 Node.js `crypto` 模块
+
+### 构建
+- 35/35 路由全部生成（前台 21 + 管理后台 7 + API 7）
+
+---
+
 ## v1.0.0 — 2026-07-04
 
 ### 主要变更
