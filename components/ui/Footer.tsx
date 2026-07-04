@@ -12,8 +12,8 @@ export default function Footer({ company, contacts }: { company: Record<string, 
       }}
     >
       <div className="container-max">
-        <div className="grid grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-10 mb-12">
-          {/* Brand — 占 2 列宽，内容更充实 */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 mb-12">
+          {/* Brand — 占 2 列宽，最左侧 */}
           <div className="col-span-2 lg:col-span-2">
             <Logo size="footer" />
             <p
@@ -22,17 +22,9 @@ export default function Footer({ company, contacts }: { company: Record<string, 
             >
               {company.fullName}
             </p>
-            {company.description && (
-              <p
-                className="mt-2 text-sm leading-relaxed max-w-xs"
-                style={{ color: "var(--color-text-copyright)" }}
-              >
-                {company.description}
-              </p>
-            )}
           </div>
 
-          {/* 解决方案 — 独立一列 */}
+          {/* 解决方案 */}
           <div>
             <h3
               className="text-sm font-semibold mb-4"
@@ -80,55 +72,7 @@ export default function Footer({ company, contacts }: { company: Record<string, 
             </ul>
           </div>
 
-          {/* 公司 — 独立一列 */}
-          <div>
-            <h3
-              className="text-sm font-semibold mb-4"
-              style={{ color: "var(--color-text-muted)" }}
-            >
-              公司
-            </h3>
-            <ul className="space-y-3">
-              <li>
-                <Link
-                  href="/"
-                  className="text-sm cursor-pointer transition-colors hover:text-[var(--color-text-body)]"
-                  style={{ color: "var(--color-text-muted)" }}
-                >
-                  首页
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/about"
-                  className="text-sm cursor-pointer transition-colors hover:text-[var(--color-text-body)]"
-                  style={{ color: "var(--color-text-muted)" }}
-                >
-                  关于我们
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/cases/customs-document-ai"
-                  className="text-sm cursor-pointer transition-colors hover:text-[var(--color-text-body)]"
-                  style={{ color: "var(--color-text-muted)" }}
-                >
-                  案例
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/blog"
-                  className="text-sm cursor-pointer transition-colors hover:text-[var(--color-text-body)]"
-                  style={{ color: "var(--color-text-muted)" }}
-                >
-                  博客
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* 联系我们 — 独立一列 */}
+          {/* 联系我们 + 二维码并排 */}
           <div>
             <h3
               className="text-sm font-semibold mb-4"
@@ -152,9 +96,9 @@ export default function Footer({ company, contacts }: { company: Record<string, 
                 <span style={{ color: "var(--color-text-body)" }}>{company.wechat}</span>
               </li>
             </ul>
-            {/* 联系人二维码 */}
+            {/* 联系人二维码 — 并排 */}
             {contacts.length > 0 && (
-              <div className="mt-6 flex flex-wrap gap-4">
+              <div className="mt-6 flex flex-row gap-4">
                 {contacts.map((contact, idx) => (
                   <div key={idx} className="flex flex-col items-center">
                     <div
@@ -184,7 +128,7 @@ export default function Footer({ company, contacts }: { company: Record<string, 
           </div>
         </div>
 
-        {/* Copyright */}
+        {/* Copyright + 描述 */}
         <div
           className="pt-6 border-t text-center"
           style={{
@@ -194,6 +138,11 @@ export default function Footer({ company, contacts }: { company: Record<string, 
           <p className="text-xs" style={{ color: "var(--color-text-copyright)" }}>
             © {new Date().getFullYear()} {company.fullName}
           </p>
+          {company.description && (
+            <p className="mt-1.5 text-xs" style={{ color: "var(--color-text-copyright)" }}>
+              {company.description}
+            </p>
+          )}
         </div>
       </div>
     </footer>
