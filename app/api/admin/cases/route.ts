@@ -1,13 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { readData, writeData } from "@/lib/dataStore";
 import type { CaseItem } from "@/lib/data";
+import { requireAuth } from "@/lib/auth";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const authError = requireAuth(request);
+  if (authError) return authError;
   const cases = readData.cases();
   return NextResponse.json(cases);
 }
 
 export async function PUT(request: NextRequest) {
+  const authError = requireAuth(request);
+  if (authError) return authError;
   try {
     const data = await request.json();
     const cases = readData.cases() as CaseItem[];

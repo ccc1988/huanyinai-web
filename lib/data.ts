@@ -90,6 +90,45 @@ export interface Settings {
   navItems: { label: string; href: string }[];
 }
 
+// ===== 预约咨询相关类型 =====
+
+export interface Submission {
+  id: string;
+  name: string;
+  company: string;
+  phone: string;
+  email: string;
+  message: string;
+  ip: string;
+  userAgent: string;
+  createdAt: string;
+  status: "unread" | "read";
+  category: string;
+  tags: string[];
+  notes: string;
+  emailSent: boolean;
+  emailSentAt: string | null;
+}
+
+export interface SmtpConfig {
+  enabled: boolean;
+  host: string;
+  port: number;
+  secure: boolean;
+  username: string;
+  encryptedPassword: string | null;
+  fromName: string;
+  fromEmail: string;
+  recipients: string[];
+  subjectTemplate: string;
+}
+
+export interface AdminConfig {
+  passwordHash: string | null;
+  passwordSalt: string | null;
+  updatedAt: string | null;
+}
+
 // ===== 运行时读取数据（每次调用读磁盘，确保后台修改即时生效） =====
 
 export function getCompany() {
@@ -126,6 +165,33 @@ export function getBlogPosts() {
 
 export function getSettings() {
   return loadJson<Settings>("settings.json");
+}
+
+export function getSubmissions() {
+  try {
+    return loadJson<Submission[]>("submissions.json");
+  } catch {
+    return [];
+  }
+}
+
+export function getSmtpConfig() {
+  try {
+    return loadJson<SmtpConfig>("smtp-config.json");
+  } catch {
+    return {
+      enabled: false,
+      host: "",
+      port: 465,
+      secure: true,
+      username: "",
+      encryptedPassword: null,
+      fromName: "寰引智能官网",
+      fromEmail: "",
+      recipients: [],
+      subjectTemplate: "【新咨询】{company} - {name}",
+    } as SmtpConfig;
+  }
 }
 
 export function getNavItems() {

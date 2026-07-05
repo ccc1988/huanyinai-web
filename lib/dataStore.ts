@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import type { Customer, CaseItem, IndustrySolution, CapabilityItem, StatItem, BlogPost, Settings, Contact } from "./data";
+import type { Customer, CaseItem, IndustrySolution, CapabilityItem, StatItem, BlogPost, Settings, Contact, Submission, SmtpConfig, AdminConfig } from "./data";
 
 const dataDir = process.env.DATA_DIR || path.join(process.cwd(), "data");
 
@@ -12,7 +12,9 @@ function readJson<T>(filename: string): T {
 
 function writeJson<T>(filename: string, data: T): void {
   const filePath = path.join(dataDir, filename);
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
+  const tmpPath = filePath + ".tmp";
+  fs.writeFileSync(tmpPath, JSON.stringify(data, null, 2), "utf-8");
+  fs.renameSync(tmpPath, filePath); // 原子操作，防止并发写入丢失
 }
 
 // ===== 读取函数 =====
@@ -26,6 +28,9 @@ export const readData = {
   contacts: () => readJson<Contact[]>("contacts.json"),
   blogPosts: () => readJson<BlogPost[]>("blog-posts.json"),
   settings: () => readJson<Settings>("settings.json"),
+  submissions: () => { try { return readJson<Submission[]>("submissions.json"); } catch { return []; } },
+  smtpConfig: () => { try { return readJson<SmtpConfig>("smtp-config.json"); } catch { return { enabled: false, host: "", port: 465, secure: true, username: "", encryptedPassword: null, fromName: "寰引智能官网", fromEmail: "", recipients: [], subjectTemplate: "【新咨询】{company} - {name}" } as SmtpConfig; } },
+  adminConfig: () => { try { return readJson<AdminConfig>("admin-config.json"); } catch { return { passwordHash: null, passwordSalt: null, updatedAt: null } as AdminConfig; } },
 };
 
 // ===== 写入函数 =====
@@ -39,4 +44,7 @@ export const writeData = {
   contacts: (data: Contact[]) => writeJson("contacts.json", data),
   blogPosts: (data: BlogPost[]) => writeJson("blog-posts.json", data),
   settings: (data: Settings) => writeJson("settings.json", data),
+  submissions: (data: Submission[]) => writeJson("submissions.json", data),
+  smtpConfig: (data: SmtpConfig) => writeJson("smtp-config.json", data),
+  adminConfig: (data: AdminConfig) => writeJson("admin-config.json", data),
 };

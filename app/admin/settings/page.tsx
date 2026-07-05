@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Save, Plus, Trash2 } from "lucide-react";
+import { Save, Plus, Trash2, Lock } from "lucide-react";
 import { FormField, ArrayEditor, Toast } from "@/components/admin/AdminShared";
 
 type SiteSettings = {
@@ -176,7 +176,111 @@ export default function AdminSettingsPage() {
         </div>
       </section>
 
+      {/* 安全设置 — 修改密码 */}
+      <ChangePasswordSection />
+
       {toast && <Toast message={toast.message} type={toast.type} />}
     </div>
+  );
+}
+
+// ===== 修改密码子组件 =====
+function ChangePasswordSection() {
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+
+  const showToast = (message: string, type: "success" | "error") => {
+    setToast({ message, type });
+    setTimeout(() => setToast(null), 3000);
+  };
+
+  const handleChangePassword = async () => {
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      showToast("请填写所有字段", "error");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      showToast("两次输入的新密码不一致", "error");
+      return;
+    }
+    if (newPassword.length < 6) {
+      showToast("新密码至少 6 位", "error");
+      return;
+    }
+    setSaving(true);
+    try {
+      const res = await fetch("/api/admin/change-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ currentPassword, newPassword }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast("密码修改成功，即时生效", "success");
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+      } else {
+        showToast(data.error || "修改失败", "error");
+      }
+    } catch {
+      showToast("修改失败", "error");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <section className="glass-card rounded-[var(--radius-lg)] p-6">
+      <div className="flex items-center gap-2 mb-4">
+        <Lock size={18} style={{ color: "var(--color-accent-light)" }} />
+        <h2 className="text-lg font-bold" style={{ color: "var(--color-text-primary)" }}>安全设置</h2>
+      </div>
+      <p className="text-sm mb-4" style={{ color: "var(--color-text-muted)" }}>
+        修改后台管理员密码，修改后即时生效。如忘记密码，可通过服务器 .env.local 中 ADMIN_PASSWORD 登录。
+      </p>
+      <div className="space-y-4 max-w-md">
+        <FormField label="当前密码" required>
+          <input
+            type="password"
+            value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
+            className="form-input"
+            placeholder="请输入当前密码"
+          />
+        </FormField>
+        <FormField label="新密码" required>
+          <input
+            type="password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            className="form-input"
+            placeholder="至少 6 位"
+          />
+        </FormField>
+        <FormField label="确认新密码" required>
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className="form-input"
+            placeholder="再次输入新密码"
+          />
+        </FormField>
+        <button
+          onClick={handleChangePassword}
+          disabled={saving}
+          className="flex items-center gap-2 px-4 py-2 rounded-[var(--radius-sm)] text-sm font-medium cursor-pointer transition-colors disabled:opacity-50"
+          style={{ backgroundColor: "var(--color-accent)", color: "white" }}
+        >
+          <Lock size={16} />
+          {saving ? "修改中..." : "修改密码"}
+        </button>
+      </div>
+      {toast && <Toast message={toast.message} type={toast.type} />}
+    </section>
   );
 }

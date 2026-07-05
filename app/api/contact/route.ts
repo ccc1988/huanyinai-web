@@ -1,4 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
+import { readData, writeData } from "@/lib/dataStore";
+import { sendNotificationEmail } from "@/lib/email";
+import type { Submission } from "@/lib/data";
 
 export async function POST(request: NextRequest) {
   try {
@@ -35,16 +38,57 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Log the submission (replace with actual email/CRM integration)
-    console.log("[Contact Form Submission]", {
-      name,
-      company,
-      phone,
-      email: email || "(未提供)",
-      message,
-      timestamp: new Date().toISOString(),
-      ip: request.headers.get("x-forwarded-for") || "unknown",
-    });
+    const now = new Date();
+    const ip = request.headers.get("x-forwarded-for") || "unknown";
+    const userAgent = request.headers.get("user-agent") || "unknown";
+
+    // 持久化到 submissions.json
+    const submission: Submission = {
+      id: `sub-${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}-${String(now.getHours()).padStart(2, "0")}${String(now.getMinutes()).padStart(2, "0")}${String(now.getSeconds()).padStart(2, "0")}-${Math.random().toString(36).slice(2, 6)}`,
+      name: name.trim(),
+      company: company.trim(),
+      phone: phone.trim(),
+      email: (email || "").trim(),
+      message: message.trim(),
+      ip,
+      userAgent,
+      createdAt: now.toISOString(),
+      status: "unread",
+      category: "",
+      tags: [],
+      notes: "",
+      emailSent: false,
+      emailSentAt: null,
+    };
+
+    try {
+      const submissions = readData.submissions();
+      submissions.unshift(submission);
+      writeData.submissions(submissions);
+    } catch (err) {
+      console.error("[Contact] Failed to persist submission:", err);
+    }
+
+    // 异步发送邮件通知（不阻塞用户提交）
+    try {
+      const smtpConfig = readData.smtpConfig();
+      if (smtpConfig.enabled && smtpConfig.recipients.length > 0) {
+        const result = await sendNotificationEmail(smtpConfig, submission);
+        if (result.success) {
+          const submissions = readData.submissions();
+          const idx = submissions.findIndex((s) => s.id === submission.id);
+          if (idx >= 0) {
+            submissions[idx].emailSent = true;
+            submissions[idx].emailSentAt = new Date().toISOString();
+            writeData.submissions(submissions);
+          }
+        } else {
+          console.error("[Contact] Email send failed:", result.error);
+        }
+      }
+    } catch (err) {
+      console.error("[Contact] Email notification error:", err);
+    }
 
     // Check for webhook URL env var for external integration
     const webhookUrl = process.env.CONTACT_WEBHOOK_URL;

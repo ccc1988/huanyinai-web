@@ -1,5 +1,27 @@
 # Changelog
 
+## v1.5.0 — 2026-07-04
+
+### 新功能
+- **预约咨询管理**: 联系表单提交持久化到 submissions.json，后台新增管理页面（查看/筛选/搜索/分类/标签/备注/删除）
+- **邮件通知系统**: SMTP 配置页面，新咨询自动转发到指定邮箱（AES-256-GCM 加密存储密码，支持测试发送）
+- **密码管理**: 三级密码验证（admin-config.json > 环境变量 > 默认值），后台支持在线修改密码（scrypt 哈希）
+- **仪表盘统计**: 新增未读咨询数量统计卡片和快捷入口
+
+### 安全加固
+- **API 认证修复**: 所有 admin API 路由添加 HMAC 签名验证（requireAuth），修复认证绕过漏洞
+- **邮件 HTML 注入防护**: 所有用户输入经 escapeHtml 转义后插入邮件模板
+- **密码哈希升级**: SHA-256 改为 scrypt（符合 OWASP 标准）
+- **原子文件写入**: dataStore 写入改为 tmp + rename 原子操作，防止并发数据丢失
+
+### 依赖
+- 新增 nodemailer ^9.0.3（SMTP 邮件发送）
+- 新增 @types/nodemailer（开发依赖）
+
+### 部署改进
+- 新增 deploy.sh 部署脚本（source .env.local + 传递 ADMIN_PASSWORD/ADMIN_SESSION_SECRET 给 PM2）
+- 修复 PM2 环境变量缺失导致密码回退到 admin123 的问题
+
 ## v1.4.5 — 2026-07-04
 
 ### 依赖

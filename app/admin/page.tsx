@@ -1,17 +1,19 @@
 import Link from "next/link";
-import { Briefcase, FileText, Globe, Building2, Settings, ArrowRight } from "lucide-react";
-import { getCases, getBlogPosts, getIndustries, getCustomers } from "@/lib/data";
+import { Briefcase, FileText, Globe, Building2, Settings, ArrowRight, Inbox, Bell } from "lucide-react";
+import { getCases, getBlogPosts, getIndustries, getCustomers, getSubmissions } from "@/lib/data";
 
 export default function AdminDashboard() {
   const cases = getCases();
   const blogPosts = getBlogPosts();
   const industries = getIndustries();
   const customers = getCustomers();
+  const submissions = getSubmissions();
+  const unreadCount = submissions.filter((s) => s.status === "unread").length;
   const cards = [
+    { label: "预约咨询", count: submissions.length, badge: unreadCount > 0 ? `${unreadCount} 未读` : undefined, href: "/admin/submissions", icon: Inbox, desc: "查看客户咨询" },
     { label: "案例", count: cases.length, href: "/admin/cases", icon: Briefcase, desc: "管理所有案例" },
     { label: "博客", count: blogPosts.length, href: "/admin/blog", icon: FileText, desc: "管理博客文章" },
     { label: "行业方案", count: industries.length, href: "/admin/industries", icon: Globe, desc: "管理行业方案" },
-    { label: "客户", count: customers.length, href: "/admin/company", icon: Building2, desc: "管理公司信息" },
   ];
 
   return (
@@ -55,6 +57,14 @@ export default function AdminDashboard() {
               <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>
                 {card.label}
               </span>
+              {"badge" in card && card.badge && (
+                <span
+                  className="inline-block mt-1 text-xs px-2 py-0.5 rounded"
+                  style={{ backgroundColor: "rgba(245,158,11,0.15)", color: "#f59e0b" }}
+                >
+                  {card.badge}
+                </span>
+              )}
             </Link>
           );
         })}
@@ -88,6 +98,27 @@ export default function AdminDashboard() {
           </Link>
         ))}
       </div>
+
+      {/* 预约咨询快捷入口 */}
+      {unreadCount > 0 && (
+        <Link
+          href="/admin/submissions"
+          className="glass-card rounded-[var(--radius-md)] p-4 mt-4 flex items-center justify-between cursor-pointer group"
+          style={{ borderLeft: "3px solid #f59e0b" }}
+        >
+          <div className="flex items-center gap-2">
+            <Bell size={16} style={{ color: "#f59e0b" }} />
+            <span className="text-sm" style={{ color: "var(--color-text-primary)" }}>
+              {unreadCount} 条未读咨询待处理
+            </span>
+          </div>
+          <ArrowRight
+            size={16}
+            className="transition-transform group-hover:translate-x-1"
+            style={{ color: "#f59e0b" }}
+          />
+        </Link>
+      )}
     </div>
   );
 }
