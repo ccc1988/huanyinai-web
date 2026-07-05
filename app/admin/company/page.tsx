@@ -89,16 +89,39 @@ export default function AdminCompanyPage() {
     } finally { setSaving(false); }
   };
 
-  // ponytail: base64 直存 JSON，省掉文件上传基础设施；QR 图很小足够用
+  // 上传二维码后自动压缩到 200×200，避免 base64 撑大 HTML 体积
+  const QR_MAX_SIZE = 200;
   const handleQrUpload = (idx: number, file: File | undefined) => {
     if (!file || !data) return;
-    const reader = new FileReader();
-    reader.onload = () => {
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(img.src);
+      const canvas = document.createElement("canvas");
+      canvas.width = QR_MAX_SIZE;
+      canvas.height = QR_MAX_SIZE;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+      // 白色背景，避免透明 PNG 在深色 Footer 上不可见
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, QR_MAX_SIZE, QR_MAX_SIZE);
+      // 等比缩放居中
+      const scale = Math.min(QR_MAX_SIZE / img.width, QR_MAX_SIZE / img.height);
+      const w = img.width * scale;
+      const h = img.height * scale;
+      const x = (QR_MAX_SIZE - w) / 2;
+      const y = (QR_MAX_SIZE - h) / 2;
+      ctx.drawImage(img, x, y, w, h);
+      // JPEG 压缩，二维码用 quality 0.85 足够清晰
+      const compressed = canvas.toDataURL("image/jpeg", 0.85);
       const newContacts = [...data.contacts];
-      newContacts[idx] = { ...newContacts[idx], qrCode: reader.result as string };
+      newContacts[idx] = { ...newContacts[idx], qrCode: compressed };
       setData({ ...data, contacts: newContacts });
     };
-    reader.readAsDataURL(file);
+    img.onerror = () => {
+      URL.revokeObjectURL(img.src);
+      showToast("图片加载失败", "error");
+    };
+    img.src = URL.createObjectURL(file);
   };
 
   if (!data) return <div className="py-20 text-center" style={{ color: "var(--color-text-muted)" }}>加载中...</div>;

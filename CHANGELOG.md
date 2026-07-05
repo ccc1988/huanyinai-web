@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.4.4 — 2026-07-04
+
+### 性能优化
+- **首屏懒加载**：首页 Hero 以下组件（ClientLogos/CapabilityMatrix/IndustryTabs/CaseHighlights/StatsWall/FinalCTA）全部 next/dynamic 懒加载，减小首包体积
+- **Hero CSS 动画**：用 CSS keyframes 替代 framer-motion 入场动画，消除水合闪烁，Hero 从客户端组件改为服务端组件
+- **Footer 二维码懒加载**：提取 LazyQRContacts 组件，next/dynamic ssr:false + IntersectionObserver 视口可见才渲染，base64 不再进入首屏 HTML
+- **NeuralBackground 优化**：移除 framer-motion useReducedMotion 依赖，改用原生 matchMedia
+- **二维码上传压缩**：管理后台上传二维码自动 canvas 压缩至 200x200，避免 base64 撑大 JSON
+
+
+
 ## v1.4.3 — 2026-07-05
 
 ### 优化

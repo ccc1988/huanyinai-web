@@ -1,6 +1,10 @@
 import Link from "next/link";
+import nextDynamic from "next/dynamic";
 import Logo from "./Logo";
 import type { Contact, StatItem, IndustrySolution, CaseItem } from "@/lib/data";
+
+// 二维码区域：不参与 SSR，base64 数据不进入首屏 HTML
+const LazyQRContacts = nextDynamic(() => import("./LazyQRContacts"), { ssr: false });
 
 export default function Footer({ company, contacts, stats, industries, cases }: { company: Record<string, string>; contacts: Contact[]; stats: StatItem[]; industries: IndustrySolution[]; cases: CaseItem[] }) {
   return (
@@ -147,34 +151,9 @@ export default function Footer({ company, contacts, stats, industries, cases }: 
                 <span style={{ color: "var(--color-text-body)" }}>{company.wechat}</span>
               </li>
             </ul>
-            {/* 联系人二维码 — 并排 */}
+            {/* 联系人二维码 — 懒加载，不参与 SSR，不进入首屏 HTML */}
             {contacts.length > 0 && (
-              <div className="mt-6 flex flex-row gap-4">
-                {contacts.map((contact, idx) => (
-                  <div key={idx} className="flex flex-col items-center">
-                    <div
-                      className="w-24 h-24 rounded-[var(--radius-md)] flex items-center justify-center overflow-hidden"
-                      style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}
-                    >
-                      {contact.qrCode ? (
-                        <img src={contact.qrCode} alt={`${contact.name || "联系人"}二维码`} className="w-full h-full object-cover" />
-                      ) : (
-                        <span className="text-xs text-center leading-relaxed px-1" style={{ color: "var(--color-text-copyright)" }}>
-                          {contact.name || "微信"}<br />二维码
-                        </span>
-                      )}
-                    </div>
-                    {(contact.name || contact.role) && (
-                      <span className="mt-1.5 text-xs text-center" style={{ color: "var(--color-text-copyright)" }}>
-                        {contact.name}{contact.name && contact.role && " · "}{contact.role}
-                      </span>
-                    )}
-                    {contact.phone && (
-                      <span className="text-xs" style={{ color: "var(--color-text-copyright)" }}>{contact.phone}</span>
-                    )}
-                  </div>
-                ))}
-              </div>
+              <LazyQRContacts contacts={contacts} />
             )}
           </div>
         </div>

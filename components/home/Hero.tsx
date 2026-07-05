@@ -1,8 +1,4 @@
-"use client";
-
-import { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import type { StatItem } from "@/lib/data";
 import NeuralBackground from "./NeuralBackground";
@@ -12,22 +8,6 @@ export default function Hero({ stats }: { stats: StatItem[] }) {
     label: s.label,
     value: `${s.value}${s.suffix || ""}`,
   }));
-  const shouldReduceMotion = useReducedMotion();
-  const [mounted, setMounted] = useState(false);
-  // ponytail: hudMetrics derived from props above
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const fadeUp = (delay: number) =>
-    !mounted || shouldReduceMotion
-      ? { initial: { opacity: 1, y: 0 }, animate: { opacity: 1, y: 0 } }
-      : {
-          initial: { opacity: 0, y: 20 },
-          animate: { opacity: 1, y: 0 },
-          transition: { duration: 0.6, ease: "easeOut" as const, delay },
-        };
 
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-24">
@@ -61,17 +41,16 @@ export default function Hero({ stats }: { stats: StatItem[] }) {
       {/* ===== Main Content ===== */}
       <div className="container-max flex flex-col items-center text-center">
         {/* Pill tag */}
-        <motion.div {...fadeUp(0)}>
+        <div className="hero-fade hero-delay-0">
           <span className="pill-tag">
             <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent)] pulse-dot" />
             AI 驱动 · 产业数字化
           </span>
-        </motion.div>
+        </div>
 
         {/* Main title — enhanced size + gradient */}
-        <motion.h1
-          {...fadeUp(0.2)}
-          className="mt-8 text-center font-bold leading-tight"
+        <h1
+          className="hero-fade hero-delay-1 mt-8 text-center font-bold leading-tight"
           style={{
             fontSize: "clamp(2.5rem, 7vw, 4.5rem)",
           }}
@@ -89,12 +68,11 @@ export default function Hero({ stats }: { stats: StatItem[] }) {
           <span className="block mt-2" style={{ color: "var(--color-text-primary)" }}>
             重构企业每一个业务环节
           </span>
-        </motion.h1>
+        </h1>
 
         {/* Subtitle */}
-        <motion.p
-          {...fadeUp(0.4)}
-          className="mt-6 max-w-2xl text-center leading-relaxed"
+        <p
+          className="hero-fade hero-delay-2 mt-6 max-w-2xl text-center leading-relaxed"
           style={{
             color: "var(--color-text-body)",
             fontSize: "clamp(1rem, 2.5vw, 1.25rem)",
@@ -103,13 +81,10 @@ export default function Hero({ stats }: { stats: StatItem[] }) {
           }}
         >
           为物流、跨境、制造、制药等行业提供可落地的 AI 解决方案
-        </motion.p>
+        </p>
 
         {/* CTA buttons */}
-        <motion.div
-          {...fadeUp(0.6)}
-          className="mt-10 flex flex-col sm:flex-row gap-4"
-        >
+        <div className="hero-fade hero-delay-3 mt-10 flex flex-col sm:flex-row gap-4">
           <Link href="/contact" className="cta-primary">
             预约 AI 解决方案咨询
             <ArrowRight size={18} />
@@ -117,13 +92,10 @@ export default function Hero({ stats }: { stats: StatItem[] }) {
           <Link href="/cases/customs-document-ai" className="cta-secondary">
             查看案例
           </Link>
-        </motion.div>
+        </div>
 
         {/* HUD Metrics Bar — 实时数据指标状态栏 */}
-        <motion.div
-          {...fadeUp(0.8)}
-          className="mt-14 w-full max-w-2xl"
-        >
+        <div className="hero-fade hero-delay-4 mt-14 w-full max-w-2xl">
           <div
             className="hud-corners rounded-[var(--radius-md)] px-6 py-4 flex items-center justify-between gap-4"
             style={{
@@ -155,19 +127,16 @@ export default function Hero({ stats }: { stats: StatItem[] }) {
               </div>
             ))}
           </div>
-        </motion.div>
+        </div>
 
         {/* Scroll down indicator */}
-        <motion.div
-          {...fadeUp(1.0)}
-          className="mt-12 mb-8"
-        >
+        <div className="hero-fade hero-delay-5 mt-12 mb-8">
           <ChevronDown
             size={24}
             className="scroll-indicator"
             style={{ color: "var(--color-text-muted)" }}
           />
-        </motion.div>
+        </div>
       </div>
 
       {/* Bottom horizon glow transition */}

@@ -4,6 +4,7 @@ import { getIndustries, getCasesByIndustry, getCases } from "@/lib/data";
 import { createMetadata } from "@/lib/seo";
 import { getIndustryIcon } from "@/lib/industryIcons";
 
+
 export const metadata = createMetadata({
   title: "行业 AI 解决方案 — 6 大行业全链路交付",
   description:

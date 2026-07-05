@@ -279,6 +279,25 @@ h6 {
   opacity: 1;
 }
 
+/* Hero 入场动画 — CSS 驱动，无需 framer-motion，避免水合闪烁 */
+.hero-fade {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: hero-fade-up 0.5s ease-out forwards;
+}
+.hero-delay-0 { animation-delay: 0ms; }
+.hero-delay-1 { animation-delay: 80ms; }
+.hero-delay-2 { animation-delay: 160ms; }
+.hero-delay-3 { animation-delay: 240ms; }
+.hero-delay-4 { animation-delay: 320ms; }
+.hero-delay-5 { animation-delay: 400ms; }
+@keyframes hero-fade-up {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* 脉冲光点动画 */
 @keyframes pulse-dot {
   0%, 100% { opacity: 0.4; transform: scale(1); }

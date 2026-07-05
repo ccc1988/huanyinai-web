@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useReducedMotion } from "framer-motion";
 
 /**
  * NeuralBackground — Canvas 2D 神经场混合背景
@@ -14,7 +13,6 @@ import { useReducedMotion } from "framer-motion";
  */
 export default function NeuralBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const shouldReduceMotion = useReducedMotion();
   const [supported, setSupported] = useState(true);
 
   useEffect(() => {
@@ -33,7 +31,9 @@ export default function NeuralBackground() {
     const isTouch =
       typeof window !== "undefined" &&
       window.matchMedia("(pointer: coarse)").matches;
-    const reduced = Boolean(shouldReduceMotion);
+    const reduced =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     // ---- 尺寸与 DPR ----
     let width = 0;
@@ -446,7 +446,7 @@ export default function NeuralBackground() {
       window.removeEventListener("resize", resize);
       if (observer) observer.disconnect();
     };
-  }, [shouldReduceMotion]);
+  }, []);
 
   if (!supported) return null;
 
