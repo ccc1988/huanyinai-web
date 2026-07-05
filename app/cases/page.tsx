@@ -5,9 +5,9 @@ import { createMetadata } from "@/lib/seo";
 import CaseCard from "@/components/shared/CaseCard";
 
 export const metadata = createMetadata({
-  title: "客户案例 — 11+ AI 系统落地实践",
+  title: "精选公开案例 — AI 系统落地实践",
   description:
-    "寰引智能已交付 11+ 智能化系统，覆盖报关 AI 文档处理、跨境物流智能系统、跨境电商 AI 生产、物流轨迹追踪、电商智能客服、RPA 自动化等领域。",
+    "寰引智能精选公开案例，覆盖报关 AI 文档处理、跨境物流智能系统、跨境电商 AI 生产、物流轨迹追踪、电商智能客服、RPA 自动化等领域。",
   path: "/cases",
 });
 
@@ -39,8 +39,6 @@ export default function CasesPage() {
     industry,
     cases: allCases.filter((c) => c.industry === industry),
   })).filter((g) => g.cases.length > 0);
-
-  const detailCount = allCases.filter((c) => c.hasDetailPage).length;
 
   return (
     <div className="pt-24">
@@ -112,7 +110,7 @@ export default function CasesPage() {
             className="text-xl max-w-3xl"
             style={{ color: "var(--color-text-body)" }}
           >
-            {allCases.length} 个落地系统、{grouped.length} 大行业场景，从痛点诊断到系统交付的真实实践
+            精选 {allCases.length} 个公开案例，覆盖 {grouped.length} 大行业场景，从痛点诊断到系统交付的真实实践
           </p>
 
           {/* Stats bar */}
@@ -126,10 +124,10 @@ export default function CasesPage() {
                   WebkitTextFillColor: "transparent",
                 }}
               >
-                {allCases.length}+
+                {allCases.length}
               </span>
               <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>
-                落地系统
+                精选公开案例
               </span>
             </div>
             <div className="flex items-baseline gap-2">
@@ -145,21 +143,6 @@ export default function CasesPage() {
               </span>
               <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>
                 行业覆盖
-              </span>
-            </div>
-            <div className="flex items-baseline gap-2">
-              <span
-                className="text-2xl font-bold font-[family-name:var(--font-heading)]"
-                style={{
-                  background: "linear-gradient(135deg, #F8FAFC 0%, #C7D2FE 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                }}
-              >
-                {detailCount}
-              </span>
-              <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>
-                详细案例
               </span>
             </div>
           </div>

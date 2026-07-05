@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, ChevronRight, Layers } from "lucide-react";
-import { getIndustries, getCasesByIndustry } from "@/lib/data";
+import { getIndustries, getCasesByIndustry, getCases } from "@/lib/data";
 import { createMetadata } from "@/lib/seo";
 import { getIndustryIcon } from "@/lib/industryIcons";
 
@@ -84,7 +84,7 @@ export default function SolutionsPage() {
             className="text-xl max-w-3xl"
             style={{ color: "var(--color-text-body)" }}
           >
-            6 大行业、11+ 落地系统，从痛点诊断到智能体交付的全链路服务
+            {industries.length} 大行业全覆盖，精选 {getCases().length} 个公开案例，从痛点诊断到智能体交付的全链路服务
           </p>
         </div>
       </section>
