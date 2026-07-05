@@ -53,12 +53,18 @@ export default function NeuralBackground() {
     // ---- 调参常量 ----
     const NODE_COUNT = isTouch ? 35 : 70;
     const STAR_COUNT = isTouch ? 80 : 150;
-    const LINK_DIST = 140; // 连线距离阈值
+    const LINK_DIST = 165; // 连线距离阈值（增大让网络更密）
     const LINK_DIST_SQ = LINK_DIST * LINK_DIST;
     const MOUSE_RADIUS = 180; // 鼠标影响半径
     const MOUSE_RADIUS_SQ = MOUSE_RADIUS * MOUSE_RADIUS;
     const REPULSE_DIST = 60; // 近距斥力半径
     const DRIFT_SPEED = 0.15; // 节点漂移速度上限
+
+    // ---- 入场动画 ----
+    // 首帧即 60% 可见，300ms 内快速补满，用户感觉"一打开就在"
+    const INTRO_DURATION = 300; // ms
+    const startTime = performance.now();
+    let introProgress = 0.6; // 首帧起始亮度，0→1 缓动后作为 alpha 乘数
 
     // ---- 粒子数组（预分配）----
     type Node = {
@@ -91,9 +97,9 @@ export default function NeuralBackground() {
           y: Math.random() * height,
           vx: (Math.random() - 0.5) * DRIFT_SPEED * 2,
           vy: (Math.random() - 0.5) * DRIFT_SPEED * 2,
-          baseRadius: 1 + Math.random() * 1.5,
+          baseRadius: 1.5 + Math.random() * 2, // 节点更大，首屏更醒目
           radius: 0,
-          baseAlpha: 0.25 + Math.random() * 0.25,
+          baseAlpha: 0.4 + Math.random() * 0.25, // 提升基础亮度
           alpha: 0,
         });
       }
@@ -101,7 +107,7 @@ export default function NeuralBackground() {
         stars.push({
           x: Math.random() * width,
           y: Math.random() * height,
-          baseAlpha: 0.1 + Math.random() * 0.3,
+          baseAlpha: 0.2 + Math.random() * 0.35, // 星尘更亮
           alpha: 0,
           twinklePhase: Math.random() * Math.PI * 2,
           twinkleSpeed: 0.003 + Math.random() * 0.007,
@@ -147,7 +153,7 @@ export default function NeuralBackground() {
       alpha: number;
     };
     let stream: DataStream | null = null;
-    let nextStreamTime = performance.now() + 3000 + Math.random() * 5000;
+    let nextStreamTime = performance.now() + 500 + Math.random() * 1000; // 首条 0.5-1.5s 内触发
 
     // ---- 动画循环 ----
     let rafId = 0;
@@ -159,15 +165,22 @@ export default function NeuralBackground() {
       const dt = Math.min((now - lastFrame) / 16.67, 3); // 归一化到 ~60fps，上限 3x
       lastFrame = now;
 
+      // 入场进度（缓出）
+      if (introProgress < 1) {
+        const raw = Math.min((now - startTime) / INTRO_DURATION, 1);
+        introProgress = 1 - Math.pow(1 - raw, 3); // easeOutCubic
+      }
+      const fade = introProgress; // 全局 alpha 乘数
+
       c2d.clearRect(0, 0, width, height);
 
       // ===== L2: 星尘 =====
       for (let i = 0; i < stars.length; i++) {
         const s = stars[i];
         s.twinklePhase += s.twinkleSpeed * dt;
-        s.alpha = s.baseAlpha * (0.5 + 0.5 * Math.sin(s.twinklePhase));
+        s.alpha = s.baseAlpha * (0.5 + 0.5 * Math.sin(s.twinklePhase)) * fade;
         c2d.beginPath();
-        c2d.arc(s.x, s.y, 0.8, 0, Math.PI * 2);
+        c2d.arc(s.x, s.y, 0.8 + fade * 0.4, 0, Math.PI * 2); // 入场时星尘略变大
         c2d.fillStyle = `rgba(${COLORS.star[0]},${COLORS.star[1]},${COLORS.star[2]},${s.alpha})`;
         c2d.fill();
       }
@@ -197,8 +210,8 @@ export default function NeuralBackground() {
         }
 
         // 鼠标交互
-        n.alpha = n.baseAlpha;
-        n.radius = n.baseRadius;
+        n.alpha = n.baseAlpha * fade;
+        n.radius = n.baseRadius * (0.3 + 0.7 * fade); // 入场时从小变大
         if (mouseActive) {
           const dx = mx - n.x;
           const dy = my - n.y;
@@ -207,8 +220,8 @@ export default function NeuralBackground() {
             const dist = Math.sqrt(distSq) || 1;
             const influence = 1 - dist / MOUSE_RADIUS; // 0→1
             // 激活：提升 alpha
-            n.alpha = n.baseAlpha + influence * 0.5;
-            n.radius = n.baseRadius + influence * 1.2;
+            n.alpha = (n.baseAlpha + influence * 0.5) * fade;
+            n.radius = (n.baseRadius + influence * 1.2) * (0.3 + 0.7 * fade);
             // 引力聚拢（轻微）
             const gravCoef = 0.02 * influence;
             n.vx += (dx / dist) * gravCoef * dt;
@@ -241,7 +254,7 @@ export default function NeuralBackground() {
           const distSq = dx * dx + dy * dy;
           if (distSq < LINK_DIST_SQ) {
             const dist = Math.sqrt(distSq);
-            let linkAlpha = 0.15 * (1 - dist / LINK_DIST);
+            let linkAlpha = 0.22 * (1 - dist / LINK_DIST) * fade; // 连线更亮 + 入场渐入
 
             // 鼠标激活连线变亮
             if (mouseActive) {
@@ -254,7 +267,7 @@ export default function NeuralBackground() {
                 linkAlpha += 0.3 * (1 - Math.sqrt(mDistSq) / MOUSE_RADIUS);
               }
             }
-            linkAlpha = Math.min(linkAlpha, 0.45);
+            linkAlpha = Math.min(linkAlpha, 0.55 * fade);
 
             c2d.beginPath();
             c2d.moveTo(a.x, a.y);
@@ -271,7 +284,7 @@ export default function NeuralBackground() {
         c2d.beginPath();
         c2d.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
         // 被激活的节点用浅色，否则用主色
-        const useLight = n.alpha > 0.55;
+        const useLight = n.alpha > 0.55 * fade;
         const c = useLight ? COLORS.nodeLight : COLORS.node;
         c2d.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},${n.alpha})`;
         c2d.fill();
@@ -288,7 +301,7 @@ export default function NeuralBackground() {
           my,
           haloRadius,
         );
-        gradient.addColorStop(0, `rgba(${COLORS.halo[0]},${COLORS.halo[1]},${COLORS.halo[2]},0.12)`);
+        gradient.addColorStop(0, `rgba(${COLORS.halo[0]},${COLORS.halo[1]},${COLORS.halo[2]},${0.18 * fade})`);
         gradient.addColorStop(1, `rgba(${COLORS.halo[0]},${COLORS.halo[1]},${COLORS.halo[2]},0)`);
         c2d.beginPath();
         c2d.arc(mx, my, haloRadius, 0, Math.PI * 2);
@@ -304,14 +317,14 @@ export default function NeuralBackground() {
             duration: 1200 + Math.random() * 600,
             angle: (Math.random() - 0.5) * 0.3, // 轻微斜角
             thickness: 1.5 + Math.random() * 1.5,
-            alpha: 0.15 + Math.random() * 0.1,
+            alpha: 0.2 + Math.random() * 0.1,
           };
         }
         if (stream) {
           stream.progress += dt * 16.67 / stream.duration;
           if (stream.progress >= 1) {
             stream = null;
-            nextStreamTime = now + 3000 + Math.random() * 5000;
+            nextStreamTime = now + 3000 + Math.random() * 5000; // 后续 3-8s
           } else {
             // 绘制斜向光带
             const p = stream.progress;
