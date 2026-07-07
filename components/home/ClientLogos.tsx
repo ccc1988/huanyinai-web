@@ -75,7 +75,7 @@ export default function ClientLogos({ customers }: { customers: Customer[] }) {
       <div className="container-max relative z-20">
         <div className="text-center mb-10">
           <p className="text-sm font-medium" style={{ color: "var(--color-text-muted)" }}>
-            跨行业信赖 — 已为 {customers.length} 家企业提供 AI 转型服务
+            跨行业信赖 — 来自多行业真实项目的服务经验
           </p>
           <div className="flex flex-wrap items-center justify-center gap-2 mt-4">
             {industryTags.map((tag) => (

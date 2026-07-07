@@ -45,7 +45,7 @@ export default function AboutPage() {
             style={{ color: "var(--color-text-body)" }}
           >
             {company.fullName}，定位为面向企业的 AI 转型落地服务商。
-            我们拥有 {stats[0].value} 家真实企业客户、{stats[1].value} 个落地案例、{stats[2].value} 大行业解决方案，
+            我们已服务 {stats[0].value}{stats[0].suffix ?? ""} 企业客户、交付 {stats[1].value}{stats[1].suffix ?? ""} 智能化系统、覆盖 {stats[2].value} 大行业解决方案，
             核心竞争优势是有实际交付能力。
           </p>
         </div>
@@ -162,7 +162,7 @@ export default function AboutPage() {
             客户信任
           </h2>
           <p className="mb-8" style={{ color: "var(--color-text-muted)" }}>
-            {customers.length} 家真实企业客户选择寰引智能
+            多家真实企业客户选择寰引智能
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {customers.map((customer) => (
