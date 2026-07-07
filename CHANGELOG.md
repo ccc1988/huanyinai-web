@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.5.2 — 2026-07-07
+
+### SEO/GEO
+
+- **统一 canonical 域名**：将站点官网地址从 `https://www.huanyinai.com` 调整为 `https://huanyinai.com`，同步影响 sitemap、robots、metadataBase 与 JSON-LD。
+- **更新 llms.txt**：将 AI 可读站点说明更新为 `30+ 企业客户 / 50+ 智能化系统 / 6 大行业 / 10x+ 人效提升`，移除旧域名 `huanyin.ai`。
+- **AI 爬虫允许规则**：robots 追加 GPTBot、OAI-SearchBot、ChatGPT-User 明确允许规则。
+- **www 301 跳转准备**：配合 Nginx 将 `www.huanyinai.com` 统一重定向到非 www 主域。
+
 ## v1.5.1 — 2026-07-05
 
 ### 部署修复
