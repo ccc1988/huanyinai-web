@@ -30,6 +30,7 @@ export interface CaseItem {
   scenarios: string[];
   tags: string[];
   hasDetailPage: boolean;
+  updatedAt?: string;
 }
 
 export interface IndustrySolution {
@@ -40,6 +41,7 @@ export interface IndustrySolution {
   solutionSummary: string;
   relatedCases: string[];
   faq: { q: string; a: string }[];
+  updatedAt?: string;
 }
 
 export interface Customer {
@@ -64,6 +66,7 @@ export interface BlogPost {
   date: string;
   author: string;
   sections: { heading: string; body: string }[];
+  updatedAt?: string;
 }
 
 export interface StatItem {

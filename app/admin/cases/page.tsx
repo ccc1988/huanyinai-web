@@ -25,6 +25,7 @@ export default function AdminCasesPage() {
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<CaseItem | null>(null);
   const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState("");
   const [search, setSearch] = useState("");
 
   const fetchCases = useCallback(async () => {
@@ -46,14 +47,21 @@ export default function AdminCasesPage() {
   const handleSave = async () => {
     if (!editing) return;
     setSaving(true);
+    setSaveError("");
     try {
-      await fetch("/api/admin/cases", {
+      const response = await fetch("/api/admin/cases", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editing),
       });
+      if (!response.ok) {
+        const result = await response.json().catch(() => ({}));
+        throw new Error(result.error || "保存失败，请稍后重试");
+      }
       setEditing(null);
       fetchCases();
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : "保存失败，请稍后重试");
     } finally {
       setSaving(false);
     }
@@ -61,11 +69,16 @@ export default function AdminCasesPage() {
 
   const handleDelete = async (slug: string) => {
     if (!confirm("确定删除此案例？此操作不可撤销。")) return;
-    await fetch("/api/admin/cases", {
+    const response = await fetch("/api/admin/cases", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ slug }),
     });
+    if (!response.ok) {
+      const result = await response.json().catch(() => ({}));
+      alert(result.error || "删除失败，请稍后重试");
+      return;
+    }
     fetchCases();
   };
 
@@ -186,6 +199,7 @@ export default function AdminCasesPage() {
           onSave={handleSave}
           saving={saving}
         >
+          {saveError && <p className="text-sm mb-4" style={{ color: "rgb(248,113,113)" }}>{saveError}</p>}
           <CaseForm data={editing} onChange={setEditing} />
         </EditModal>
       )}
@@ -273,5 +287,4 @@ function CaseForm({ data, onChange }: { data: CaseItem; onChange: (d: CaseItem) 
     </div>
   );
 }
-
 

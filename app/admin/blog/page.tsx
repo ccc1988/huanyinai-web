@@ -21,6 +21,7 @@ export default function AdminBlogPage() {
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<BlogPost | null>(null);
   const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState("");
   const [search, setSearch] = useState("");
 
   const fetchPosts = useCallback(async () => {
@@ -37,24 +38,36 @@ export default function AdminBlogPage() {
   const handleSave = async () => {
     if (!editing) return;
     setSaving(true);
+    setSaveError("");
     try {
-      await fetch("/api/admin/blog", {
+      const response = await fetch("/api/admin/blog", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editing),
       });
+      if (!response.ok) {
+        const result = await response.json().catch(() => ({}));
+        throw new Error(result.error || "保存失败，请稍后重试");
+      }
       setEditing(null);
       fetchPosts();
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : "保存失败，请稍后重试");
     } finally { setSaving(false); }
   };
 
   const handleDelete = async (slug: string) => {
     if (!confirm("确定删除这篇文章？")) return;
-    await fetch("/api/admin/blog", {
+    const response = await fetch("/api/admin/blog", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ slug }),
     });
+    if (!response.ok) {
+      const result = await response.json().catch(() => ({}));
+      alert(result.error || "删除失败，请稍后重试");
+      return;
+    }
     fetchPosts();
   };
 
@@ -104,6 +117,7 @@ export default function AdminBlogPage() {
 
       {editing && (
         <EditModal title={editing.slug ? "编辑文章" : "新增文章"} onClose={() => setEditing(null)} onSave={handleSave} saving={saving}>
+          {saveError && <p className="text-sm mb-4" style={{ color: "rgb(248,113,113)" }}>{saveError}</p>}
           <BlogForm data={editing} onChange={setEditing} />
         </EditModal>
       )}
