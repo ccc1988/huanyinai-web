@@ -57,6 +57,9 @@ try {
   const llms = await fetchPage("/llms.txt");
   check(llms.response.status === 200, `/llms.txt status=${llms.response.status}`);
   check(llms.body.includes("huanyinai.com"), "/llms.txt includes the official domain");
+  check(llms.body.includes("企业 AI 智能体与 RPA 业务自动化解决方案"), "/llms.txt includes current solution content");
+  check(llms.body.includes("某跨境物流团队：企业模板标准化引擎与离线交付项目"), "/llms.txt includes current case content");
+  check(llms.body.includes("跨境物流 AI 项目如何验收"), "/llms.txt includes current blog content");
 
   for (const page of expectedPages) {
     const result = await fetchPage(page.path);

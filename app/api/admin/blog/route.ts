@@ -29,6 +29,7 @@ export async function PUT(request: NextRequest) {
 
     writeData.blogPosts(posts);
     revalidatePath("/sitemap.xml");
+    revalidatePath("/api/llms");
     revalidatePath("/blog");
     revalidatePath("/blog/[slug]", "page");
     return NextResponse.json({ success: true, data: posts[index] || nextPost });

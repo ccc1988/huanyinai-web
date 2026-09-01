@@ -11,6 +11,10 @@ const SESSION_COOKIE = "huanyin_admin_session";
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  if (pathname === "/llms.txt") {
+    return NextResponse.rewrite(new URL("/api/llms", request.url));
+  }
+
   // 登录页和 API 登录端点不拦截
   if (pathname === "/admin/login" || pathname === "/api/auth/login") {
     return NextResponse.next();
@@ -56,5 +60,5 @@ function isValidTokenShape(token: string | undefined): boolean {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/api/admin/:path*"],
+  matcher: ["/admin/:path*", "/api/admin/:path*", "/llms.txt"],
 };

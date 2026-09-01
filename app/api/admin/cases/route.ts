@@ -32,6 +32,7 @@ export async function PUT(request: NextRequest) {
 
     writeData.cases(cases);
     revalidatePath("/sitemap.xml");
+    revalidatePath("/api/llms");
     revalidatePath("/cases");
     revalidatePath("/cases/[slug]", "page");
     return NextResponse.json({ success: true, data: cases[index] || nextCase });

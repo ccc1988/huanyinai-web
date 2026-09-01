@@ -29,6 +29,7 @@ export async function PUT(request: NextRequest) {
 
     writeData.industries(industries);
     revalidatePath("/sitemap.xml");
+    revalidatePath("/api/llms");
     revalidatePath("/solutions");
     revalidatePath("/solutions/[industry]", "page");
     return NextResponse.json({ success: true, data: industries[index] || nextIndustry });

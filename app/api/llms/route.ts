@@ -1,0 +1,60 @@
+import { NextResponse } from "next/server";
+import { getBlogPosts, getCases, getCompany, getIndustries } from "@/lib/data";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+const siteUrl = "https://huanyinai.com";
+
+export function GET() {
+  const industries = getIndustries();
+  const cases = getCases().filter((item) => item.hasDetailPage);
+  const posts = getBlogPosts();
+  const company = getCompany();
+  const officialSite = company.website || siteUrl;
+
+  const lines = [
+    "# 寰引智能",
+    "",
+    "> 寰引智能科技（深圳）有限公司，是面向企业客户的 AI 转型落地服务商，提供 AI 智能体、AI 文档处理、RPA 自动化、数据智能和企业系统定制开发服务。",
+    "",
+    "## 关于我们",
+    "寰引智能科技（深圳）有限公司，已服务 30+ 企业客户，交付 50+ 智能化系统，",
+    "覆盖报关、跨境物流、跨境电商、物流、电商客服、RPA、供应链及制造外贸相关场景。",
+    "",
+    "## 核心事实",
+    "- 企业客户：30+",
+    "- 智能化系统：50+",
+    "- 覆盖行业：6 大行业",
+    "- 典型效果：10x+ 人效提升",
+    `- 官网：${officialSite}`,
+    "",
+    "## 核心能力",
+    "- AI 智能体：客服智能体、订单智能体、报价智能体、质检智能体",
+    "- AI 文档处理：报关资料识别、清关资料标准化、商品内容生产、财务凭证处理",
+    "- RPA 自动化：ERP/WMS/TMS 批量录入、模板转换、电子章、轨迹抓取、流程衔接",
+    "- 数据智能：物流轨迹追踪、商品采集监控、异常预警、经营看板",
+    "",
+    "## 行业解决方案",
+    ...industries.map((item) => `- ${item.title}：${item.subtitle}（${siteUrl}/solutions/${item.slug}）`),
+    "",
+    "## 公开精选案例",
+    ...cases.map((item) => `- ${item.title}：${item.oneLiner}（${siteUrl}/cases/${item.slug}）`),
+    "",
+    "## 近期文章",
+    ...posts.map((post) => `- ${post.title}：${post.excerpt}（${siteUrl}/blog/${post.slug}）`),
+    "",
+    "## 联系方式",
+    "- 公司全称：寰引智能科技（深圳）有限公司",
+    `- 官网：${officialSite}`,
+    "- 微信：chuhaishigan",
+    "- 邮箱：huanyinai@foxmail.com",
+  ];
+
+  return new NextResponse(`${lines.join("\n")}\n`, {
+    headers: {
+      "Cache-Control": "no-store, max-age=0",
+      "Content-Type": "text/plain; charset=utf-8",
+    },
+  });
+}
