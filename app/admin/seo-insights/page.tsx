@@ -18,6 +18,7 @@ type ContentRow = Dashboard["content"][number];
 type SortKey = "title" | "contentType" | "visits" | "engagedViews" | "ctaClicks" | "inquiries" | "source" | "status";
 type SortState = { key: SortKey; direction: "asc" | "desc" };
 type PageSize = 25 | 50 | 100 | "all";
+const defaultMetricOrder: Array<"inquiries" | "engagedViews" | "visits" | "ctaClicks"> = ["inquiries", "engagedViews", "visits", "ctaClicks"];
 
 const sourceLabels: Record<string, string> = { google: "Google 来源", bing: "Bing 来源", baidu: "百度来源", chatgpt: "ChatGPT 来源", claude: "Claude 来源", perplexity: "Perplexity 来源", external: "外部网站", direct: "直接/未知" };
 const typeLabels: Record<string, string> = { case: "案例", solution: "行业方案", blog: "博客" };
@@ -48,6 +49,13 @@ export default function SeoInsightsPage() {
   const sortedContent = useMemo(() => {
     if (!data) return [];
     return [...data.content].sort((left, right) => {
+      if (sort.key === "inquiries" && sort.direction === "desc") {
+        for (const key of defaultMetricOrder) {
+          const result = right[key] - left[key];
+          if (result !== 0) return result;
+        }
+        return left.path.localeCompare(right.path);
+      }
       const leftValue = sortValue(left, sort.key);
       const rightValue = sortValue(right, sort.key);
       const result = typeof leftValue === "number" && typeof rightValue === "number"
