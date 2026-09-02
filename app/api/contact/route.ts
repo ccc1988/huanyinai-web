@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { readData, writeData } from "@/lib/dataStore";
 import { sendNotificationEmail } from "@/lib/email";
 import type { Submission } from "@/lib/data";
+import { normalizeAttribution, normalizeSource, recordAnalyticsEvent } from "@/lib/siteAnalytics";
 
 export async function POST(request: NextRequest) {
   try {
@@ -9,6 +10,7 @@ export async function POST(request: NextRequest) {
 
     // Server-side validation
     const { name, company, phone, email, message } = body;
+    const attribution = normalizeAttribution(body);
 
     if (!name || typeof name !== "string" || name.trim().length < 2) {
       return NextResponse.json(
@@ -59,14 +61,29 @@ export async function POST(request: NextRequest) {
       notes: "",
       emailSent: false,
       emailSentAt: null,
+      ...attribution,
     };
 
+    let submissionPersisted = false;
     try {
       const submissions = readData.submissions();
       submissions.unshift(submission);
       writeData.submissions(submissions);
+      submissionPersisted = true;
     } catch (err) {
       console.error("[Contact] Failed to persist submission:", err);
+    }
+
+    if (submissionPersisted) {
+      recordAnalyticsEvent({
+        eventId: submission.id,
+        name: "contact_submit",
+        path: attribution.landingPath || "/contact",
+        sessionId: attribution.analyticsSessionId,
+        source: normalizeSource(attribution.landingReferrer ? `https://${attribution.landingReferrer}` : undefined),
+        occurredAt: now.toISOString(),
+        submissionId: submission.id,
+      });
     }
 
     // 异步发送邮件通知（不阻塞用户提交）

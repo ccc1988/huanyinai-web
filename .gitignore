@@ -9,6 +9,9 @@
 
 # production
 /build
+/data/site-analytics.json
+/data/site-analytics-health.json
+/data/site-analytics.json.lock
 
 # misc
 .DS_Store

@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import type { Settings, Contact, StatItem, IndustrySolution, CaseItem } from "@/lib/data";
+import SiteAnalyticsTracker from "@/components/analytics/SiteAnalyticsTracker";
 
 export default function AppShell({
   children,
@@ -31,6 +32,7 @@ export default function AppShell({
 
   return (
     <>
+      <SiteAnalyticsTracker />
       <Navbar navItems={navItems} />
       <main className="min-h-screen">{children}</main>
       <Footer company={company} contacts={contacts} stats={stats} industries={industries} cases={cases} />

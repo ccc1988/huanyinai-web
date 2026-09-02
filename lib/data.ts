@@ -111,6 +111,12 @@ export interface Submission {
   notes: string;
   emailSent: boolean;
   emailSentAt: string | null;
+  analyticsSessionId?: string;
+  landingPath?: string;
+  landingReferrer?: string;
+  landingUtmSource?: string;
+  landingUtmMedium?: string;
+  landingUtmCampaign?: string;
 }
 
 export interface SmtpConfig {

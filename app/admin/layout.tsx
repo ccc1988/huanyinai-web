@@ -16,6 +16,7 @@ import {
   X,
   Inbox,
   Bell,
+  LineChart,
 } from "lucide-react";
 
 const menuItems = [
@@ -24,6 +25,7 @@ const menuItems = [
   { label: "案例管理", href: "/admin/cases", icon: Briefcase },
   { label: "博客管理", href: "/admin/blog", icon: FileText },
   { label: "行业方案", href: "/admin/industries", icon: Globe },
+  { label: "内容方向", href: "/admin/seo-insights", icon: LineChart },
   { label: "公司信息", href: "/admin/company", icon: Building2 },
   { label: "邮件通知", href: "/admin/notifications", icon: Bell },
   { label: "站点设置", href: "/admin/settings", icon: Settings },

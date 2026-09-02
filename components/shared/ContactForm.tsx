@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from "react";
 import { CheckCircle, AlertCircle, Loader2 } from "lucide-react";
+import { getAnalyticsContext } from "@/lib/analyticsContext";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -52,6 +53,7 @@ export default function ContactForm() {
           phone: formData.get("phone"),
           email: formData.get("email"),
           message: formData.get("message"),
+          ...getAnalyticsContext(),
         }),
       });
 
