@@ -1,36 +1,20 @@
 {
-  "seoTitle": "寰引智能 — AI 驱动的企业数字化转型落地服务商（定制开发 AI 应用）",
-  "seoDescription": "寰引智能科技为物流、跨境电商、报关、供应链等行业提供 AI 智能体、AI 文档处理、RPA 自动化和数据智能解决方案。已服务 30+ 企业客户，交付 50+ 智能化系统（定制开发 AI 应用）。",
+  "seoTitle": "寰引智能 — 把一条可验收的业务闭环交给 AI 持续运营",
+  "seoDescription": "不只是帮企业使用 AI，而是把一条可验收的业务闭环交给 AI 持续运营。人负责目标、边界和最终判断。不接无边界定制开发。",
   "seoKeywords": [
-    "AI企业服务",
-    "AI智能体",
-    "RPA自动化",
-    "AI数字化转型",
-    "企业AI转型方案"
+    "AI运营",
+    "跨境履约协同",
+    "AI原生",
+    "业务闭环"
   ],
-  "ogTitle": "寰引智能 — AI 驱动的企业数字化转型落地服务商",
-  "ogDescription": "面向企业的 AI 转型落地服务商，提供 AI 智能体、AI 文档处理、RPA 自动化和数据智能解决方案（定制开发 AI 应用）。",
-  "llmsTxtDescription": "面向企业的 AI 转型落地服务商，提供 AI 智能体、AI 文档处理、RPA 自动化和数据智能解决方案（定制开发 AI 应用）。",
+  "ogTitle": "寰引智能 — 把一条可验收的业务闭环交给 AI 持续运营",
+  "ogDescription": "把一条可验收的业务闭环交给 AI 持续运营。人负责目标、边界和最终判断。",
+  "llmsTxtDescription": "寰引智能把一条可验收的业务闭环交给 AI 持续运营。人负责目标、边界和最终判断。不接无边界定制开发。对外首发是跨境履约协同运营，不宣称已经是 AI Native 公司。",
   "navItems": [
-    {
-      "label": "首页",
-      "href": "/"
-    },
-    {
-      "label": "解决方案",
-      "href": "/solutions"
-    },
-    {
-      "label": "案例",
-      "href": "/cases"
-    },
-    {
-      "label": "关于",
-      "href": "/about"
-    },
-    {
-      "label": "博客",
-      "href": "/blog"
-    }
+    { "label": "首页", "href": "/" },
+    { "label": "解决方案", "href": "/solutions" },
+    { "label": "案例", "href": "/cases" },
+    { "label": "关于", "href": "/about" },
+    { "label": "博客", "href": "/blog" }
   ]
 }
