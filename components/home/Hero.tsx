@@ -11,12 +11,8 @@ export default function Hero({ stats }: { stats: StatItem[] }) {
 
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-24">
-      {/* ===== Background Layers ===== */}
-
-      {/* Layer 1: Solid base */}
       <div className="absolute inset-0 -z-10" style={{ backgroundColor: "var(--color-bg-base)" }} />
 
-      {/* Layer 2: Radial gradients (透明度略降，避免与新粒子层抢戏) */}
       <div
         className="absolute inset-0 -z-10"
         style={{
@@ -28,27 +24,19 @@ export default function Hero({ stats }: { stats: StatItem[] }) {
         }}
       />
 
-      {/* Layer 3: Grid lines */}
       <div className="absolute inset-0 -z-10 accent-glow" />
       <div className="absolute inset-0 -z-10 grid-bg" />
-
-      {/* Layer 4-5: Neural field (星尘 + 神经网络 + 数据流 + 鼠标交互) */}
       <NeuralBackground />
-
-      {/* Scanline overlay */}
       <div className="absolute inset-0 -z-10 scanline-overlay" />
 
-      {/* ===== Main Content ===== */}
       <div className="container-max flex flex-col items-center text-center">
-        {/* Pill tag */}
         <div className="hero-fade hero-delay-0">
           <span className="pill-tag">
             <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent)] pulse-dot" />
-            AI 驱动 · 产业数字化
+            AI 原生运营 · 两条产品线
           </span>
         </div>
 
-        {/* Main title — enhanced size + gradient */}
         <h1
           className="hero-fade hero-delay-1 mt-8 text-center font-bold leading-tight"
           style={{
@@ -63,14 +51,13 @@ export default function Hero({ stats }: { stats: StatItem[] }) {
               WebkitTextFillColor: "transparent",
             }}
           >
-            AI 智能体 与 RPA 自动化
+            跨境物流运营
           </span>
           <span className="block mt-2" style={{ color: "var(--color-text-primary)" }}>
-            重构企业每一个业务环节
+            与外贸客户开发增长
           </span>
         </h1>
 
-        {/* Subtitle */}
         <p
           className="hero-fade hero-delay-2 mt-6 max-w-2xl text-center leading-relaxed"
           style={{
@@ -80,21 +67,19 @@ export default function Hero({ stats }: { stats: StatItem[] }) {
             lineHeight: 1.8,
           }}
         >
-          为物流、跨境、制造、制药等行业提供可落地的 AI 解决方案
+          两条产品线由 AI 持续跑。FDE 学习与培训同期开放。不接无边界定制。
         </p>
 
-        {/* CTA buttons */}
         <div className="hero-fade hero-delay-3 mt-10 flex flex-col sm:flex-row gap-4">
           <Link href="/contact" className="cta-primary">
-            预约 AI 解决方案咨询
+            谈产品线
             <ArrowRight size={18} />
           </Link>
-          <Link href="/cases/customs-document-ai" className="cta-secondary">
-            查看案例
+          <Link href="/cases" className="cta-secondary">
+            查看已跑通的案例
           </Link>
         </div>
 
-        {/* HUD Metrics Bar — 实时数据指标状态栏 */}
         <div className="hero-fade hero-delay-4 mt-14 w-full max-w-2xl">
           <div
             className="hud-corners rounded-[var(--radius-md)] px-6 py-4 flex items-center justify-between gap-4"
@@ -129,7 +114,6 @@ export default function Hero({ stats }: { stats: StatItem[] }) {
           </div>
         </div>
 
-        {/* Scroll down indicator */}
         <div className="hero-fade hero-delay-5 mt-12 mb-8">
           <ChevronDown
             size={24}
@@ -139,7 +123,6 @@ export default function Hero({ stats }: { stats: StatItem[] }) {
         </div>
       </div>
 
-      {/* Bottom horizon glow transition */}
       <div className="absolute bottom-0 left-0 right-0 h-32 horizon-glow pointer-events-none" />
     </section>
   );

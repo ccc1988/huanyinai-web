@@ -9,7 +9,6 @@ export default function FinalCTA() {
       className="py-28 relative overflow-hidden"
       style={{ backgroundColor: "var(--color-bg-base)" }}
     >
-      {/* 背景装饰层 */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -22,7 +21,6 @@ export default function FinalCTA() {
       <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none" />
       <div className="absolute inset-0 starfield pointer-events-none" />
 
-      {/* 浮动光球 */}
       <div
         className="absolute top-[20%] left-[10%] w-40 h-40 rounded-full blur-3xl pointer-events-none"
         style={{ background: "radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 70%)" }}
@@ -32,7 +30,6 @@ export default function FinalCTA() {
         style={{ background: "radial-gradient(circle, rgba(139,92,246,0.06) 0%, transparent 70%)" }}
       />
 
-      {/* Top divider */}
       <div className="absolute top-0 left-0 right-0 gradient-divider" />
 
       <div className="container-max text-center relative">
@@ -51,7 +48,7 @@ export default function FinalCTA() {
               WebkitTextFillColor: "transparent",
             }}
           >
-            让 AI 为你的企业创造价值
+            按产品卖，不按人天
           </span>
         </h2>
 
@@ -59,15 +56,14 @@ export default function FinalCTA() {
           className="max-w-2xl mx-auto mb-10 text-lg"
           style={{ color: "var(--color-text-body)" }}
         >
-          告诉我们你的业务场景，我们给出可落地的 AI 方案
+          跨境物流运营 · 外贸客户开发增长 · FDE 学习与培训
         </p>
 
         <Link href="/contact" className="cta-primary">
-          预约免费咨询
+          谈产品线
           <ArrowRight size={18} />
         </Link>
 
-        {/* 联系渠道三列 */}
         <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6">
           <div
             className="glass-card hud-corners rounded-[var(--radius-md)] px-6 py-4 flex items-center gap-3"
