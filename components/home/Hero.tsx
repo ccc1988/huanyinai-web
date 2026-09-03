@@ -12,7 +12,6 @@ export default function Hero({ stats }: { stats: StatItem[] }) {
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-24">
       <div className="absolute inset-0 -z-10" style={{ backgroundColor: "var(--color-bg-base)" }} />
-
       <div
         className="absolute inset-0 -z-10"
         style={{
@@ -23,7 +22,6 @@ export default function Hero({ stats }: { stats: StatItem[] }) {
           `,
         }}
       />
-
       <div className="absolute inset-0 -z-10 accent-glow" />
       <div className="absolute inset-0 -z-10 grid-bg" />
       <NeuralBackground />
@@ -33,15 +31,13 @@ export default function Hero({ stats }: { stats: StatItem[] }) {
         <div className="hero-fade hero-delay-0">
           <span className="pill-tag">
             <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent)] pulse-dot" />
-            AI 原生运营 · 两条产品线
+            AI 持续运营 · 人做最终判断
           </span>
         </div>
 
         <h1
           className="hero-fade hero-delay-1 mt-8 text-center font-bold leading-tight"
-          style={{
-            fontSize: "clamp(2.5rem, 7vw, 4.5rem)",
-          }}
+          style={{ fontSize: "clamp(2.5rem, 7vw, 4.5rem)" }}
         >
           <span
             className="block bg-clip-text text-transparent"
@@ -51,10 +47,10 @@ export default function Hero({ stats }: { stats: StatItem[] }) {
               WebkitTextFillColor: "transparent",
             }}
           >
-            跨境物流运营
+            把一条可验收的业务闭环
           </span>
           <span className="block mt-2" style={{ color: "var(--color-text-primary)" }}>
-            与外贸客户开发增长
+            交给 AI 持续运营
           </span>
         </h1>
 
@@ -67,16 +63,16 @@ export default function Hero({ stats }: { stats: StatItem[] }) {
             lineHeight: 1.8,
           }}
         >
-          两条产品线由 AI 持续跑。FDE 学习与培训同期开放。不接无边界定制。
+          人负责目标、边界和最终判断。不接无边界定制。
         </p>
 
         <div className="hero-fade hero-delay-3 mt-10 flex flex-col sm:flex-row gap-4">
           <Link href="/contact" className="cta-primary">
-            谈产品线
+            看哪条业务能交给 AI
             <ArrowRight size={18} />
           </Link>
           <Link href="/cases" className="cta-secondary">
-            查看已跑通的案例
+            查看案例
           </Link>
         </div>
 
@@ -103,10 +99,7 @@ export default function Hero({ stats }: { stats: StatItem[] }) {
                 {i < hudMetrics.length - 1 && (
                   <div
                     className="hidden sm:block absolute h-6 w-px"
-                    style={{
-                      backgroundColor: "rgba(255,255,255,0.06)",
-                      right: 0,
-                    }}
+                    style={{ backgroundColor: "rgba(255,255,255,0.06)", right: 0 }}
                   />
                 )}
               </div>
@@ -115,11 +108,7 @@ export default function Hero({ stats }: { stats: StatItem[] }) {
         </div>
 
         <div className="hero-fade hero-delay-5 mt-12 mb-8">
-          <ChevronDown
-            size={24}
-            className="scroll-indicator"
-            style={{ color: "var(--color-text-muted)" }}
-          />
+          <ChevronDown size={24} className="scroll-indicator" style={{ color: "var(--color-text-muted)" }} />
         </div>
       </div>
 

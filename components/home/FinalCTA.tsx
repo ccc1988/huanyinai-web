@@ -5,10 +5,7 @@ import { getCompany } from "@/lib/data";
 export default function FinalCTA() {
   const company = getCompany();
   return (
-    <section
-      className="py-28 relative overflow-hidden"
-      style={{ backgroundColor: "var(--color-bg-base)" }}
-    >
+    <section className="py-28 relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-base)" }}>
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -20,25 +17,12 @@ export default function FinalCTA() {
       />
       <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none" />
       <div className="absolute inset-0 starfield pointer-events-none" />
-
-      <div
-        className="absolute top-[20%] left-[10%] w-40 h-40 rounded-full blur-3xl pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 70%)" }}
-      />
-      <div
-        className="absolute bottom-[20%] right-[10%] w-48 h-48 rounded-full blur-3xl pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(139,92,246,0.06) 0%, transparent 70%)" }}
-      />
-
       <div className="absolute top-0 left-0 right-0 gradient-divider" />
 
       <div className="container-max text-center relative">
         <h2
           className="font-bold mb-4"
-          style={{
-            color: "var(--color-text-primary)",
-            fontSize: "clamp(2rem, 5vw, 3.5rem)",
-          }}
+          style={{ color: "var(--color-text-primary)", fontSize: "clamp(2rem, 5vw, 3.5rem)" }}
         >
           <span
             className="bg-clip-text text-transparent"
@@ -48,63 +32,46 @@ export default function FinalCTA() {
               WebkitTextFillColor: "transparent",
             }}
           >
-            按产品卖，不按人天
+            人负责目标、边界和最终判断
           </span>
         </h2>
 
-        <p
-          className="max-w-2xl mx-auto mb-10 text-lg"
-          style={{ color: "var(--color-text-body)" }}
-        >
-          跨境物流运营 · 外贸客户开发增长 · FDE 学习与培训
+        <p className="max-w-2xl mx-auto mb-10 text-lg" style={{ color: "var(--color-text-body)" }}>
+          不接无边界定制。不宣称已经是 AI Native 公司。
         </p>
 
         <Link href="/contact" className="cta-primary">
-          谈产品线
+          谈可验收的业务闭环
           <ArrowRight size={18} />
         </Link>
 
         <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6">
-          <div
-            className="glass-card hud-corners rounded-[var(--radius-md)] px-6 py-4 flex items-center gap-3"
-          >
+          <div className="glass-card hud-corners rounded-[var(--radius-md)] px-6 py-4 flex items-center gap-3">
             <MessageCircle size={18} style={{ color: "var(--color-accent-light)" }} />
             <div className="text-left">
               <p className="text-xs" style={{ color: "var(--color-text-muted)" }}>微信咨询</p>
-              <p className="text-sm font-medium" style={{ color: "var(--color-text-primary)" }}>
-                {company.wechat}
-              </p>
+              <p className="text-sm font-medium" style={{ color: "var(--color-text-primary)" }}>{company.wechat}</p>
             </div>
           </div>
-          <div
-            className="glass-card hud-corners rounded-[var(--radius-md)] px-6 py-4 flex items-center gap-3"
-          >
+          <div className="glass-card hud-corners rounded-[var(--radius-md)] px-6 py-4 flex items-center gap-3">
             <Mail size={18} style={{ color: "var(--color-accent-light)" }} />
             <div className="text-left">
               <p className="text-xs" style={{ color: "var(--color-text-muted)" }}>邮件咨询</p>
-              <p className="text-sm font-medium" style={{ color: "var(--color-text-primary)" }}>
-                {company.email}
-              </p>
+              <p className="text-sm font-medium" style={{ color: "var(--color-text-primary)" }}>{company.email}</p>
             </div>
           </div>
           {company.phone && company.phone !== "待填写" && (
-            <div
-              className="glass-card hud-corners rounded-[var(--radius-md)] px-6 py-4 flex items-center gap-3"
-            >
+            <div className="glass-card hud-corners rounded-[var(--radius-md)] px-6 py-4 flex items-center gap-3">
               <Phone size={18} style={{ color: "var(--color-accent-light)" }} />
               <div className="text-left">
                 <p className="text-xs" style={{ color: "var(--color-text-muted)" }}>电话咨询</p>
-                <p className="text-sm font-medium" style={{ color: "var(--color-text-primary)" }}>
-                  {company.phone}
-                </p>
+                <p className="text-sm font-medium" style={{ color: "var(--color-text-primary)" }}>{company.phone}</p>
               </div>
             </div>
           )}
         </div>
 
-        <p className="mt-14 text-sm" style={{ color: "var(--color-text-logo)" }}>
-          {company.fullName}
-        </p>
+        <p className="mt-14 text-sm" style={{ color: "var(--color-text-logo)" }}>{company.fullName}</p>
       </div>
     </section>
   );
