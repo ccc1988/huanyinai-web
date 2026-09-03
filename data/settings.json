@@ -1,36 +1,20 @@
 {
-  "seoTitle": "寰引智能 — AI 跨境物流运营与外贸客户开发增长",
-  "seoDescription": "两条产品线：跨境物流运营、AI 外贸客户开发增长；另有 FDE 学习与培训。不接无边界定制开发。",
+  "seoTitle": "寰引智能 — 把一条可验收的业务闭环交给 AI 持续运营",
+  "seoDescription": "不只是帮企业使用 AI，而是把一条可验收的业务闭环交给 AI 持续运营。人负责目标、边界和最终判断。不接无边界定制开发。",
   "seoKeywords": [
-    "AI跨境物流运营",
-    "AI外贸客户开发",
-    "外贸增长",
-    "FDE学习",
-    "AI原生运营"
+    "AI运营",
+    "跨境履约协同",
+    "AI原生",
+    "业务闭环"
   ],
-  "ogTitle": "寰引智能 — AI 跨境物流运营与外贸客户开发增长",
-  "ogDescription": "把跨境物流运营和外贸客户开发交给 AI 持续跑。FDE 学习与培训同期开放。",
-  "llmsTxtDescription": "寰引智能的产品线是跨境物流运营、AI 外贸客户开发增长，以及 FDE 学习与培训。不接无边界定制开发。",
+  "ogTitle": "寰引智能 — 把一条可验收的业务闭环交给 AI 持续运营",
+  "ogDescription": "把一条可验收的业务闭环交给 AI 持续运营。人负责目标、边界和最终判断。",
+  "llmsTxtDescription": "寰引智能把一条可验收的业务闭环交给 AI 持续运营。人负责目标、边界和最终判断。不接无边界定制开发。对外首发是跨境履约协同运营，不宣称已经是 AI Native 公司。",
   "navItems": [
-    {
-      "label": "首页",
-      "href": "/"
-    },
-    {
-      "label": "解决方案",
-      "href": "/solutions"
-    },
-    {
-      "label": "案例",
-      "href": "/cases"
-    },
-    {
-      "label": "关于",
-      "href": "/about"
-    },
-    {
-      "label": "博客",
-      "href": "/blog"
-    }
+    { "label": "首页", "href": "/" },
+    { "label": "解决方案", "href": "/solutions" },
+    { "label": "案例", "href": "/cases" },
+    { "label": "关于", "href": "/about" },
+    { "label": "博客", "href": "/blog" }
   ]
 }
