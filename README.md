@@ -2,6 +2,8 @@
 
 面向企业的 AI 转型落地服务商官网，基于 Next.js 16 + Tailwind CSS 4 构建。
 
+当前封板版本：`v1.6.0`（2026-09-11）。生产事实以服务器 `current` 指向、Git SHA 和线上健康检查共同确认，不能只依据版本号判断。
+
 ## 技术栈
 
 | 层 | 技术 |
@@ -92,7 +94,10 @@ Footer 和联系页自动动态渲染。
 - 博客文章
 - 行业方案
 - 客户列表
+- 内容方向（官网访问、有效阅读、CTA 和咨询归因）
 - 站点设置（SEO、OG、导航菜单）
+
+首页客户与典型场景、行业方案首页短标题、营销数据及 SEO 描述均可通过后台维护。列表顺序即首页展示顺序；真实客户名称只在确认可公开展示时录入，扩展行业覆盖使用“典型场景·行业名称”。
 
 ## 生产部署
 
@@ -101,10 +106,11 @@ Footer 和联系页自动动态渲染。
 bash /var/www/huanyin_web/deploy.sh
 
 # deploy.sh 自动完成：
-# 1. npm run build
-# 2. 创建新 release 目录，复制 standalone 产物
-# 3. 切换 current 软链接
-# 4. PM2 重启（带 DATA_DIR 环境变量）
+# 1. npm test
+# 2. npm run build
+# 3. 创建新 release 目录并复制 standalone 产物
+# 4. 原子切换 current 软链接
+# 5. PM2 重启、健康检查，失败时回滚
 ```
 
 ### 环境变量
@@ -121,12 +127,14 @@ bash /var/www/huanyin_web/deploy.sh
 | 页面 | 路由 | 说明 |
 |------|------|------|
 | 首页 | `/` | 9 个区块 |
-| 行业方案 | `/solutions/[industry]` | 4 个行业 |
-| 案例详情 | `/cases/[slug]` | 3 个案例 |
+| 行业方案 | `/solutions`、`/solutions/[industry]` | 8 个行业方向，后台可维护 |
+| 案例 | `/cases`、`/cases/[slug]` | 后台可维护 |
 | 关于我们 | `/about` | |
 | 联系我们 | `/contact` | 含表单 + 二维码 |
 | 博客 | `/blog` | 列表 + 详情 |
 | 管理后台 | `/admin` | 数据管理 |
+
+完整运行、验收和回滚口径见 `docs/operations.md`；`v1.6.0` 发布范围见 `docs/releases/v1.6.0.md`。
 
 ## SEO/GEO
 
