@@ -7,6 +7,7 @@ import type { ContentAction } from "@/lib/siteAnalytics";
 type Dashboard = {
   days: number;
   totals: { visits: number; engagedViews: number; ctaClicks: number; inquiries: number };
+  daily: Array<{ date: string; visits: number; engagedViews: number; ctaClicks: number; inquiries: number }>;
   content: Array<{ path: string; title: string; contentType: string; industry: string; visits: number; engagedViews: number; ctaClicks: number; inquiries: number; source: string; status: string }>;
   sources: Array<{ source: string; visits: number; pages: number; engagedViews: number; ctaClicks: number; inquiries: number; lastVisit: string }>;
   actions: ContentAction[];
@@ -125,9 +126,21 @@ export default function SeoInsightsPage() {
         <span>{data.health.complete ? "数据完整" : `数据不完整，已有 ${data.health.incompleteEvents} 次写入失败记录`}</span>
         <span>最近更新：{data.updatedAt === new Date(0).toISOString() ? "暂无数据" : new Date(data.updatedAt).toLocaleString("zh-CN")}</span>
       </div>
+      <p className="text-xs" style={{ color: "var(--color-text-muted)" }}>历史访问初始化量统一记入 2026-09-02；此后按每日真实站内事件持续统计。</p>
+
+      <section>
+        <div className="mb-3">
+          <h2 className="text-lg font-bold" style={{ color: "var(--color-text-primary)" }}>每日趋势</h2>
+          <p className="text-xs mt-1" style={{ color: "var(--color-text-muted)" }}>最近 6 个自然日，按中国时区统计；没有访问的日期显示为 0。</p>
+        </div>
+        <div className="overflow-x-auto glass-card rounded-[var(--radius-md)]">
+          <table className="w-full text-left text-sm min-w-[620px]"><thead><tr style={{ borderBottom: "1px solid var(--color-border-default)", color: "var(--color-text-muted)" }}><th className="p-4 font-medium">日期</th><th className="p-4 font-medium">访问</th><th className="p-4 font-medium">有效阅读</th><th className="p-4 font-medium">CTA</th><th className="p-4 font-medium">咨询</th></tr></thead><tbody>{data.daily.map((item) => <tr key={item.date} style={{ borderBottom: "1px solid var(--color-border-default)" }}><td className="p-4" style={{ color: "var(--color-text-primary)" }}>{item.date}</td><td className="p-4">{item.visits}</td><td className="p-4">{item.engagedViews}</td><td className="p-4">{item.ctaClicks}</td><td className="p-4">{item.inquiries}</td></tr>)}</tbody></table>
+        </div>
+      </section>
 
       <section>
         <h2 className="text-lg font-bold mb-3" style={{ color: "var(--color-text-primary)" }}>来源概览</h2>
+        <p className="text-xs mb-3" style={{ color: "var(--color-text-muted)" }}>按访问来源汇总；“最近访问”表示该来源最后一次出现的日期，不是每日统计。</p>
         <div className="overflow-x-auto glass-card rounded-[var(--radius-md)]"><table className="w-full text-left text-sm min-w-[700px]"><thead><tr style={{ borderBottom: "1px solid var(--color-border-default)", color: "var(--color-text-muted)" }}><th className="p-4 font-medium">来源</th><th className="p-4 font-medium">访问</th><th className="p-4 font-medium">页面数</th><th className="p-4 font-medium">有效阅读</th><th className="p-4 font-medium">CTA</th><th className="p-4 font-medium">咨询</th><th className="p-4 font-medium">最近访问</th></tr></thead><tbody>{data.sources.map((item) => <tr key={item.source} style={{ borderBottom: "1px solid var(--color-border-default)" }}><td className="p-4" style={{ color: "var(--color-text-primary)" }}>{sourceLabels[item.source] || item.source}</td><td className="p-4">{item.visits}</td><td className="p-4">{item.pages}</td><td className="p-4">{item.engagedViews}</td><td className="p-4">{item.ctaClicks}</td><td className="p-4">{item.inquiries}</td><td className="p-4" style={{ color: "var(--color-text-muted)" }}>{item.lastVisit}</td></tr>)}</tbody></table></div>
       </section>
 

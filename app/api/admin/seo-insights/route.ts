@@ -4,6 +4,7 @@ import { readData } from "@/lib/dataStore";
 import type { CaseItem, IndustrySolution, BlogPost } from "@/lib/data";
 import {
   getDirectionStatus,
+  dateKey,
   normalizeLandingPath,
   readAnalyticsData,
   saveContentAction,
@@ -30,8 +31,28 @@ function contentCatalog() {
   ];
 }
 
-function dateStart(days: number): number {
-  return Date.now() - days * 24 * 60 * 60 * 1000;
+function periodDateKeys(days: number): Set<string> {
+  const now = Date.now();
+  return new Set(Array.from({ length: days }, (_, index) => dateKey(new Date(now - index * 24 * 60 * 60 * 1000))));
+}
+
+function recentDailyMetrics(daily: ReturnType<typeof readAnalyticsData>["daily"], count = 6) {
+  const totals = new Map<string, { date: string; visits: number; engagedViews: number; ctaClicks: number; inquiries: number }>();
+  for (const item of daily) {
+    const current = totals.get(item.date) || { date: item.date, visits: 0, engagedViews: 0, ctaClicks: 0, inquiries: 0 };
+    current.visits += item.visits;
+    current.engagedViews += item.engagedViews;
+    current.ctaClicks += item.ctaClicks;
+    current.inquiries += item.inquiries;
+    totals.set(item.date, current);
+  }
+
+  const today = new Date();
+  return Array.from({ length: count }, (_, index) => {
+    const day = new Date(today.getTime() - index * 24 * 60 * 60 * 1000);
+    const date = dateKey(day);
+    return totals.get(date) || { date, visits: 0, engagedViews: 0, ctaClicks: 0, inquiries: 0 };
+  });
 }
 
 export async function GET(request: NextRequest) {
@@ -39,8 +60,8 @@ export async function GET(request: NextRequest) {
   if (authError) return authError;
   const days = periodDays(request);
   const analytics = readAnalyticsData();
-  const cutoff = dateStart(days);
-  const daily = analytics.daily.filter((item) => Date.parse(`${item.date}T00:00:00.000Z`) >= cutoff);
+  const dates = periodDateKeys(days);
+  const daily = analytics.daily.filter((item) => dates.has(item.date));
   const observed = summarizePageMetrics(daily);
   const observedByPath = new Map(observed.map((item) => [item.path, item]));
   const catalog = contentCatalog();
@@ -70,7 +91,7 @@ export async function GET(request: NextRequest) {
     ctaClicks: result.ctaClicks + item.ctaClicks,
     inquiries: result.inquiries + item.inquiries,
   }), { visits: 0, engagedViews: 0, ctaClicks: 0, inquiries: 0 });
-  return NextResponse.json({ days, totals, content, sources, actions: analytics.actions, health: analytics.health, updatedAt: analytics.updatedAt });
+  return NextResponse.json({ days, totals, daily: recentDailyMetrics(analytics.daily), content, sources, actions: analytics.actions, health: analytics.health, updatedAt: analytics.updatedAt });
 }
 
 export async function PUT(request: NextRequest) {

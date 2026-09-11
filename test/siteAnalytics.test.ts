@@ -6,6 +6,7 @@ import path from "node:path";
 import {
   applyAnalyticsEvents,
   createEmptyAnalyticsData,
+  dateKey,
   getContentType,
   normalizeSource,
   normalizeAttribution,
@@ -13,6 +14,11 @@ import {
   summarizePageMetrics,
   type AnalyticsEvent,
 } from "../lib/siteAnalytics.ts";
+
+test("groups event dates by China Standard Time", () => {
+  assert.equal(dateKey("2026-09-10T16:30:00.000Z"), "2026-09-11");
+  assert.equal(dateKey("2026-09-11T15:59:59.000Z"), "2026-09-11");
+});
 
 test("normalizes referrer into a source category without query data", () => {
   assert.equal(normalizeSource("https://www.google.com/search?q=secret"), "google");

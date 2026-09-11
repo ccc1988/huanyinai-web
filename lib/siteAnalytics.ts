@@ -201,8 +201,14 @@ export function getContentType(inputPath: string): { type: ContentType; slug?: s
   return null;
 }
 
-function dateKey(value: string): string {
-  return value.slice(0, 10);
+export function dateKey(value: string | Date): string {
+  const date = value instanceof Date ? value : new Date(value);
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Shanghai",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date);
 }
 
 function sourceKey(value: string | undefined): string {
