@@ -112,7 +112,7 @@ bash /var/www/huanyin_web/deploy.sh
 | 变量 | 说明 |
 |------|------|
 | `ADMIN_PASSWORD` | 管理后台密码 |
-| `SESSION_SECRET` | Session 签名密钥 |
+| `ADMIN_SESSION_SECRET` | Session 签名及敏感配置加密密钥（生产环境必填） |
 | `DATA_DIR` | 持久化数据目录（生产环境） |
 | `CONTACT_WEBHOOK_URL` | 联系表单转发地址（可选） |
 

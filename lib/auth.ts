@@ -4,7 +4,8 @@ import path from "path";
 import { verifyHash } from "./crypto";
 import { NextRequest, NextResponse } from "next/server";
 
-const SESSION_SECRET = process.env.ADMIN_SESSION_SECRET || "huanyin-admin-dev-secret";
+const SESSION_SECRET = process.env.ADMIN_SESSION_SECRET;
+if (!SESSION_SECRET) throw new Error("ADMIN_SESSION_SECRET is required");
 export const SESSION_COOKIE = "huanyin_admin_session";
 
 /**
@@ -29,7 +30,6 @@ function safeReadAdminConfig(): { passwordHash: string | null; passwordSalt: str
  * 验证管理员密码（三级优先级）
  * 1. admin-config.json 中的 passwordHash（后台修改密码后写入）
  * 2. process.env.ADMIN_PASSWORD（deploy.sh / .env.local）
- * 3. "admin123" 硬编码兑底
  */
 export function verifyPassword(password: string): boolean {
   // 1. 检查 admin-config.json
@@ -47,11 +47,7 @@ export function verifyPassword(password: string): boolean {
     return timingSafeEqual(a, b);
   }
 
-  // 3. 默认兑底
-  const a = Buffer.from(password);
-  const b = Buffer.from("admin123");
-  if (a.length !== b.length) return false;
-  return timingSafeEqual(a, b);
+  return false;
 }
 
 /**

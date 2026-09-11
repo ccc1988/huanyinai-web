@@ -5,12 +5,15 @@ import { createMetadata } from "@/lib/seo";
 import { getIndustryIcon } from "@/lib/industryIcons";
 
 
-export const metadata = createMetadata({
-  title: "行业 AI 解决方案 — 6 大行业全链路交付",
-  description:
-    "寰引智能为报关、跨境物流、跨境电商、制造外贸、供应链、电商客服 6 大行业提供 AI 智能体、AI 文档处理、RPA 自动化全链路解决方案。",
-  path: "/solutions",
-});
+export function generateMetadata() {
+  const industries = getIndustries();
+  const industryNames = industries.map((item) => item.title.replace(/\s*AI\s*解决方案$/, "")).join("、");
+  return createMetadata({
+    title: "行业 AI 解决方案｜企业智能体与自动化落地",
+    description: `寰引智能面向${industryNames}等 ${industries.length} 个行业方向，提供 AI 智能体、AI 文档处理、RPA 自动化和企业系统集成方案。`,
+    path: "/solutions",
+  });
+}
 
 export default function SolutionsPage() {
   const industries = getIndustries();

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getBlogPosts, getCases, getCompany, getIndustries } from "@/lib/data";
+import { getBlogPosts, getCases, getCompany, getIndustries, getStats } from "@/lib/data";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -11,7 +11,12 @@ export function GET() {
   const cases = getCases().filter((item) => item.hasDetailPage);
   const posts = getBlogPosts();
   const company = getCompany();
+  const stats = getStats();
   const officialSite = company.website || siteUrl;
+  const statValue = (label: string) => {
+    const item = stats.find((entry) => entry.label === label);
+    return item ? `${item.value}${item.suffix || ""}` : "以官网后台最新数据为准";
+  };
 
   const lines = [
     "# 寰引智能",
@@ -19,14 +24,14 @@ export function GET() {
     "> 寰引智能科技（深圳）有限公司，是面向企业客户的 AI 转型落地服务商，提供 AI 智能体、AI 文档处理、RPA 自动化、数据智能和企业系统定制开发服务。",
     "",
     "## 关于我们",
-    "寰引智能科技（深圳）有限公司，已服务 30+ 企业客户，交付 50+ 智能化系统，",
+    `寰引智能科技（深圳）有限公司，已服务 ${statValue("企业客户")} 企业客户，交付 ${statValue("落地系统")} 智能化系统，`,
     "覆盖报关、跨境物流、跨境电商、物流、电商客服、RPA、供应链及制造外贸相关场景。",
     "",
     "## 核心事实",
-    "- 企业客户：30+",
-    "- 智能化系统：50+",
-    "- 覆盖行业：6 大行业",
-    "- 典型效果：10x+ 人效提升",
+    `- 企业客户：${statValue("企业客户")}`,
+    `- 智能化系统：${statValue("落地系统")}`,
+    `- 覆盖行业：${industries.length} 个行业方向`,
+    `- 典型效果：${statValue("人效提升")} 人效提升`,
     `- 官网：${officialSite}`,
     "",
     "## 核心能力",
