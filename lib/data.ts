@@ -36,6 +36,7 @@ export interface CaseItem {
 export interface IndustrySolution {
   slug: string;
   title: string;
+  shortTitle?: string;
   subtitle: string;
   painPoints: string[];
   solutionSummary: string;

@@ -42,7 +42,7 @@ export default function IndustryTabs({ industries }: { industries: IndustrySolut
               }}
             >
               <Icon size={16} />
-              {ind.title.replace(/ AI 解决方案.*/, "")}
+              <span className="whitespace-nowrap">{ind.shortTitle || ind.title.replace(/ AI 解决方案.*/, "")}</span>
               {idx === activeIndex && (
                 <motion.span
                   layoutId={!shouldReduceMotion ? "active-tab" : undefined}

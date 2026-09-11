@@ -10,8 +10,8 @@ function makeReverse(items: Customer[]) {
 }
 
 /* 单个 Logo 卡片 */
-function LogoCard({ name }: { name: string }) {
-  const { icon: Icon, color } = getCustomerIcon(name);
+function LogoCard({ customer }: { customer: Customer }) {
+  const { icon: Icon, color } = getCustomerIcon(customer.industry);
   return (
     <div className="logo-cloud-item group flex items-center gap-2.5 px-4 py-2.5 rounded-xl cursor-pointer shrink-0">
       <div
@@ -24,7 +24,7 @@ function LogoCard({ name }: { name: string }) {
         className="logo-cloud-name text-sm font-medium whitespace-nowrap transition-colors duration-300"
         style={{ color: "var(--color-text-logo)" }}
       >
-        {name}
+        {customer.name}
       </span>
     </div>
   );
@@ -101,7 +101,7 @@ export default function ClientLogos({ customers }: { customers: Customer[] }) {
         <div className="marquee-mask overflow-hidden">
           <div className={`flex gap-4 marquee-track-left ${paused ? "marquee-paused" : ""}`}>
             {[...customers, ...customers].map((c, i) => (
-              <LogoCard key={`row1-${i}`} name={c.name} />
+              <LogoCard key={`row1-${i}`} customer={c} />
             ))}
           </div>
         </div>
@@ -110,7 +110,7 @@ export default function ClientLogos({ customers }: { customers: Customer[] }) {
         <div className="marquee-mask overflow-hidden">
           <div className={`flex gap-4 marquee-track-right ${paused ? "marquee-paused" : ""}`}>
             {[...rowReverse, ...rowReverse].map((c, i) => (
-              <LogoCard key={`row2-${i}`} name={c.name} />
+              <LogoCard key={`row2-${i}`} customer={c} />
             ))}
           </div>
         </div>

@@ -8,6 +8,7 @@ import { EditModal, FormField, ArrayEditor, SearchBar } from "@/components/admin
 const emptyIndustry: IndustrySolution = {
   slug: "",
   title: "",
+  shortTitle: "",
   subtitle: "",
   painPoints: [],
   solutionSummary: "",
@@ -137,6 +138,9 @@ function IndustryForm({ data, onChange }: { data: IndustrySolution; onChange: (d
           <input value={data.title} onChange={(e) => update("title", e.target.value)} className="form-input" />
         </FormField>
       </div>
+      <FormField label="首页短标题" required>
+        <input value={data.shortTitle || ""} onChange={(e) => update("shortTitle", e.target.value)} placeholder="如：企业 AI 定制（建议 4-10 个字）" maxLength={20} className="form-input" />
+      </FormField>
       <FormField label="副标题">
         <input value={data.subtitle} onChange={(e) => update("subtitle", e.target.value)} className="form-input" />
       </FormField>
