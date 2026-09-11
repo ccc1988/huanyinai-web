@@ -2,7 +2,7 @@ import { createCipheriv, createDecipheriv, scryptSync, randomBytes, timingSafeEq
 
 const ALGO = "aes-256-gcm";
 // 密钥派生来源：ADMIN_SESSION_SECRET（与 auth.ts 共享同一密钥源）
-const SECRET = process.env.ADMIN_SESSION_SECRET;
+const SECRET = process.env.ADMIN_SESSION_SECRET ?? "";
 if (!SECRET) throw new Error("ADMIN_SESSION_SECRET is required");
 
 function deriveKey(): Buffer {

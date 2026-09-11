@@ -4,7 +4,7 @@ import path from "path";
 import { verifyHash } from "./crypto";
 import { NextRequest, NextResponse } from "next/server";
 
-const SESSION_SECRET = process.env.ADMIN_SESSION_SECRET;
+const SESSION_SECRET = process.env.ADMIN_SESSION_SECRET ?? "";
 if (!SESSION_SECRET) throw new Error("ADMIN_SESSION_SECRET is required");
 export const SESSION_COOKIE = "huanyin_admin_session";
 
