@@ -360,7 +360,12 @@ export default function AdminCompanyPage() {
       {/* 客户列表 */}
       <section className="glass-card rounded-[var(--radius-lg)] p-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold" style={{ color: "var(--color-text-primary)" }}>客户列表</h2>
+          <div>
+            <h2 className="text-lg font-bold" style={{ color: "var(--color-text-primary)" }}>首页客户与典型场景</h2>
+            <p className="mt-1 text-xs" style={{ color: "var(--color-text-muted)" }}>
+              此处内容会直接公开展示。真实客户名称仅在已获公开授权时填写；扩展行业覆盖请使用“典型场景·行业名称”。列表顺序即首页滚动顺序。
+            </p>
+          </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setData({ ...data, customers: [...data.customers, { name: "", industry: "", solutions: [] }] })}
@@ -383,7 +388,7 @@ export default function AdminCompanyPage() {
                     newCustomers[idx] = { ...customer, name: e.target.value };
                     setData({ ...data, customers: newCustomers });
                   }}
-                  placeholder="客户名称"
+                  placeholder="公开展示名称"
                   className="form-input flex-1"
                 />
                 <input
