@@ -1293,7 +1293,7 @@ interface BlogPost {
 | AI GEO/AEO 方案页、基线案例、5 篇文章 | 已发布并验收 | 专页和基线案例公开可访问；5 篇文章保持 `reviewStatus=draft`，详情返回 404，不进入公开博客、sitemap 或 `llms.txt` |
 | 后台字段与 API 校验 | 已发布并验收 | 认证后台数据和 API 校验随 `v1.7.0` 发布；生产共享数据同步清单已留存 |
 | sitemap、robots、llms.txt、JSON-LD | 已发布并验收 | 公开文件 HTTP 200，sitemap 42 个 URL，`scripts/verify-seo.mjs` 36/36 通过，核心 JSON-LD 通过检查 |
-| Git / 发布 | 已提交、已推送、已部署 | GitHub `main`/候选分支最新文档提交为 `9ac352a`；正式运行 tag `v1.7.0` 指向 `c588aa2`；生产 release 为 `20260917030820-c588aa2` |
+| Git / 发布 | 已提交、已推送、已部署 | GitHub `main`/候选分支最新文档提交为 `805c696`；正式运行 tag `v1.7.0` 指向 `c588aa2`；生产 release 为 `20260917030820-c588aa2` |
 | 线上后台 `/admin/cases`、`/admin/industries`、`/admin/blog` | 已写入并验收 | 生产数据为 22 个案例、9 个行业方案、23 篇博客；新增 5 篇文章均保持草稿 |
 | AI 平台实际收录、引用、推荐和线索结果 | 未验证，且不属于本次发布前承诺 | 只能作为后续观察指标，不能写成验收通过条件 |
 
