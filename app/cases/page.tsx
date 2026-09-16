@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, ChevronRight, FolderOpen } from "lucide-react";
-import { getCases, type CaseItem } from "@/lib/data";
+import { getPublicCases, type CaseItem } from "@/lib/data";
 import { createMetadata } from "@/lib/seo";
 import CaseCard from "@/components/shared/CaseCard";
 
@@ -19,6 +19,7 @@ const INDUSTRY_ORDER = [
   "物流",
   "电商客服",
   "RPA",
+  "AI 搜索增长",
 ];
 
 // 行业图标映射
@@ -29,10 +30,11 @@ const INDUSTRY_ICONS: Record<string, string> = {
   物流: "📦",
   电商客服: "💬",
   RPA: "🤖",
+  "AI 搜索增长": "🔎",
 };
 
 export default function CasesPage() {
-  const allCases = getCases();
+  const allCases = getPublicCases();
 
   // 按行业分组
   const grouped = INDUSTRY_ORDER.map((industry) => ({

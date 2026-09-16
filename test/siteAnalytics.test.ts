@@ -14,6 +14,7 @@ import {
   summarizePageMetrics,
   type AnalyticsEvent,
 } from "../lib/siteAnalytics.ts";
+import { getPublicBlogPosts, getPublicCases } from "../lib/data.ts";
 
 test("groups event dates by China Standard Time", () => {
   assert.equal(dateKey("2026-09-10T16:30:00.000Z"), "2026-09-11");
@@ -110,4 +111,13 @@ test("normalizes attribution and persists only accepted browser events", () => {
   } finally {
     fs.rmSync(dataDir, { recursive: true, force: true });
   }
+});
+
+test("keeps drafts and cases without detail pages out of public content", () => {
+  const publicPosts = getPublicBlogPosts();
+  const publicCases = getPublicCases();
+
+  assert.equal(publicPosts.some((post) => post.reviewStatus === "draft"), false);
+  assert.equal(publicCases.some((caseItem) => !caseItem.hasDetailPage), false);
+  assert.equal(publicCases.some((caseItem) => caseItem.slug === "huanyin-ai-search-visibility-baseline"), true);
 });

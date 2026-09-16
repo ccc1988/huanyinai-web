@@ -1,18 +1,18 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowRight, ChevronRight, Target, Lightbulb, TrendingUp, Wrench } from "lucide-react";
-import { getCases, getCaseBySlug, getCompany } from "@/lib/data";
+import { getPublicCases, getPublicCaseBySlug, getCompany } from "@/lib/data";
 import { createMetadata } from "@/lib/seo";
 import { getCaseStudyJsonLd } from "@/lib/geo";
 import { getCaseVisual } from "@/lib/caseVisuals";
 
 export function generateStaticParams() {
-  return getCases().map((c) => ({ slug: c.slug }));
+  return getPublicCases().map((c) => ({ slug: c.slug }));
 }
 
 export function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   return params.then(({ slug }) => {
-    const caseItem = getCaseBySlug(slug);
+    const caseItem = getPublicCaseBySlug(slug);
     if (!caseItem) return {};
     return createMetadata({
       title: caseItem.title,
@@ -28,7 +28,7 @@ export default async function CaseDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const caseItem = getCaseBySlug(slug);
+  const caseItem = getPublicCaseBySlug(slug);
 
   if (!caseItem) {
     notFound();
@@ -252,6 +252,16 @@ export default async function CaseDetailPage({
           </div>
         </div>
       </section>
+
+      {caseItem!.disclaimer && (
+        <section className="py-8" style={{ backgroundColor: "var(--color-bg-base)" }}>
+          <div className="container-max max-w-4xl">
+            <p className="border-l-2 pl-4 text-sm leading-6" style={{ borderColor: "var(--color-accent)", color: "var(--color-text-muted)" }}>
+              {caseItem!.disclaimer}
+            </p>
+          </div>
+        </section>
+      )}
 
       {/* CTA */}
       <section className="py-20 text-center relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-base)" }}>

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { Plus, Edit3, Trash2 } from "lucide-react";
-import type { IndustrySolution } from "@/lib/data";
+import type { IndustrySolution, ServicePackage } from "@/lib/data";
 import { EditModal, FormField, ArrayEditor, SearchBar } from "@/components/admin/AdminShared";
 
 const emptyIndustry: IndustrySolution = {
@@ -147,6 +147,19 @@ function IndustryForm({ data, onChange }: { data: IndustrySolution; onChange: (d
       <FormField label="方案概述">
         <textarea value={data.solutionSummary} onChange={(e) => update("solutionSummary", e.target.value)} rows={3} className="form-input resize-none" />
       </FormField>
+      <ServicePackageEditor value={data.servicePackages || []} onChange={(value) => update("servicePackages", value)} />
+      <FormField label="项目推进流程（每行一条）">
+        <ArrayEditor value={data.process || []} onChange={(v) => update("process", v)} />
+      </FormField>
+      <FormField label="交付物（每行一条）">
+        <ArrayEditor value={data.deliverables || []} onChange={(v) => update("deliverables", v)} />
+      </FormField>
+      <FormField label="可观察指标（每行一条）">
+        <ArrayEditor value={data.measurement || []} onChange={(v) => update("measurement", v)} />
+      </FormField>
+      <FormField label="项目边界（每行一条）">
+        <ArrayEditor value={data.boundaries || []} onChange={(v) => update("boundaries", v)} />
+      </FormField>
       <FormField label="行业痛点（每行一条）">
         <ArrayEditor value={data.painPoints} onChange={(v) => update("painPoints", v)} />
       </FormField>
@@ -205,6 +218,44 @@ function IndustryForm({ data, onChange }: { data: IndustrySolution; onChange: (d
             </p>
           )}
         </div>
+      </div>
+    </div>
+  );
+}
+
+function ServicePackageEditor({ value, onChange }: { value: ServicePackage[]; onChange: (value: ServicePackage[]) => void }) {
+  const update = (index: number, patch: Partial<ServicePackage>) => {
+    const next = [...value];
+    next[index] = { ...next[index], ...patch };
+    onChange(next);
+  };
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-2">
+        <label className="text-xs font-medium" style={{ color: "var(--color-text-muted)" }}>服务包</label>
+        <button
+          type="button"
+          onClick={() => onChange([...value, { title: "", description: "", deliverables: [] }])}
+          className="text-xs cursor-pointer flex items-center gap-1"
+          style={{ color: "var(--color-accent-light)" }}
+        >
+          <Plus size={12} /> 添加服务包
+        </button>
+      </div>
+      <div className="space-y-3">
+        {value.map((pkg, index) => (
+          <div key={index} className="glass-card rounded-[var(--radius-sm)] p-3 space-y-2">
+            <div className="flex items-center gap-2">
+              <input value={pkg.title} onChange={(e) => update(index, { title: e.target.value })} placeholder="服务包名称" className="form-input flex-1" />
+              <button type="button" onClick={() => onChange(value.filter((_, itemIndex) => itemIndex !== index))} className="p-2 cursor-pointer" style={{ color: "rgb(248,113,113)" }} aria-label="删除服务包"><Trash2 size={14} /></button>
+            </div>
+            <textarea value={pkg.description} onChange={(e) => update(index, { description: e.target.value })} placeholder="服务包说明" rows={2} className="form-input resize-none" />
+            <FormField label="服务包交付物（每行一条）">
+              <ArrayEditor value={pkg.deliverables} onChange={(deliverables) => update(index, { deliverables })} rows={3} />
+            </FormField>
+          </div>
+        ))}
       </div>
     </div>
   );

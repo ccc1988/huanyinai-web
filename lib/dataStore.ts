@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import type { Customer, CaseItem, IndustrySolution, CapabilityItem, StatItem, BlogPost, Settings, Contact, Submission, SmtpConfig, AdminConfig } from "./data";
+import { normalizeSettings, type Customer, type CaseItem, type IndustrySolution, type CapabilityItem, type StatItem, type BlogPost, type Settings, type Contact, type Submission, type SmtpConfig, type AdminConfig } from "./data";
 
 const dataDir = process.env.DATA_DIR || path.join(process.cwd(), "data");
 
@@ -27,7 +27,7 @@ export const readData = {
   stats: () => readJson<StatItem[]>("stats.json"),
   contacts: () => readJson<Contact[]>("contacts.json"),
   blogPosts: () => readJson<BlogPost[]>("blog-posts.json"),
-  settings: () => readJson<Settings>("settings.json"),
+  settings: () => normalizeSettings(readJson<Partial<Settings>>("settings.json")),
   submissions: () => { try { return readJson<Submission[]>("submissions.json"); } catch { return []; } },
   smtpConfig: () => { try { return readJson<SmtpConfig>("smtp-config.json"); } catch { return { enabled: false, host: "", port: 465, secure: true, username: "", encryptedPassword: null, fromName: "寰引智能官网", fromEmail: "", recipients: [], subjectTemplate: "【新咨询】{company} - {name}" } as SmtpConfig; } },
   adminConfig: () => { try { return readJson<AdminConfig>("admin-config.json"); } catch { return { passwordHash: null, passwordSalt: null, updatedAt: null } as AdminConfig; } },

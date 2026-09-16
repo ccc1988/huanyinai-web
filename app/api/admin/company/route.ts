@@ -28,6 +28,7 @@ export async function PUT(request: NextRequest) {
         writeData.customers(data);
         break;
       case "capabilities":
+        if (!isCapabilities(data)) return NextResponse.json({ error: "能力模块数据格式无效" }, { status: 400 });
         writeData.capabilities(data);
         break;
       case "stats":
@@ -44,4 +45,16 @@ export async function PUT(request: NextRequest) {
   } catch {
     return NextResponse.json({ error: "保存失败" }, { status: 500 });
   }
+}
+
+function isCapabilities(value: unknown): value is Array<{ module: string; products: string[]; scenarios: string; icon: string }> {
+  return Array.isArray(value) && value.length > 0 && value.every((item) => {
+    if (typeof item !== "object" || item === null || Array.isArray(item)) return false;
+    const candidate = item as Record<string, unknown>;
+    return typeof candidate.module === "string" && candidate.module.trim().length > 0
+      && typeof candidate.scenarios === "string"
+      && typeof candidate.icon === "string"
+      && Array.isArray(candidate.products)
+      && candidate.products.every((product) => typeof product === "string" && product.trim().length > 0);
+  });
 }

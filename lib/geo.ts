@@ -1,4 +1,4 @@
-import { getCompany, getIndustries, getCases } from "./data";
+import { getCompany, getIndustries, getPublicCases } from "./data";
 
 /** Organization JSON-LD */
 export function getOrganizationJsonLd() {
@@ -22,6 +22,8 @@ export function getOrganizationJsonLd() {
       "RPA 自动化",
       "AI 文档处理",
       "企业 AI 转型",
+      "AI 搜索增长",
+      "GEO/AEO",
       "物流 AI",
       "跨境电商 AI",
     ],
@@ -51,7 +53,7 @@ export function getServiceJsonLd(slug: string) {
 /** CaseStudy JSON-LD for case detail pages */
 export function getCaseStudyJsonLd(slug: string) {
   const company = getCompany();
-  const caseItem = getCases().find((c) => c.slug === slug);
+  const caseItem = getPublicCases().find((c) => c.slug === slug);
   if (!caseItem) return null;
 
   return {
@@ -83,6 +85,20 @@ export function getFaqJsonLd(faq: { q: string; a: string }[]) {
         "@type": "Answer",
         text: item.a,
       },
+    })),
+  };
+}
+
+/** BreadcrumbList JSON-LD for public detail pages */
+export function getBreadcrumbJsonLd(items: { name: string; url: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: item.url,
     })),
   };
 }

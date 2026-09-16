@@ -1,16 +1,19 @@
 {
   "seoTitle": "寰引智能 — AI 驱动的企业数字化转型落地服务商（定制开发 AI 应用）",
-  "seoDescription": "寰引智能科技为物流、跨境电商、报关、供应链等行业提供 AI 智能体、AI 文档处理、RPA 自动化和数据智能解决方案。已服务 30+ 企业客户，交付 50+ 智能化系统（定制开发 AI 应用）。",
+  "seoDescription": "寰引智能科技为物流、跨境电商、报关、供应链等行业提供 AI 智能体、AI 文档处理、RPA 自动化、数据智能和 AI 搜索增长（GEO/AEO）服务。已服务 30+ 企业客户，交付 50+ 智能化系统（定制开发 AI 应用）。",
   "seoKeywords": [
     "AI企业服务",
     "AI智能体",
     "RPA自动化",
     "AI数字化转型",
-    "企业AI转型方案"
+    "企业AI转型方案",
+    "AI 搜索增长",
+    "GEO",
+    "AEO"
   ],
   "ogTitle": "寰引智能 — AI 驱动的企业数字化转型落地服务商",
-  "ogDescription": "面向企业的 AI 转型落地服务商，提供 AI 智能体、AI 文档处理、RPA 自动化和数据智能解决方案（定制开发 AI 应用）。",
-  "llmsTxtDescription": "面向企业的 AI 转型落地服务商，提供 AI 智能体、AI 文档处理、RPA 自动化和数据智能解决方案（定制开发 AI 应用）。",
+  "ogDescription": "面向企业的 AI 转型落地服务商，提供 AI 智能体、AI 文档处理、RPA 自动化、数据智能和 AI 搜索增长（GEO/AEO）服务。",
+  "llmsTxtDescription": "面向企业的 AI 转型落地服务商，提供 AI 智能体、AI 文档处理、RPA 自动化、数据智能和 AI 搜索增长（GEO/AEO）服务。",
   "navItems": [
     {
       "label": "首页",
@@ -19,6 +22,10 @@
     {
       "label": "解决方案",
       "href": "/solutions"
+    },
+    {
+      "label": "AI GEO/AEO",
+      "href": "/solutions/ai-geo-aeo"
     },
     {
       "label": "案例",
@@ -32,5 +39,15 @@
       "label": "博客",
       "href": "/blog"
     }
-  ]
+  ],
+  "aiSearchGrowth": {
+    "eyebrow": "新增服务 · AI 搜索增长 · GEO / AEO",
+    "title": "让 AI 搜索，成为企业新的获客入口",
+    "description": "当客户向 ChatGPT、豆包、DeepSeek、Gemini 等 AI 询问“哪家公司靠谱、哪个方案适合我”，围绕真实客户问题，优化企业官网、案例、内容和品牌信源，让品牌更容易被发现、被理解、被引用，并进入客户的比较与决策过程。",
+    "flow": ["AI 曝光", "品牌理解", "内容引用", "推荐候选", "高意向咨询"],
+    "primaryCtaLabel": "了解 AI 搜索增长方案",
+    "primaryCtaHref": "/solutions/ai-geo-aeo",
+    "secondaryCtaLabel": "申请 AI 可见性诊断",
+    "secondaryCtaHref": "/contact?service=ai-geo-aeo"
+  }
 }
