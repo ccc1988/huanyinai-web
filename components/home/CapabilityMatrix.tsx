@@ -36,14 +36,13 @@ export default function CapabilityMatrix() {
       <div className="absolute inset-0 grid-bg opacity-50 pointer-events-none" />
 
       <div className="container-max relative">
-        <SectionTitle subtitle="从 AI 智能体、流程自动化到 AI 搜索增长，帮助企业提升运营效率、品牌影响力和业务增长能力。">
-          五大 AI 能力，覆盖从内部提效到外部获客
+        <SectionTitle subtitle="从业务提效到增长获客，为企业提供可落地的 AI 产品与实施服务。">
+          AI 应用与增长服务
         </SectionTitle>
 
         {featured && (
-          <div className="glass-card glass-card-accent mb-8 rounded-[var(--radius-lg)] p-7 sm:p-8 relative overflow-hidden">
-            <div className="absolute inset-y-0 left-0 w-1" style={{ background: "linear-gradient(180deg, #22D3EE, #4ADE80)" }} />
-            <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
+          <div className="ai-capability-featured glass-card glass-card-accent mb-8 rounded-[var(--radius-lg)] p-6 sm:p-7 relative overflow-hidden">
+            <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
               <div>
                 <div className="flex items-center gap-4">
                   <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl" style={{ background: "linear-gradient(135deg, rgba(6,182,212,0.2), rgba(74,222,128,0.08))", border: "1px solid rgba(34,211,238,0.28)" }}>
@@ -51,15 +50,15 @@ export default function CapabilityMatrix() {
                   </div>
                   <div>
                     <p className="text-xs font-medium uppercase tracking-[0.12em]" style={{ color: "#67e8f9" }}>AI 搜索增长 · GEO / AEO</p>
-                    <h3 className="mt-1 text-2xl font-bold" style={{ color: "var(--color-text-primary)" }}>{featured.module}</h3>
+                    <h3 className="sr-only">{featured.module}</h3>
                   </div>
                 </div>
-                <p className="mt-5 max-w-3xl text-base leading-7" style={{ color: "var(--color-text-body)" }}>
-                  让品牌被 AI 发现、理解、引用，进入客户的比较与决策过程。
+                <p className="mt-4 text-base leading-7 lg:whitespace-nowrap" style={{ color: "var(--color-text-body)" }}>
+                  让品牌、产品与服务在 <span className="font-semibold underline decoration-cyan-300/60 underline-offset-4" style={{ color: "#67e8f9" }}>AI 搜索</span> 中更容易<span className="font-semibold underline decoration-cyan-300/60 underline-offset-4" style={{ color: "var(--color-text-primary)" }}>被发现</span>；在 <span className="font-semibold underline decoration-cyan-300/60 underline-offset-4" style={{ color: "#67e8f9" }}>AI 提问</span> 的答案中更容易被<span className="font-semibold underline decoration-cyan-300/60 underline-offset-4" style={{ color: "var(--color-text-primary)" }}>理解、引用与推荐</span>。
                 </p>
-                <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2">
+                <div className="mt-4 flex flex-wrap gap-2">
                   {featured.products.map((product) => (
-                    <span key={product} className="text-sm" style={{ color: "var(--color-text-body)" }}>· {product}</span>
+                    <span key={product} className="pill-tag text-xs">{product}</span>
                   ))}
                 </div>
               </div>

@@ -125,10 +125,10 @@ export interface Settings {
 }
 
 export const defaultAiSearchGrowthContent: AiSearchGrowthContent = {
-  eyebrow: "新增服务 · AI 搜索增长 · GEO / AEO",
-  title: "让 AI 搜索，成为企业新的获客入口",
-  description: "当客户向 ChatGPT、豆包、DeepSeek、Gemini 等 AI 询问“哪家公司靠谱、哪个方案适合我”，围绕真实客户问题，优化企业官网、案例、内容和品牌信源，让品牌更容易被发现、被理解、被引用，并进入客户的比较与决策过程。",
-  flow: ["AI 曝光", "品牌理解", "内容引用", "推荐候选", "高意向咨询"],
+  eyebrow: "AI 搜索增长 · GEO / AEO",
+  title: "让品牌进入 AI 答案",
+  description: "围绕客户真实问题，优化官网、案例和品牌信源，让品牌更容易被发现、理解与引用。",
+  flow: ["AI 曝光", "内容引用", "咨询机会"],
   primaryCtaLabel: "了解 AI 搜索增长方案",
   primaryCtaHref: "/solutions/ai-geo-aeo",
   secondaryCtaLabel: "申请 AI 可见性诊断",

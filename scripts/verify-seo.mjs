@@ -1,4 +1,5 @@
 const siteUrl = (process.env.SITE_URL || "https://huanyinai.com").replace(/\/$/, "");
+const canonicalSiteUrl = (process.env.CANONICAL_SITE_URL || "https://huanyinai.com").replace(/\/$/, "");
 const checks = [];
 
 function check(condition, message) {
@@ -25,12 +26,12 @@ const expectedPages = [
   },
   {
     path: "/cases/supply-chain-ai-service-production",
-    title: "达九州供应链：AI 客服知识库与总控平台生产化项目",
+    title: "某供应链企业：物流智能客服、智能报价与消息中台生产化项目",
     jsonLd: "CaseStudy",
   },
   {
     path: "/solutions/enterprise-ai-rpa-automation",
-    title: "企业 AI 智能体与 RPA 业务自动化解决方案",
+    title: "深圳企业 AI 定制开发与私有化交付方案",
     jsonLd: "Service",
   },
   {
@@ -57,13 +58,13 @@ try {
   const llms = await fetchPage("/llms.txt");
   check(llms.response.status === 200, `/llms.txt status=${llms.response.status}`);
   check(llms.body.includes("huanyinai.com"), "/llms.txt includes the official domain");
-  check(llms.body.includes("企业 AI 智能体与 RPA 业务自动化解决方案"), "/llms.txt includes current solution content");
+  check(llms.body.includes("AI 搜索增长（GEO/AEO）"), "/llms.txt includes current solution content");
   check(llms.body.includes("某跨境物流团队：企业模板标准化引擎与离线交付项目"), "/llms.txt includes current case content");
   check(llms.body.includes("跨境物流 AI 项目如何验收"), "/llms.txt includes current blog content");
 
   for (const page of expectedPages) {
     const result = await fetchPage(page.path);
-    const canonical = `${siteUrl}${page.path}`;
+    const canonical = `${canonicalSiteUrl}${page.path}`;
     check(result.response.status === 200, `${page.path} status=${result.response.status}`);
     check(/<title>[^<]+<\/title>/i.test(result.body), `${page.path} has title`);
     check(result.body.includes(page.title), `${page.path} contains expected title`);

@@ -1,6 +1,22 @@
 [
-  { "value": 30, "suffix": "+", "label": "企业客户" },
-  { "value": 50, "suffix": "+", "label": "智能化系统" },
-  { "value": 6, "label": "行业覆盖" },
-  { "value": 10, "suffix": "x+", "label": "人效提升" }
+  {
+    "value": 100,
+    "suffix": "+",
+    "label": "企业客户"
+  },
+  {
+    "value": 200,
+    "suffix": "+",
+    "label": "落地系统"
+  },
+  {
+    "value": 8,
+    "label": "行业覆盖",
+    "suffix": "+"
+  },
+  {
+    "value": 10,
+    "suffix": "x+",
+    "label": "人效提升"
+  }
 ]

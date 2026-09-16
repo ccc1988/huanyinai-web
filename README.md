@@ -2,7 +2,7 @@
 
 面向企业的 AI 转型落地服务商官网，基于 Next.js 16 + Tailwind CSS 4 构建。
 
-当前封板版本：`v1.6.0`（2026-09-11）。生产事实以服务器 `current` 指向、Git SHA 和线上健康检查共同确认，不能只依据版本号判断。
+当前封板版本：`v1.7.0`（2026-09-17）。生产事实以服务器 `current` 指向、Git SHA 和线上健康检查共同确认，不能只依据版本号判断。
 
 ## 技术栈
 
@@ -127,14 +127,14 @@ bash /var/www/huanyin_web/deploy.sh
 | 页面 | 路由 | 说明 |
 |------|------|------|
 | 首页 | `/` | 9 个区块 |
-| 行业方案 | `/solutions`、`/solutions/[industry]` | 8 个行业方向，后台可维护 |
+| 行业方案 | `/solutions`、`/solutions/[industry]` | 9 个行业方向，后台可维护 |
 | 案例 | `/cases`、`/cases/[slug]` | 后台可维护 |
 | 关于我们 | `/about` | |
 | 联系我们 | `/contact` | 含表单 + 二维码 |
 | 博客 | `/blog` | 列表 + 详情 |
 | 管理后台 | `/admin` | 数据管理 |
 
-完整运行、验收和回滚口径见 `docs/operations.md`；`v1.6.0` 发布范围见 `docs/releases/v1.6.0.md`。
+完整运行、验收和回滚口径见 `docs/operations.md`；`v1.7.0` 发布范围见 `docs/releases/v1.7.0.md`。
 
 ## SEO/GEO
 

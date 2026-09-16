@@ -16,7 +16,7 @@ export default function SectionTitle({
       }
     >
       <h2
-        className="text-[clamp(1.75rem,4vw,3rem)] font-semibold leading-tight"
+        className="text-balance text-[clamp(1.75rem,4vw,3rem)] font-semibold leading-tight"
         style={{ color: "var(--color-text-primary)" }}
       >
         {children}

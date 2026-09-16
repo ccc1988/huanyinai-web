@@ -1,19 +1,25 @@
 {
-  "seoTitle": "寰引智能 — AI 驱动的企业数字化转型落地服务商（定制开发 AI 应用）",
-  "seoDescription": "寰引智能科技为物流、跨境电商、报关、供应链等行业提供 AI 智能体、AI 文档处理、RPA 自动化、数据智能和 AI 搜索增长（GEO/AEO）服务。已服务 30+ 企业客户，交付 50+ 智能化系统（定制开发 AI 应用）。",
+  "seoTitle": "企业 AI 解决方案｜AI 智能体、AI 搜索获客与 AI 数字化转型｜寰引智能",
+  "seoDescription": "寰引智能为物流、跨境、制造、电商、金融等行业提供 AI 智能体、AI 文档处理、业务自动化、AI 数据应用与 AI 搜索增长服务，帮助企业推进 AI 数字化转型，从业务提效走向增长获客。",
   "seoKeywords": [
-    "AI企业服务",
-    "AI智能体",
-    "RPA自动化",
-    "AI数字化转型",
-    "企业AI转型方案",
+    "企业 AI 解决方案",
+    "AI 智能体",
+    "企业 AI 数字化转型",
+    "企业 AI 转型",
+    "AI 应用落地",
+    "AI 搜索获客",
     "AI 搜索增长",
-    "GEO",
-    "AEO"
+    "GEO 服务",
+    "AEO 服务",
+    "物流 AI 解决方案",
+    "跨境 AI 解决方案",
+    "制造业 AI 解决方案",
+    "电商 AI 解决方案",
+    "金融 AI 解决方案"
   ],
-  "ogTitle": "寰引智能 — AI 驱动的企业数字化转型落地服务商",
-  "ogDescription": "面向企业的 AI 转型落地服务商，提供 AI 智能体、AI 文档处理、RPA 自动化、数据智能和 AI 搜索增长（GEO/AEO）服务。",
-  "llmsTxtDescription": "面向企业的 AI 转型落地服务商，提供 AI 智能体、AI 文档处理、RPA 自动化、数据智能和 AI 搜索增长（GEO/AEO）服务。",
+  "ogTitle": "寰引智能｜企业 AI 解决方案与 AI 搜索增长服务",
+  "ogDescription": "面向企业提供 AI 智能体、AI 文档处理、业务自动化、AI 数据应用与 AI 搜索增长服务，连接业务提效与增长获客。",
+  "llmsTxtDescription": "寰引智能面向物流、跨境、制造、电商、金融等行业提供 AI 智能体、AI 文档处理、业务自动化、AI 数据应用与 AI 搜索增长服务，帮助企业推进 AI 数字化转型与业务增长。",
   "navItems": [
     {
       "label": "首页",
@@ -22,10 +28,6 @@
     {
       "label": "解决方案",
       "href": "/solutions"
-    },
-    {
-      "label": "AI GEO/AEO",
-      "href": "/solutions/ai-geo-aeo"
     },
     {
       "label": "案例",
@@ -38,13 +40,21 @@
     {
       "label": "博客",
       "href": "/blog"
+    },
+    {
+      "label": "AI GEO/AEO",
+      "href": "/solutions/ai-geo-aeo"
     }
   ],
   "aiSearchGrowth": {
-    "eyebrow": "新增服务 · AI 搜索增长 · GEO / AEO",
-    "title": "让 AI 搜索，成为企业新的获客入口",
-    "description": "当客户向 ChatGPT、豆包、DeepSeek、Gemini 等 AI 询问“哪家公司靠谱、哪个方案适合我”，围绕真实客户问题，优化企业官网、案例、内容和品牌信源，让品牌更容易被发现、被理解、被引用，并进入客户的比较与决策过程。",
-    "flow": ["AI 曝光", "品牌理解", "内容引用", "推荐候选", "高意向咨询"],
+    "eyebrow": "AI 搜索增长 · GEO / AEO",
+    "title": "让品牌进入 AI 答案",
+    "description": "围绕客户真实问题，优化官网、案例和品牌信源，让品牌更容易被发现、理解与引用。",
+    "flow": [
+      "AI 曝光",
+      "内容引用",
+      "咨询机会"
+    ],
     "primaryCtaLabel": "了解 AI 搜索增长方案",
     "primaryCtaHref": "/solutions/ai-geo-aeo",
     "secondaryCtaLabel": "申请 AI 可见性诊断",
