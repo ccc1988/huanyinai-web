@@ -51,7 +51,7 @@ export default function FinalCTA() {
               WebkitTextFillColor: "transparent",
             }}
           >
-            让 AI 为你的企业创造价值
+            从业务提效，到 AI 搜索获客
           </span>
         </h2>
 
@@ -59,13 +59,18 @@ export default function FinalCTA() {
           className="max-w-2xl mx-auto mb-10 text-lg"
           style={{ color: "var(--color-text-body)" }}
         >
-          告诉我们你的业务场景，我们给出可落地的 AI 方案
+          无论你要建设企业 AI 应用，还是希望让客户在 AI 答案中更容易发现你的品牌，寰引都从业务场景和目标结果出发，设计可落地的实施方案。
         </p>
 
-        <Link href="/contact" className="cta-primary">
-          预约免费咨询
-          <ArrowRight size={18} />
-        </Link>
+        <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <Link href="/contact?service=enterprise-ai" className="cta-primary">
+            咨询企业 AI 落地
+            <ArrowRight size={18} />
+          </Link>
+          <Link href="/contact?service=ai-geo-aeo" className="cta-secondary">
+            申请 AI 搜索可见性诊断
+          </Link>
+        </div>
 
         {/* 联系渠道三列 */}
         <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6">

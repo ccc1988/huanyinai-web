@@ -15,19 +15,22 @@ export async function PUT(request: NextRequest) {
   const authError = requireAuth(request);
   if (authError) return authError;
   try {
-    const data = await request.json();
+    const data: unknown = await request.json();
+    const validationError = validateCase(data);
+    if (validationError) return NextResponse.json({ error: validationError }, { status: 400 });
+    const caseItem = data as CaseItem;
     const cases = readData.cases() as CaseItem[];
     const now = new Date().toISOString();
 
     // 根据 slug 查找并更新
-    const index = cases.findIndex((c) => c.slug === data.slug);
-    const nextCase = { ...data, updatedAt: now } as CaseItem;
+    const index = cases.findIndex((c) => c.slug === caseItem.slug);
+    const nextCase = { ...caseItem, updatedAt: now } as CaseItem;
     if (index === -1) {
       // 新增
       cases.push(nextCase);
     } else {
       // 更新
-      cases[index] = { ...cases[index], ...data, updatedAt: now };
+      cases[index] = { ...cases[index], ...caseItem, updatedAt: now };
     }
 
     writeData.cases(cases);
@@ -39,6 +42,37 @@ export async function PUT(request: NextRequest) {
   } catch {
     return NextResponse.json({ error: "保存失败" }, { status: 500 });
   }
+}
+
+function validateCase(value: unknown): string | null {
+  if (!isRecord(value)) return "案例数据必须是对象";
+  if (!isSlug(value.slug)) return "slug 只能使用小写字母、数字和连字符";
+  for (const field of ["title", "industry", "oneLiner", "solution"]) {
+    if (!isNonEmptyString(value[field])) return `${field} 不能为空`;
+  }
+  for (const field of ["relatedCustomers", "painPoints", "customerValue", "scenarios", "tags"]) {
+    if (!isStringArray(value[field])) return `${field} 必须是字符串数组`;
+  }
+  if (value.metrics !== undefined && !isStringArray(value.metrics)) return "metrics 必须是字符串数组";
+  if (typeof value.hasDetailPage !== "boolean") return "hasDetailPage 必须是布尔值";
+  if (value.disclaimer !== undefined && typeof value.disclaimer !== "string") return "disclaimer 必须是字符串";
+  return null;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function isNonEmptyString(value: unknown): value is string {
+  return typeof value === "string" && value.trim().length > 0;
+}
+
+function isStringArray(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every((item) => typeof item === "string");
+}
+
+function isSlug(value: unknown): value is string {
+  return typeof value === "string" && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value);
 }
 
 export async function DELETE(request: NextRequest) {

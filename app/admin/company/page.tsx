@@ -74,6 +74,21 @@ export default function AdminCompanyPage() {
     } finally { setSaving(false); }
   };
 
+  const saveCapabilities = async () => {
+    if (!data) return;
+    setSaving(true);
+    try {
+      const response = await fetch("/api/admin/company", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type: "capabilities", data: data.capabilities }),
+      });
+      showToast(response.ok ? "能力模块已保存" : "保存失败", response.ok ? "success" : "error");
+    } catch {
+      showToast("保存失败", "error");
+    } finally { setSaving(false); }
+  };
+
   const saveContacts = async () => {
     if (!data) return;
     setSaving(true);
@@ -239,6 +254,37 @@ export default function AdminCompanyPage() {
                   }}
                   className="form-input"
                 />
+              </FormField>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 能力模块 */}
+      <section className="glass-card rounded-[var(--radius-lg)] p-6">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-lg font-bold" style={{ color: "var(--color-text-primary)" }}>AI 能力模块</h2>
+            <p className="mt-1 text-xs" style={{ color: "var(--color-text-muted)" }}>首页能力区直接读取此列表，AI 搜索增长作为第五项能力维护。</p>
+          </div>
+          <SaveButton onClick={saveCapabilities} saving={saving} />
+        </div>
+        <div className="space-y-3">
+          {data.capabilities.map((capability, idx) => (
+            <div key={idx} className="glass-card rounded-[var(--radius-sm)] p-4 space-y-3">
+              <div className="grid gap-3 sm:grid-cols-[1fr_1fr_120px]">
+                <FormField label="能力名称">
+                  <input value={capability.module} onChange={(e) => { const next = [...data.capabilities]; next[idx] = { ...capability, module: e.target.value }; setData({ ...data, capabilities: next }); }} className="form-input" />
+                </FormField>
+                <FormField label="场景说明">
+                  <input value={capability.scenarios} onChange={(e) => { const next = [...data.capabilities]; next[idx] = { ...capability, scenarios: e.target.value }; setData({ ...data, capabilities: next }); }} className="form-input" />
+                </FormField>
+                <FormField label="图标标识">
+                  <input value={capability.icon} onChange={(e) => { const next = [...data.capabilities]; next[idx] = { ...capability, icon: e.target.value }; setData({ ...data, capabilities: next }); }} className="form-input" />
+                </FormField>
+              </div>
+              <FormField label="产品或子能力（每行一条）">
+                <ArrayEditor value={capability.products} onChange={(products) => { const next = [...data.capabilities]; next[idx] = { ...capability, products }; setData({ ...data, capabilities: next }); }} rows={4} />
               </FormField>
             </div>
           ))}

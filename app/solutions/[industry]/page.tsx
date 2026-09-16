@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, ChevronRight } from "lucide-react";
+import { ArrowRight, CheckCircle2, ChevronRight, ClipboardCheck, ListChecks, ShieldCheck } from "lucide-react";
 import { getIndustries, getIndustryBySlug, getCasesByIndustry, getCompany } from "@/lib/data";
 import { createMetadata } from "@/lib/seo";
-import { getServiceJsonLd, getFaqJsonLd } from "@/lib/geo";
+import { getBreadcrumbJsonLd, getServiceJsonLd, getFaqJsonLd } from "@/lib/geo";
 import { getIndustryIcon } from "@/lib/industryIcons";
 import CaseCard from "@/components/shared/CaseCard";
 
@@ -16,8 +16,8 @@ export function generateMetadata({ params }: { params: Promise<{ industry: strin
     const ind = getIndustryBySlug(slug);
     if (!ind) return {};
     return createMetadata({
-      title: ind.title,
-      description: ind.subtitle,
+      title: ind.metaTitle || ind.title,
+      description: ind.metaDescription || ind.subtitle,
       path: `/solutions/${slug}`,
     });
   });
@@ -38,6 +38,12 @@ export default async function SolutionPage({
   const relatedCases = getCasesByIndustry(slug);
   const serviceJsonLd = getServiceJsonLd(slug);
   const faqJsonLd = getFaqJsonLd(industry!.faq);
+  const company = getCompany();
+  const breadcrumbJsonLd = getBreadcrumbJsonLd([
+    { name: "首页", url: company.website },
+    { name: "解决方案", url: `${company.website}/solutions` },
+    { name: industry!.title, url: `${company.website}/solutions/${slug}` },
+  ]);
 
   return (
     <div className="pt-24">
@@ -49,6 +55,10 @@ export default async function SolutionPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
       {/* Hero */}
@@ -168,6 +178,95 @@ export default async function SolutionPage({
         </div>
       </section>
 
+      {/* Service packages */}
+      {industry!.servicePackages && industry!.servicePackages.length > 0 && (
+        <section className="py-20 relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-elevated)" }}>
+          <div className="absolute inset-0 -z-0 section-decor" />
+          <div className="container-max">
+            <h2 className="text-3xl font-bold mb-3" style={{ color: "var(--color-text-primary)" }}>我们提供什么</h2>
+            <p className="mb-8 max-w-3xl" style={{ color: "var(--color-text-body)" }}>从一次基线诊断开始，把客户问题、公开信息和可验证的交付物连接起来。</p>
+            <div className="grid gap-5 md:grid-cols-2">
+              {industry!.servicePackages.map((pkg, index) => (
+                <article key={pkg.title} className="glass-card hud-corners rounded-[var(--radius-md)] p-6">
+                  <div className="mb-4 flex items-start gap-3">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-sm font-bold" style={{ backgroundColor: "rgba(99,102,241,0.14)", color: "var(--color-accent-light)" }}>{String(index + 1).padStart(2, "0")}</span>
+                    <h3 className="text-xl font-bold" style={{ color: "var(--color-text-primary)" }}>{pkg.title}</h3>
+                  </div>
+                  <p className="leading-7" style={{ color: "var(--color-text-body)" }}>{pkg.description}</p>
+                  <ul className="mt-5 space-y-2">
+                    {pkg.deliverables.map((item) => (
+                      <li key={item} className="flex items-start gap-2 text-sm" style={{ color: "var(--color-text-body)" }}>
+                        <CheckCircle2 size={16} className="mt-0.5 shrink-0" style={{ color: "#67e8f9" }} aria-hidden="true" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Process */}
+      {industry!.process && industry!.process.length > 0 && (
+        <section className="py-20 relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-base)" }}>
+          <div className="absolute inset-0 -z-0 grid-bg" />
+          <div className="container-max max-w-5xl">
+            <div className="flex items-center gap-3 mb-8">
+              <ListChecks size={22} style={{ color: "var(--color-accent-light)" }} />
+              <h2 className="text-3xl font-bold" style={{ color: "var(--color-text-primary)" }}>项目如何推进</h2>
+            </div>
+            <ol className="grid gap-4 md:grid-cols-5">
+              {industry!.process.map((step, index) => (
+                <li key={step} className="border-t pt-4" style={{ borderColor: "var(--color-border-default)" }}>
+                  <span className="text-sm font-bold" style={{ color: "var(--color-accent-light)" }}>{String(index + 1).padStart(2, "0")}</span>
+                  <p className="mt-3 text-sm leading-6" style={{ color: "var(--color-text-body)" }}>{step}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+      )}
+
+      {/* Deliverables and boundaries */}
+      {((industry!.deliverables && industry!.deliverables.length > 0) || (industry!.measurement && industry!.measurement.length > 0) || (industry!.boundaries && industry!.boundaries.length > 0)) && (
+        <section className="py-20 relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-elevated)" }}>
+          <div className="absolute inset-0 -z-0 section-decor" />
+          <div className="container-max grid gap-8 lg:grid-cols-2">
+            <div>
+              <div className="mb-6 flex items-center gap-3">
+                <ClipboardCheck size={22} style={{ color: "var(--color-accent-light)" }} />
+                <h2 className="text-3xl font-bold" style={{ color: "var(--color-text-primary)" }}>交付什么，如何验收</h2>
+              </div>
+              <div className="space-y-6">
+                {industry!.deliverables && industry!.deliverables.length > 0 && (
+                  <div>
+                    <h3 className="mb-3 font-semibold" style={{ color: "var(--color-text-primary)" }}>交付物</h3>
+                    <ul className="space-y-2">{industry!.deliverables.map((item) => <li key={item} className="flex gap-2 text-sm leading-6" style={{ color: "var(--color-text-body)" }}><CheckCircle2 size={16} className="mt-1 shrink-0" style={{ color: "#67e8f9" }} aria-hidden="true" />{item}</li>)}</ul>
+                  </div>
+                )}
+                {industry!.measurement && industry!.measurement.length > 0 && (
+                  <div>
+                    <h3 className="mb-3 font-semibold" style={{ color: "var(--color-text-primary)" }}>可观察指标</h3>
+                    <ul className="space-y-2">{industry!.measurement.map((item) => <li key={item} className="flex gap-2 text-sm leading-6" style={{ color: "var(--color-text-body)" }}><CheckCircle2 size={16} className="mt-1 shrink-0" style={{ color: "#67e8f9" }} aria-hidden="true" />{item}</li>)}</ul>
+                  </div>
+                )}
+              </div>
+            </div>
+            {industry!.boundaries && industry!.boundaries.length > 0 && (
+              <div className="border-l pl-0 lg:pl-8" style={{ borderColor: "rgba(248,113,113,0.3)" }}>
+                <div className="mb-6 flex items-center gap-3">
+                  <ShieldCheck size={22} style={{ color: "#fda4af" }} />
+                  <h2 className="text-3xl font-bold" style={{ color: "var(--color-text-primary)" }}>哪些结果不能保证</h2>
+                </div>
+                <ul className="space-y-3">{industry!.boundaries.map((item) => <li key={item} className="text-sm leading-7" style={{ color: "var(--color-text-body)" }}>· {item}</li>)}</ul>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
       {/* Related cases */}
       {relatedCases.length > 0 && (
         <section className="py-20 relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-elevated)" }}>
@@ -237,16 +336,16 @@ export default async function SolutionPage({
             className="text-3xl font-bold mb-4"
             style={{ color: "var(--color-text-primary)" }}
           >
-            想了解更多？
+            {industry!.slug === "ai-geo-aeo" ? "先从一次可验证的基线诊断开始" : "想了解更多？"}
           </h2>
           <p
             className="mb-8"
             style={{ color: "var(--color-text-body)" }}
           >
-            告诉我们你的业务场景，我们给出可落地的 AI 方案
+            {industry!.slug === "ai-geo-aeo" ? "提供你的官网、主要服务和目标客户问题，我们先确认 AI 搜索增长是否适合当前阶段。" : "告诉我们你的业务场景，我们给出可落地的 AI 方案"}
           </p>
-          <Link href="/contact" className="cta-primary">
-            预约免费咨询
+          <Link href={industry!.slug === "ai-geo-aeo" ? "/contact?service=ai-geo-aeo" : "/contact"} className="cta-primary">
+            {industry!.slug === "ai-geo-aeo" ? "申请 AI 搜索可见性诊断" : "预约免费咨询"}
             <ArrowRight size={18} />
           </Link>
         </div>

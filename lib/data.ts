@@ -31,18 +31,32 @@ export interface CaseItem {
   tags: string[];
   hasDetailPage: boolean;
   updatedAt?: string;
+  disclaimer?: string;
+}
+
+export interface ServicePackage {
+  title: string;
+  description: string;
+  deliverables: string[];
 }
 
 export interface IndustrySolution {
   slug: string;
   title: string;
   shortTitle?: string;
+  metaTitle?: string;
+  metaDescription?: string;
   subtitle: string;
   painPoints: string[];
   solutionSummary: string;
   relatedCases: string[];
   faq: { q: string; a: string }[];
   updatedAt?: string;
+  servicePackages?: ServicePackage[];
+  process?: string[];
+  deliverables?: string[];
+  measurement?: string[];
+  boundaries?: string[];
 }
 
 export interface Customer {
@@ -68,6 +82,10 @@ export interface BlogPost {
   author: string;
   sections: { heading: string; body: string }[];
   updatedAt?: string;
+  sources?: { title: string; url: string; accessedAt: string }[];
+  reviewStatus?: "draft" | "reviewed";
+  reviewedAt?: string;
+  reviewer?: string;
 }
 
 export interface StatItem {
@@ -84,6 +102,17 @@ export interface Contact {
   qrCode: string; // base64 data URL
 }
 
+export interface AiSearchGrowthContent {
+  eyebrow: string;
+  title: string;
+  description: string;
+  flow: string[];
+  primaryCtaLabel: string;
+  primaryCtaHref: string;
+  secondaryCtaLabel: string;
+  secondaryCtaHref: string;
+}
+
 export interface Settings {
   seoTitle: string;
   seoDescription: string;
@@ -92,6 +121,37 @@ export interface Settings {
   ogDescription: string;
   llmsTxtDescription: string;
   navItems: { label: string; href: string }[];
+  aiSearchGrowth: AiSearchGrowthContent;
+}
+
+export const defaultAiSearchGrowthContent: AiSearchGrowthContent = {
+  eyebrow: "新增服务 · AI 搜索增长 · GEO / AEO",
+  title: "让 AI 搜索，成为企业新的获客入口",
+  description: "当客户向 ChatGPT、豆包、DeepSeek、Gemini 等 AI 询问“哪家公司靠谱、哪个方案适合我”，围绕真实客户问题，优化企业官网、案例、内容和品牌信源，让品牌更容易被发现、被理解、被引用，并进入客户的比较与决策过程。",
+  flow: ["AI 曝光", "品牌理解", "内容引用", "推荐候选", "高意向咨询"],
+  primaryCtaLabel: "了解 AI 搜索增长方案",
+  primaryCtaHref: "/solutions/ai-geo-aeo",
+  secondaryCtaLabel: "申请 AI 可见性诊断",
+  secondaryCtaHref: "/contact?service=ai-geo-aeo",
+};
+
+export function normalizeSettings(settings: Partial<Settings>): Settings {
+  const growth = settings.aiSearchGrowth;
+  return {
+    ...settings,
+    seoTitle: settings.seoTitle || "",
+    seoDescription: settings.seoDescription || "",
+    seoKeywords: settings.seoKeywords || [],
+    ogTitle: settings.ogTitle || "",
+    ogDescription: settings.ogDescription || "",
+    llmsTxtDescription: settings.llmsTxtDescription || "",
+    navItems: settings.navItems || [],
+    aiSearchGrowth: {
+      ...defaultAiSearchGrowthContent,
+      ...(growth || {}),
+      flow: growth?.flow || [...defaultAiSearchGrowthContent.flow],
+    },
+  };
 }
 
 // ===== 预约咨询相关类型 =====
@@ -165,6 +225,10 @@ export function getCases() {
   return loadJson<CaseItem[]>("cases.json");
 }
 
+export function getPublicCases() {
+  return getCases().filter((item) => item.hasDetailPage);
+}
+
 export function getIndustries() {
   return loadJson<IndustrySolution[]>("industries.json");
 }
@@ -173,8 +237,13 @@ export function getBlogPosts() {
   return loadJson<BlogPost[]>("blog-posts.json");
 }
 
+/** Public content excludes explicitly marked drafts while preserving legacy posts. */
+export function getPublicBlogPosts() {
+  return getBlogPosts().filter((post) => post.reviewStatus !== "draft");
+}
+
 export function getSettings() {
-  return loadJson<Settings>("settings.json");
+  return normalizeSettings(loadJson<Partial<Settings>>("settings.json"));
 }
 
 export function getSubmissions() {
@@ -214,11 +283,15 @@ export function getCaseBySlug(slug: string): CaseItem | undefined {
   return getCases().find((c) => c.slug === slug);
 }
 
+export function getPublicCaseBySlug(slug: string): CaseItem | undefined {
+  return getPublicCases().find((c) => c.slug === slug);
+}
+
 export function getCasesByIndustry(industrySlug: string): CaseItem[] {
   const industry = getIndustries().find((i) => i.slug === industrySlug);
   if (!industry) return [];
   return industry.relatedCases
-    .map((slug) => getCases().find((c) => c.slug === slug))
+    .map((slug) => getPublicCases().find((c) => c.slug === slug))
     .filter(Boolean) as CaseItem[];
 }
 
@@ -228,4 +301,8 @@ export function getIndustryBySlug(slug: string): IndustrySolution | undefined {
 
 export function getBlogPostBySlug(slug: string): BlogPost | undefined {
   return getBlogPosts().find((p) => p.slug === slug);
+}
+
+export function getPublicBlogPostBySlug(slug: string): BlogPost | undefined {
+  return getPublicBlogPosts().find((p) => p.slug === slug);
 }

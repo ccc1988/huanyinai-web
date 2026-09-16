@@ -3,16 +3,9 @@
 import { useState, useEffect } from "react";
 import { Save, Plus, Trash2, Lock } from "lucide-react";
 import { FormField, ArrayEditor, Toast } from "@/components/admin/AdminShared";
+import type { Settings } from "@/lib/data";
 
-type SiteSettings = {
-  seoTitle: string;
-  seoDescription: string;
-  seoKeywords: string[];
-  ogTitle: string;
-  ogDescription: string;
-  llmsTxtDescription: string;
-  navItems: { label: string; href: string }[];
-};
+type SiteSettings = Settings;
 
 export default function AdminSettingsPage() {
   const [settings, setSettings] = useState<SiteSettings | null>(null);
@@ -22,7 +15,7 @@ export default function AdminSettingsPage() {
   useEffect(() => {
     fetch("/api/admin/settings")
       .then((res) => res.json())
-      .then(setSettings);
+      .then((data) => setSettings(data as SiteSettings));
   }, []);
 
   const showToast = (message: string, type: "success" | "error") => {
@@ -34,12 +27,13 @@ export default function AdminSettingsPage() {
     if (!settings) return;
     setSaving(true);
     try {
-      await fetch("/api/admin/settings", {
+      const response = await fetch("/api/admin/settings", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(settings),
       });
-      showToast("站点设置已保存", "success");
+      const result = await response.json().catch(() => ({}));
+      showToast(response.ok ? "站点设置已保存" : (result.error || "保存失败"), response.ok ? "success" : "error");
     } catch {
       showToast("保存失败", "error");
     } finally { setSaving(false); }
@@ -127,6 +121,39 @@ export default function AdminSettingsPage() {
             className="form-input resize-none"
           />
         </FormField>
+      </section>
+
+      {/* 首页 AI 搜索增长模块 */}
+      <section className="glass-card rounded-[var(--radius-lg)] p-6">
+        <h2 className="text-lg font-bold mb-4" style={{ color: "var(--color-text-primary)" }}>首页 AI 搜索增长模块</h2>
+        <div className="space-y-4">
+          <FormField label="顶部标签">
+            <input value={settings.aiSearchGrowth.eyebrow} onChange={(e) => setSettings({ ...settings, aiSearchGrowth: { ...settings.aiSearchGrowth, eyebrow: e.target.value } })} className="form-input" />
+          </FormField>
+          <FormField label="标题">
+            <input value={settings.aiSearchGrowth.title} onChange={(e) => setSettings({ ...settings, aiSearchGrowth: { ...settings.aiSearchGrowth, title: e.target.value } })} className="form-input" />
+          </FormField>
+          <FormField label="描述">
+            <textarea value={settings.aiSearchGrowth.description} onChange={(e) => setSettings({ ...settings, aiSearchGrowth: { ...settings.aiSearchGrowth, description: e.target.value } })} rows={4} className="form-input resize-none" />
+          </FormField>
+          <FormField label="流程标签（每行一条）">
+            <ArrayEditor value={settings.aiSearchGrowth.flow} onChange={(v) => setSettings({ ...settings, aiSearchGrowth: { ...settings.aiSearchGrowth, flow: v } })} rows={5} />
+          </FormField>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <FormField label="主按钮文字">
+              <input value={settings.aiSearchGrowth.primaryCtaLabel} onChange={(e) => setSettings({ ...settings, aiSearchGrowth: { ...settings.aiSearchGrowth, primaryCtaLabel: e.target.value } })} className="form-input" />
+            </FormField>
+            <FormField label="主按钮链接">
+              <input value={settings.aiSearchGrowth.primaryCtaHref} onChange={(e) => setSettings({ ...settings, aiSearchGrowth: { ...settings.aiSearchGrowth, primaryCtaHref: e.target.value } })} className="form-input" />
+            </FormField>
+            <FormField label="次按钮文字">
+              <input value={settings.aiSearchGrowth.secondaryCtaLabel} onChange={(e) => setSettings({ ...settings, aiSearchGrowth: { ...settings.aiSearchGrowth, secondaryCtaLabel: e.target.value } })} className="form-input" />
+            </FormField>
+            <FormField label="次按钮链接">
+              <input value={settings.aiSearchGrowth.secondaryCtaHref} onChange={(e) => setSettings({ ...settings, aiSearchGrowth: { ...settings.aiSearchGrowth, secondaryCtaHref: e.target.value } })} className="form-input" />
+            </FormField>
+          </div>
+        </div>
       </section>
 
       {/* 导航菜单 */}

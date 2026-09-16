@@ -2,12 +2,12 @@ import Link from "next/link";
 import { ArrowRight, TrendingUp } from "lucide-react";
 import SectionTitle from "@/components/ui/SectionTitle";
 import CaseIllustration from "@/components/shared/CaseIllustration";
-import { getCases } from "@/lib/data";
+import { getPublicCases } from "@/lib/data";
 
 const highlightSlugs = ["customs-document-ai", "ecommerce-ai-production", "logistics-tracking-ai"];
 
 export default function CaseHighlights() {
-  const cases = getCases();
+  const cases = getPublicCases();
   const highlights = cases.filter((c) => highlightSlugs.includes(c.slug));
 
   return (

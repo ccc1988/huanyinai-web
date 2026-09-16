@@ -1,17 +1,17 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowRight, ChevronRight, Calendar, Tag } from "lucide-react";
-import { getBlogPosts, getBlogPostBySlug, getCompany } from "@/lib/data";
+import { getPublicBlogPosts, getPublicBlogPostBySlug, getCompany } from "@/lib/data";
 import { createMetadata } from "@/lib/seo";
 import { getBlogPostJsonLd } from "@/lib/geo";
 
 export function generateStaticParams() {
-  return getBlogPosts().map((post) => ({ slug: post.slug }));
+  return getPublicBlogPosts().map((post) => ({ slug: post.slug }));
 }
 
 export function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   return params.then(({ slug }) => {
-    const post = getBlogPostBySlug(slug);
+    const post = getPublicBlogPostBySlug(slug);
     if (!post) return {};
     return createMetadata({
       title: post.title,
@@ -28,13 +28,13 @@ export default async function BlogDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = getBlogPostBySlug(slug);
+  const post = getPublicBlogPostBySlug(slug);
 
   if (!post) {
     notFound();
   }
 
-  const blogPosts = getBlogPosts();
+  const blogPosts = getPublicBlogPosts();
   const jsonLd = getBlogPostJsonLd(post!);
   const relatedPosts = blogPosts.filter((p) => p.slug !== slug).slice(0, 2);
 
@@ -135,6 +135,26 @@ export default async function BlogDetailPage({
               ))}
             </div>
 
+            {(post!.sources?.length || post!.reviewStatus) && (
+              <aside className="mt-12 border-t pt-6" style={{ borderColor: "var(--color-border-default)" }}>
+                <h2 className="text-base font-bold" style={{ color: "var(--color-text-primary)" }}>资料来源与内容审核</h2>
+                {post!.sources && post!.sources.length > 0 && (
+                  <ul className="mt-3 space-y-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
+                    {post!.sources.map((source) => (
+                      <li key={source.url}>
+                        <a href={source.url} target="_blank" rel="noreferrer" className="underline underline-offset-2 hover:text-[var(--color-text-primary)]">{source.title}</a>
+                        <span>（访问：{source.accessedAt}）</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                <p className="mt-3 text-xs" style={{ color: "var(--color-text-muted)" }}>
+                  内容状态：{post!.reviewStatus === "reviewed" ? `已审核${post!.reviewer ? `（${post!.reviewer}）` : ""}` : "待审核"}
+                  {post!.reviewedAt ? ` · ${post!.reviewedAt}` : ""}
+                </p>
+              </aside>
+            )}
+
             {/* CTA */}
             <div
               className="glass-card hud-corners rounded-[var(--radius-lg)] p-8 mt-12 text-center"
@@ -148,7 +168,7 @@ export default async function BlogDetailPage({
               <p className="mb-6" style={{ color: "var(--color-text-body)" }}>
                 告诉我们你的业务场景，我们给出可落地的 AI 方案
               </p>
-              <Link href="/contact" className="cta-primary">
+              <Link href={post!.tags.includes("GEO") || post!.tags.includes("AI 搜索") ? "/contact?service=ai-geo-aeo" : "/contact"} className="cta-primary">
                 预约免费咨询
                 <ArrowRight size={18} />
               </Link>

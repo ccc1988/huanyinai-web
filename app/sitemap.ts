@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getCompany, getIndustries, getCases, getBlogPosts } from "@/lib/data";
+import { getCompany, getIndustries, getPublicCases, getPublicBlogPosts } from "@/lib/data";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -16,8 +16,8 @@ function getLastModified(updatedAt?: string, fallback?: string): Date | undefine
 export default function sitemap(): MetadataRoute.Sitemap {
   const company = getCompany();
   const industries = getIndustries();
-  const cases = getCases();
-  const blogPosts = getBlogPosts();
+  const cases = getPublicCases();
+  const blogPosts = getPublicBlogPosts();
   const baseUrl = company.website;
   const staticPages: MetadataRoute.Sitemap = [
     { url: `${baseUrl}/`, changeFrequency: "weekly", priority: 1.0 },
@@ -33,14 +33,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.9,
   }));
 
-  const casePages: MetadataRoute.Sitemap = cases
-    .filter((c) => c.hasDetailPage)
-    .map((c) => ({
-      url: `${baseUrl}/cases/${c.slug}`,
-      lastModified: getLastModified(c.updatedAt),
-      changeFrequency: "monthly" as const,
-      priority: 0.8,
-    }));
+  const casePages: MetadataRoute.Sitemap = cases.map((c) => ({
+    url: `${baseUrl}/cases/${c.slug}`,
+    lastModified: getLastModified(c.updatedAt),
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  }));
 
   const blogDetailPages: MetadataRoute.Sitemap = blogPosts.map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,

@@ -126,7 +126,8 @@ export default function AdminSubmissionsPage() {
       )
     : allSubs;
 
-  const categories = ["物流", "制造", "制药", "跨境", "通用", "其他"];
+  const categories = ["物流", "制造", "制药", "跨境", "通用", "其他", "ai-geo-aeo"];
+  const categoryLabels: Record<string, string> = { "ai-geo-aeo": "AI 搜索增长（GEO/AEO）" };
 
   return (
     <div className="space-y-6">
@@ -271,7 +272,7 @@ export default function AdminSubmissionsPage() {
                     </span>
                     {sub.category && (
                       <span className="text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: "rgba(99,102,241,0.15)", color: "var(--color-accent-light)" }}>
-                        {sub.category}
+                        {categoryLabels[sub.category] || sub.category}
                       </span>
                     )}
                     {sub.tags.length > 0 && (
@@ -359,7 +360,7 @@ export default function AdminSubmissionsPage() {
                 >
                   <option value="">未分类</option>
                   {categories.map((c) => (
-                    <option key={c} value={c}>{c}</option>
+                    <option key={c} value={c}>{categoryLabels[c] || c}</option>
                   ))}
                 </select>
               </FormField>

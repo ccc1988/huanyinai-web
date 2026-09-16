@@ -10,6 +10,7 @@ export async function POST(request: NextRequest) {
 
     // Server-side validation
     const { name, company, phone, email, message } = body;
+    const category = body.category === "ai-geo-aeo" ? body.category : "";
     const attribution = normalizeAttribution(body);
 
     if (!name || typeof name !== "string" || name.trim().length < 2) {
@@ -56,7 +57,7 @@ export async function POST(request: NextRequest) {
       userAgent,
       createdAt: now.toISOString(),
       status: "unread",
-      category: "",
+      category,
       tags: [],
       notes: "",
       emailSent: false,

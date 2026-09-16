@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import { CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 import { getAnalyticsContext } from "@/lib/analyticsContext";
 
@@ -9,6 +9,12 @@ type Status = "idle" | "loading" | "success" | "error";
 export default function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [service, setService] = useState("");
+
+  useEffect(() => {
+    const requestedService = new URLSearchParams(window.location.search).get("service");
+    if (requestedService === "ai-geo-aeo") setService(requestedService);
+  }, []);
 
   const validate = (data: FormData): Record<string, string> => {
     const errs: Record<string, string> = {};
@@ -53,6 +59,7 @@ export default function ContactForm() {
           phone: formData.get("phone"),
           email: formData.get("email"),
           message: formData.get("message"),
+          category: service,
           ...getAnalyticsContext(),
         }),
       });
@@ -90,6 +97,15 @@ export default function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="glass-card rounded-[var(--radius-lg)] p-8 space-y-5" noValidate>
+      {service === "ai-geo-aeo" && (
+        <div className="flex items-start gap-3 rounded-[var(--radius-sm)] border px-4 py-3" style={{ backgroundColor: "rgba(34,211,238,0.06)", borderColor: "rgba(34,211,238,0.22)" }}>
+          <span className="mt-0.5 h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: "#67e8f9" }} aria-hidden="true" />
+          <p className="text-sm leading-6" style={{ color: "var(--color-text-body)" }}>
+            咨询方向：<strong style={{ color: "var(--color-text-primary)" }}>AI 搜索增长（GEO/AEO）</strong>
+          </p>
+        </div>
+      )}
+      <input type="hidden" name="category" value={service} />
       {/* Name */}
       <div>
         <label

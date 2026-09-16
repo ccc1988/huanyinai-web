@@ -5,6 +5,7 @@ import {
   Factory,
   Link2,
   Headphones,
+  Search,
   type LucideIcon,
 } from "lucide-react";
 
@@ -15,6 +16,7 @@ const industryIconMap: Record<string, LucideIcon> = {
   manufacturing: Factory,
   "supply-chain": Link2,
   "ecommerce-service": Headphones,
+  "ai-geo-aeo": Search,
 };
 
 export function getIndustryIcon(slug: string): LucideIcon {

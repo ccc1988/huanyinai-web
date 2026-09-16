@@ -253,6 +253,15 @@ function CaseForm({ data, onChange }: { data: CaseItem; onChange: (d: CaseItem) 
           className="form-input resize-none"
         />
       </FormField>
+      <FormField label="案例免责声明（选填）">
+        <textarea
+          value={data.disclaimer || ""}
+          onChange={(e) => update("disclaimer", e.target.value)}
+          rows={3}
+          className="form-input resize-none"
+          placeholder="仅自有基线或需要特别说明的案例填写"
+        />
+      </FormField>
       <FormField label="客户痛点（每行一条）">
         <ArrayEditor value={data.painPoints} onChange={(v) => update("painPoints", v)} />
       </FormField>
@@ -287,4 +296,3 @@ function CaseForm({ data, onChange }: { data: CaseItem; onChange: (d: CaseItem) 
     </div>
   );
 }
-

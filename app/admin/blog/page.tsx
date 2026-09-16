@@ -14,6 +14,7 @@ const emptyPost: BlogPost = {
   date: new Date().toISOString().split("T")[0],
   author: "寰引智能",
   sections: [],
+  reviewStatus: "draft",
 };
 
 export default function AdminBlogPage() {
@@ -104,6 +105,9 @@ export default function AdminBlogPage() {
               <div className="flex items-center gap-2 mb-1">
                 <span className="text-sm font-medium truncate" style={{ color: "var(--color-text-primary)" }}>{post.title}</span>
                 <span className="px-2 py-0.5 rounded-full text-xs whitespace-nowrap" style={{ backgroundColor: "rgba(99,102,241,0.15)", color: "var(--color-accent-light)" }}>{post.category}</span>
+                <span className="px-2 py-0.5 rounded-full text-xs whitespace-nowrap" style={{ backgroundColor: post.reviewStatus === "draft" ? "rgba(245,158,11,0.15)" : "rgba(34,197,94,0.15)", color: post.reviewStatus === "draft" ? "#f59e0b" : "#4ade80" }}>
+                  {post.reviewStatus === "draft" ? "待审核" : post.reviewStatus === "reviewed" ? "已审核" : "历史公开待复核"}
+                </span>
               </div>
               <p className="text-xs truncate" style={{ color: "var(--color-text-muted)" }}>{post.date} · {post.author} · {post.sections.length} 个段落</p>
             </div>
@@ -155,6 +159,21 @@ function BlogForm({ data, onChange }: { data: BlogPost; onChange: (d: BlogPost) 
       <FormField label="标签（每行一条）">
         <ArrayEditor value={data.tags} onChange={(v) => update("tags", v)} />
       </FormField>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <FormField label="内容审核状态">
+          <select value={data.reviewStatus || "draft"} onChange={(e) => update("reviewStatus", e.target.value as "draft" | "reviewed")} className="form-input">
+            <option value="draft">待审核</option>
+            <option value="reviewed">已审核</option>
+          </select>
+        </FormField>
+        <FormField label="审核人">
+          <input value={data.reviewer || ""} onChange={(e) => update("reviewer", e.target.value)} className="form-input" />
+        </FormField>
+        <FormField label="审核日期">
+          <input type="date" value={data.reviewedAt || ""} onChange={(e) => update("reviewedAt", e.target.value)} className="form-input" />
+        </FormField>
+      </div>
+      <SourceEditor value={data.sources || []} onChange={(value) => update("sources", value)} />
       <div>
         <div className="flex items-center justify-between mb-2">
           <label className="text-xs font-medium" style={{ color: "var(--color-text-muted)" }}>文章段落</label>
@@ -207,6 +226,39 @@ function BlogForm({ data, onChange }: { data: BlogPost; onChange: (d: BlogPost) 
             </p>
           )}
         </div>
+      </div>
+    </div>
+  );
+}
+
+type ContentSource = { title: string; url: string; accessedAt: string };
+
+function SourceEditor({ value, onChange }: { value: ContentSource[]; onChange: (value: ContentSource[]) => void }) {
+  const update = (index: number, patch: Partial<ContentSource>) => {
+    const next = [...value];
+    next[index] = { ...next[index], ...patch };
+    onChange(next);
+  };
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-2">
+        <label className="text-xs font-medium" style={{ color: "var(--color-text-muted)" }}>资料来源</label>
+        <button type="button" onClick={() => onChange([...value, { title: "", url: "", accessedAt: "" }])} className="text-xs cursor-pointer flex items-center gap-1" style={{ color: "var(--color-accent-light)" }}>
+          <Plus size={12} /> 添加来源
+        </button>
+      </div>
+      <div className="space-y-3">
+        {value.map((source, index) => (
+          <div key={index} className="glass-card rounded-[var(--radius-sm)] p-3 space-y-2">
+            <div className="flex items-center gap-2">
+              <input value={source.title} onChange={(e) => update(index, { title: e.target.value })} placeholder="来源名称" className="form-input flex-1" />
+              <button type="button" onClick={() => onChange(value.filter((_, itemIndex) => itemIndex !== index))} className="p-2 cursor-pointer" style={{ color: "rgb(248,113,113)" }} aria-label="删除来源"><Trash2 size={14} /></button>
+            </div>
+            <input value={source.url} onChange={(e) => update(index, { url: e.target.value })} placeholder="https://..." className="form-input" />
+            <input type="date" value={source.accessedAt} onChange={(e) => update(index, { accessedAt: e.target.value })} className="form-input" />
+          </div>
+        ))}
       </div>
     </div>
   );

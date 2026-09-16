@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight, ChevronRight, Calendar } from "lucide-react";
 import type { Metadata } from "next";
 import { createMetadata } from "@/lib/seo";
-import { getBlogPosts } from "@/lib/data";
+import { getPublicBlogPosts } from "@/lib/data";
 
 export function generateMetadata(): Metadata {
   return createMetadata({
@@ -13,7 +13,7 @@ export function generateMetadata(): Metadata {
 }
 
 export default function BlogPage() {
-  const blogPosts = getBlogPosts();
+  const blogPosts = getPublicBlogPosts();
   const sortedPosts = [...blogPosts].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
