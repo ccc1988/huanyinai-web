@@ -1,8 +1,14 @@
-import { getCompany, getIndustries, getPublicCases } from "./data";
+import { getCompany, getIndustries, getPublicCases } from "./data.ts";
 
 /** Organization JSON-LD */
 export function getOrganizationJsonLd() {
   const company = getCompany();
+  const address = {
+    "@type": "PostalAddress",
+    ...(company.location?.trim() ? { addressLocality: company.location.trim() } : {}),
+    addressCountry: "CN",
+  };
+
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -12,11 +18,7 @@ export function getOrganizationJsonLd() {
     foundingDate: company.foundingDate,
     url: company.website,
     email: company.email,
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: company.location,
-      addressCountry: "CN",
-    },
+    address,
     knowsAbout: [
       "AI 智能体",
       "RPA 自动化",

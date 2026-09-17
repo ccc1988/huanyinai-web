@@ -14,7 +14,8 @@ import {
   summarizePageMetrics,
   type AnalyticsEvent,
 } from "../lib/siteAnalytics.ts";
-import { getPublicBlogPosts, getPublicCases } from "../lib/data.ts";
+import { getIndustries, getPublicBlogPosts, getPublicCases } from "../lib/data.ts";
+import { getOrganizationJsonLd } from "../lib/geo.ts";
 
 test("groups event dates by China Standard Time", () => {
   assert.equal(dateKey("2026-09-10T16:30:00.000Z"), "2026-09-11");
@@ -120,4 +121,18 @@ test("keeps drafts and cases without detail pages out of public content", () => 
   assert.equal(publicPosts.some((post) => post.reviewStatus === "draft"), false);
   assert.equal(publicCases.some((caseItem) => !caseItem.hasDetailPage), false);
   assert.equal(publicCases.some((caseItem) => caseItem.slug === "huanyin-ai-search-visibility-baseline"), true);
+});
+
+test("records publication times for the new AI GEO/AEO pages", () => {
+  const industry = getIndustries().find((item) => item.slug === "ai-geo-aeo");
+  const caseItem = getPublicCases().find((item) => item.slug === "huanyin-ai-search-visibility-baseline");
+
+  assert.match(industry?.updatedAt || "", /^2026-09-16T19:08:20\.000Z$/);
+  assert.match(caseItem?.updatedAt || "", /^2026-09-16T19:08:20\.000Z$/);
+});
+
+test("omits an empty organization locality instead of publishing a blank address", () => {
+  const organization = getOrganizationJsonLd();
+  assert.equal("addressLocality" in organization.address, false);
+  assert.equal(organization.address.addressCountry, "CN");
 });
