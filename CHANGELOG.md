@@ -22,6 +22,8 @@
 - 应用版本升级为 `1.7.0`。
 - 发布前生产备份：`/var/backups/huanyin_web/20260917023559-pre-v1.7.0`，包含当前 release 与 `shared-data`，不含环境密钥。
 - 本地 `npm test` 7/7、正式构建、内容 JSON 校验和 SEO/GEO 抓取检查通过；生产发布后的 release、PM2、公开 URL 和浏览器验收以发布记录为准。
+- 生产已发布并验收：`/var/www/huanyin_web/releases/20260917030820-c588aa2`，生产源码 SHA `c588aa2`，GitHub 正式 Tag `v1.7.0`。
+- 修正静态与动态 `llms` 内容的能力名称和行业统计口径，统一为“业务自动化、AI 数据应用”和 `8+` 行业覆盖。
 
 ## v1.6.0 — 2026-09-11
 
