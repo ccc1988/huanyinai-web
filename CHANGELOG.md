@@ -10,7 +10,7 @@
 
 ### 生产验收
 
-- Release：`/var/www/huanyin_web/releases/20260919223315-69f25ad`；源码 SHA：`69f25ad`。
+- Release：`/var/www/huanyin_web/releases/20260919223952-33ef61d`；源码 SHA：`33ef61d`。
 - 服务器 `npm test` 9/9 通过，生产构建通过；PM2 `huanyin-web` online，重启数 0，内网 `/health` 返回 `{"status":"ok"}`。
 - 公网 `/about`、`/llms.txt`、`/sitemap.xml` 均返回 HTTP 200；浏览器核验 `/about` 已显示 5 项能力。
 - `shared-data/settings.json`、`capabilities.json`、`industries.json`、`stats.json` 部署前后哈希一致，未覆盖后台内容。
