@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026-09-19 — 生产 SEO/GEO 动态同步修复
+
+### 修复
+
+- `llms.txt` 顶部简介读取后台站点设置，方案方向与核心能力读取后台数据，不再依赖旧的静态行业描述。
+- `/about` 能力边界改为读取后台能力配置，展示 AI 智能体、AI 文档处理、业务自动化、AI 数据应用和 AI 搜索增长 5 项能力。
+- 保持首页营销统计由后台数据驱动，未修改 `100+ / 200+ / 8+ / 10x+`。
+
+### 生产验收
+
+- Release：`/var/www/huanyin_web/releases/20260919223315-69f25ad`；源码 SHA：`69f25ad`。
+- 服务器 `npm test` 9/9 通过，生产构建通过；PM2 `huanyin-web` online，重启数 0，内网 `/health` 返回 `{"status":"ok"}`。
+- 公网 `/about`、`/llms.txt`、`/sitemap.xml` 均返回 HTTP 200；浏览器核验 `/about` 已显示 5 项能力。
+- `shared-data/settings.json`、`capabilities.json`、`industries.json`、`stats.json` 部署前后哈希一致，未覆盖后台内容。
+
 ## v1.7.0 — 2026-09-17
 
 ### 官网与服务表达
