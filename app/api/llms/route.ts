@@ -24,11 +24,7 @@ export function GET() {
   const stats = getStats();
   const officialSite = company.website || siteUrl;
   const industryNames = industries.map((item) => item.shortTitle || item.title.replace(/ AI 解决方案.*/, ""));
-  const serviceNames = [
-    ...capabilities.map((item) => item.module),
-    "企业 AI 定制开发与私有化交付",
-    "AI 外贸客户开发与销售增长",
-  ];
+  const serviceNames = capabilities.map((item) => item.module);
   const statValue = (label: string) => {
     const item = stats.find((entry) => entry.label === label);
     return item ? `${item.value}${item.suffix || ""}` : "以官网后台最新数据为准";
