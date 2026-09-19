@@ -1,8 +1,10 @@
 import Link from "next/link";
-import { ArrowRight, Building2, Award, Users, Briefcase } from "lucide-react";
+import { ArrowRight, BarChart3, Bot, FileText, Search, Workflow } from "lucide-react";
 import type { Metadata } from "next";
 import { createMetadata } from "@/lib/seo";
-import { getCompany, getStats, getCustomers, getIndustries } from "@/lib/data";
+import { getCapabilities, getCompany, getStats, getCustomers, getIndustries } from "@/lib/data";
+
+const capabilityIconMap = { Bot, FileText, Workflow, BarChart3, Search };
 
 export function generateMetadata(): Metadata {
   const company = getCompany();
@@ -19,6 +21,7 @@ export default function AboutPage() {
   const stats = getStats();
   const customers = getCustomers();
   const industries = getIndustries();
+  const capabilities = getCapabilities();
   return (
     <div className="pt-24">
       {/* Hero */}
@@ -88,15 +91,10 @@ export default function AboutPage() {
             我们的能力边界
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { icon: Building2, title: "AI 智能体", desc: "客服智能体、订单智能体、报价智能体、质检智能体" },
-              { icon: Award, title: "AI 文档处理", desc: "报关文件 AI、商品 AI 生产、财务凭证生成" },
-              { icon: Users, title: "RPA 自动化", desc: "表格录入、模板转换、电子签章、流程衔接" },
-              { icon: Briefcase, title: "数据智能", desc: "物流轨迹追踪、商品采集监控、异常预警、经营看板" },
-            ].map((item) => {
-              const Icon = item.icon;
+            {capabilities.map((item) => {
+              const Icon = capabilityIconMap[item.icon as keyof typeof capabilityIconMap] || Bot;
               return (
-                <div key={item.title} className="glass-card hud-corners rounded-[var(--radius-lg)] p-8">
+                <div key={item.module} className="glass-card hud-corners rounded-[var(--radius-lg)] p-8">
                   <div
                     className="w-12 h-12 rounded-full flex items-center justify-center mb-6"
                     style={{ backgroundColor: "rgba(99,102,241,0.15)" }}
@@ -107,10 +105,10 @@ export default function AboutPage() {
                     className="text-xl font-bold mb-3"
                     style={{ color: "var(--color-text-primary)" }}
                   >
-                    {item.title}
+                    {item.module}
                   </h3>
                   <p className="text-sm" style={{ color: "var(--color-text-body)" }}>
-                    {item.desc}
+                    {item.products.join("、")}。{item.scenarios}
                   </p>
                 </div>
               );
