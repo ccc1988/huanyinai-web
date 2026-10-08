@@ -1,8 +1,12 @@
+
+import { getPageFields, isPageBlockEnabled, getPageSeo } from "@/lib/content/pages";
 import Link from "next/link";
 import { ArrowRight, SearchCheck } from "lucide-react";
 import type { AiSearchGrowthContent } from "@/lib/data";
 
 export default function AISearchGrowthBanner({ content }: { content: AiSearchGrowthContent }) {
+  const copy = getPageFields("home-ai-search-copy");
+  if (!isPageBlockEnabled("home-ai-search-copy")) return null;
   return (
     <section
       aria-labelledby="ai-search-growth-title"
@@ -30,7 +34,7 @@ export default function AISearchGrowthBanner({ content }: { content: AiSearchGro
         </div>
 
         <div className="ai-growth-floating-card relative shrink-0 rounded-[var(--radius-md)] p-4 sm:p-5 lg:w-[30rem]">
-          <div className="ai-growth-flow" aria-label="AI 搜索增长路径">
+          <div className="ai-growth-flow" aria-label={copy.flowAriaLabel}>
             {content.flow.map((step, index) => (
               <span key={`${step}-${index}`} className="contents">
                 <span className="ai-growth-flow-step">
@@ -41,9 +45,7 @@ export default function AISearchGrowthBanner({ content }: { content: AiSearchGro
               </span>
             ))}
           </div>
-          <p className="mt-3 text-xs leading-5" style={{ color: "var(--color-text-muted)" }}>
-            提升进入相关答案的机会，不承诺固定排名或平台推荐。
-          </p>
+          <p className="mt-3 text-xs leading-5" style={{ color: "var(--color-text-muted)" }}>{copy.disclaimer}</p>
           <div className="mt-4 flex flex-wrap items-center gap-3">
             <Link href={content.primaryCtaHref} className="cta-primary justify-center px-5 py-2.5 text-sm">
               {content.primaryCtaLabel}

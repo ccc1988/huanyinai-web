@@ -1,13 +1,13 @@
 {
   "name": "huanyin-website",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "private": true,
   "scripts": {
     "dev": "next dev -p 18500",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "node --experimental-strip-types --test test/siteAnalytics.test.ts"
+    "test": "node --experimental-strip-types --test test/*.test.ts test/operations/*.test.ts"
   },
   "dependencies": {
     "framer-motion": "11.18.2",

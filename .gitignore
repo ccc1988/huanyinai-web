@@ -44,3 +44,7 @@ admin-config.json
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Full-site operations runtime stores and uploaded assets
+/data/operations.sqlite3*
+/data/media/

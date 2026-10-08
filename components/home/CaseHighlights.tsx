@@ -1,3 +1,5 @@
+
+import { getPageFields, isPageBlockEnabled, getPageSeo } from "@/lib/content/pages";
 import Link from "next/link";
 import { ArrowRight, TrendingUp } from "lucide-react";
 import SectionTitle from "@/components/ui/SectionTitle";
@@ -7,6 +9,8 @@ import { getPublicCases } from "@/lib/data";
 const highlightSlugs = ["customs-document-ai", "ecommerce-ai-production", "logistics-tracking-ai"];
 
 export default function CaseHighlights() {
+  const copy = getPageFields("home-cases");
+  if (!isPageBlockEnabled("home-cases")) return null;
   const cases = getPublicCases();
   const highlights = cases.filter((c) => highlightSlugs.includes(c.slug));
 
@@ -15,7 +19,7 @@ export default function CaseHighlights() {
       {/* 背景装饰 */}
       <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none" />
       <div className="container-max relative">
-        <SectionTitle>用真实交付说话</SectionTitle>
+        <SectionTitle>{copy.title}</SectionTitle>
 
         <div className="grid md:grid-cols-3 gap-6">
           {highlights.map((item) => {
@@ -77,9 +81,7 @@ export default function CaseHighlights() {
                 <span
                   className="inline-flex items-center gap-1 text-sm font-medium transition-colors"
                   style={{ color: "var(--color-accent-light)" }}
-                >
-                  了解更多
-                  <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+                >{copy.readMoreLabel}<ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
                 </span>
               </div>
             </Link>

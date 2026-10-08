@@ -1,4 +1,5 @@
 "use client";
+import { adminFetch } from "../_components/operations-admin";
 
 import { useState, useEffect, useCallback } from "react";
 import { Plus, Edit3, Trash2, Search } from "lucide-react";
@@ -30,7 +31,7 @@ export default function AdminCasesPage() {
 
   const fetchCases = useCallback(async () => {
     try {
-      const res = await fetch("/api/admin/cases");
+      const res = await adminFetch("/api/admin/cases");
       const data = await res.json();
       setCases(data);
     } catch {
@@ -49,7 +50,7 @@ export default function AdminCasesPage() {
     setSaving(true);
     setSaveError("");
     try {
-      const response = await fetch("/api/admin/cases", {
+      const response = await adminFetch("/api/admin/cases", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editing),
@@ -69,7 +70,7 @@ export default function AdminCasesPage() {
 
   const handleDelete = async (slug: string) => {
     if (!confirm("确定删除此案例？此操作不可撤销。")) return;
-    const response = await fetch("/api/admin/cases", {
+    const response = await adminFetch("/api/admin/cases", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ slug }),

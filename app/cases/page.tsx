@@ -1,15 +1,19 @@
+
+import { getPageFields, isPageBlockEnabled, getPageSeo } from "@/lib/content/pages";
 import Link from "next/link";
 import { ArrowRight, ChevronRight, FolderOpen } from "lucide-react";
 import { getPublicCases, type CaseItem } from "@/lib/data";
 import { createMetadata } from "@/lib/seo";
 import CaseCard from "@/components/shared/CaseCard";
 
-export const metadata = createMetadata({
+export function generateMetadata() {
+  return createMetadata(getPageSeo("cases", {
   title: "精选公开案例 — AI 系统落地实践",
   description:
     "寰引智能精选公开案例，覆盖报关 AI 文档处理、跨境物流智能系统、跨境电商 AI 生产、物流轨迹追踪、电商智能客服、RPA 自动化等领域。",
   path: "/cases",
-});
+}));
+}
 
 // 行业分组顺序（与 solutions 页面保持一致）
 const INDUSTRY_ORDER = [
@@ -34,6 +38,8 @@ const INDUSTRY_ICONS: Record<string, string> = {
 };
 
 export default function CasesPage() {
+  const copy = getPageFields("cases-list");
+  if (!isPageBlockEnabled("cases-list")) return null;
   const allCases = getPublicCases();
 
   // 按行业分组
@@ -78,13 +84,11 @@ export default function CasesPage() {
             }}
           >
             <Link
-              href="/"
+              href={copy.homeHref}
               className="hover:text-[var(--color-text-body)] transition-colors"
-            >
-              首页
-            </Link>
+            >{copy.homeLabel}</Link>
             <ChevronRight size={14} />
-            <span style={{ color: "var(--color-text-body)" }}>客户案例</span>
+            <span style={{ color: "var(--color-text-body)" }}>{copy.breadcrumbLabel}</span>
           </nav>
 
           {/* Title */}
@@ -104,16 +108,12 @@ export default function CasesPage() {
                 color: "var(--color-text-primary)",
                 fontSize: "clamp(2rem, 4vw, 3rem)",
               }}
-            >
-              客户案例
-            </h1>
+            >{copy.title}</h1>
           </div>
           <p
             className="text-xl max-w-3xl"
             style={{ color: "var(--color-text-body)" }}
-          >
-            精选 {allCases.length} 个公开案例，覆盖 {grouped.length} 大行业场景，从痛点诊断到系统交付的真实实践
-          </p>
+          >{copy.introLead}{allCases.length}{copy.caseCountLabel}{grouped.length}{copy.industryCountLabel}</p>
 
           {/* Stats bar */}
           <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3">
@@ -128,9 +128,7 @@ export default function CasesPage() {
               >
                 {allCases.length}
               </span>
-              <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>
-                精选公开案例
-              </span>
+              <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>{copy.caseCountCaption}</span>
             </div>
             <div className="flex items-baseline gap-2">
               <span
@@ -143,9 +141,7 @@ export default function CasesPage() {
               >
                 {grouped.length}
               </span>
-              <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>
-                行业覆盖
-              </span>
+              <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>{copy.industryCountCaption}</span>
             </div>
           </div>
         </div>
@@ -182,8 +178,7 @@ export default function CasesPage() {
                   {group.industry}
                 </h2>
                 <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>
-                  {group.cases.length} 个案例
-                </p>
+                  {group.cases.length}{copy.groupCaseCountLabel}</p>
               </div>
             </div>
 
@@ -215,15 +210,9 @@ export default function CasesPage() {
           <h2
             className="text-3xl font-bold mb-4"
             style={{ color: "var(--color-text-primary)" }}
-          >
-            你的企业也有类似需求？
-          </h2>
-          <p className="mb-8" style={{ color: "var(--color-text-body)" }}>
-            告诉我们你的业务场景，我们给出可落地的 AI 方案
-          </p>
-          <Link href="/contact" className="cta-primary">
-            预约免费咨询
-            <ArrowRight size={18} />
+          >{copy.ctaTitle}</h2>
+          <p className="mb-8" style={{ color: "var(--color-text-body)" }}>{copy.ctaDescription}</p>
+          <Link href={copy.ctaHref} className="cta-primary">{copy.ctaLabel}<ArrowRight size={18} />
           </Link>
         </div>
       </section>

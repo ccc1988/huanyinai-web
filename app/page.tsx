@@ -1,3 +1,4 @@
+import { getPageFields, isPageBlockEnabled } from "@/lib/content/pages";
 import nextDynamic from "next/dynamic";
 import Hero from "@/components/home/Hero";
 import { getCustomers, getIndustries, getStats } from "@/lib/data";
@@ -20,11 +21,11 @@ export default function HomePage() {
   return (
     <>
       <Hero stats={stats} />
-      <ClientLogos customers={customers} />
+      {isPageBlockEnabled("home-clients") && <ClientLogos customers={customers} copy={getPageFields("home-clients")} />}
       <CapabilityMatrix />
-      <IndustryTabs industries={industries} />
+      {isPageBlockEnabled("home-industries") && <IndustryTabs industries={industries} copy={getPageFields("home-industries")} />}
       <CaseHighlights />
-      <StatsWall stats={stats} />
+      {isPageBlockEnabled("home-stats-copy") && <StatsWall stats={stats} copy={getPageFields("home-stats-copy")} />}
       <FinalCTA />
     </>
   );

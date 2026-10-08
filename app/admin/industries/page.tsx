@@ -1,4 +1,5 @@
 "use client";
+import { adminFetch } from "../_components/operations-admin";
 
 import { useState, useEffect, useCallback } from "react";
 import { Plus, Edit3, Trash2 } from "lucide-react";
@@ -26,7 +27,7 @@ export default function AdminIndustriesPage() {
 
   const fetchIndustries = useCallback(async () => {
     try {
-      const res = await fetch("/api/admin/industries");
+      const res = await adminFetch("/api/admin/industries");
       setIndustries(await res.json());
     } finally {
       setLoading(false);
@@ -40,7 +41,7 @@ export default function AdminIndustriesPage() {
     setSaving(true);
     setSaveError("");
     try {
-      const response = await fetch("/api/admin/industries", {
+      const response = await adminFetch("/api/admin/industries", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editing),
@@ -58,7 +59,7 @@ export default function AdminIndustriesPage() {
 
   const handleDelete = async (slug: string) => {
     if (!confirm("确定删除此行业方案？")) return;
-    const response = await fetch("/api/admin/industries", {
+    const response = await adminFetch("/api/admin/industries", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ slug }),

@@ -1,5 +1,7 @@
 "use client";
 
+import { PAGE_FIELDS, type PageFields } from "@/lib/content/pageFields";
+
 import { useState } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
@@ -8,7 +10,7 @@ import SectionTitle from "@/components/ui/SectionTitle";
 import type { IndustrySolution } from "@/lib/data";
 import { getIndustryIcon } from "@/lib/industryIcons";
 
-export default function IndustryTabs({ industries }: { industries: IndustrySolution[] }) {
+export default function IndustryTabs({ industries , copy = PAGE_FIELDS["home-industries"].props }: { industries: IndustrySolution[] ; copy?: PageFields<"home-industries"> }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const shouldReduceMotion = useReducedMotion();
   const active = industries[activeIndex];
@@ -18,7 +20,7 @@ export default function IndustryTabs({ industries }: { industries: IndustrySolut
       {/* 背景网格 */}
       <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none" />
       <div className="container-max relative">
-        <SectionTitle>行业解决方案</SectionTitle>
+        <SectionTitle>{copy.title}</SectionTitle>
 
         {/* Tabs */}
         <div className="flex flex-wrap justify-center gap-2 mb-10">
@@ -79,9 +81,7 @@ export default function IndustryTabs({ industries }: { industries: IndustrySolut
                   <h3
                     className="text-sm font-semibold uppercase tracking-wider"
                     style={{ color: "var(--color-text-muted)" }}
-                  >
-                    客户痛点
-                  </h3>
+                  >{copy.painPointsTitle}</h3>
                 </div>
                 <ul className="space-y-4">
                   {active.painPoints.map((point, i) => (
@@ -119,9 +119,7 @@ export default function IndustryTabs({ industries }: { industries: IndustrySolut
                   <h3
                     className="text-sm font-semibold uppercase tracking-wider"
                     style={{ color: "var(--color-text-muted)" }}
-                  >
-                    解决方案
-                  </h3>
+                  >{copy.solutionTitle}</h3>
                 </div>
                 <p
                   className="text-base leading-relaxed"
@@ -158,9 +156,7 @@ export default function IndustryTabs({ industries }: { industries: IndustrySolut
                 href={`/solutions/${active.slug}`}
                 className="inline-flex items-center gap-1 text-sm font-medium transition-colors"
                 style={{ color: "var(--color-accent-light)" }}
-              >
-                查看全部案例
-                <ArrowRight size={14} />
+              >{copy.casesLabel}<ArrowRight size={14} />
               </Link>
             </div>
           </motion.div>

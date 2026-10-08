@@ -6,6 +6,7 @@
 
 import fs from "fs";
 import path from "path";
+import { readPublic } from "./operations/content.ts";
 
 const dataDir = process.env.DATA_DIR || path.join(process.cwd(), "data");
 
@@ -120,6 +121,11 @@ export interface Settings {
   ogTitle: string;
   ogDescription: string;
   llmsTxtDescription: string;
+  canonicalBase?: string;
+  robotsIndex?: boolean;
+  redirects?: {from:string;to:string;status:number}[];
+  legalNotice?: string;
+  ogImage?: string;
   navItems: { label: string; href: string }[];
   aiSearchGrowth: AiSearchGrowthContent;
 }
@@ -202,27 +208,27 @@ export interface AdminConfig {
 // ===== 运行时读取数据（每次调用读磁盘，确保后台修改即时生效） =====
 
 export function getCompany() {
-  return loadJson<Record<string, string>>("company.json");
+  return readPublic<Record<string, string>>("company");
 }
 
 export function getCustomers() {
-  return loadJson<Customer[]>("customers.json");
+  return readPublic<Customer[]>("customers");
 }
 
 export function getCapabilities() {
-  return loadJson<CapabilityItem[]>("capabilities.json");
+  return readPublic<CapabilityItem[]>("capabilities");
 }
 
 export function getStats() {
-  return loadJson<StatItem[]>("stats.json");
+  return readPublic<StatItem[]>("stats");
 }
 
 export function getContacts() {
-  return loadJson<Contact[]>("contacts.json");
+  return readPublic<Contact[]>("contacts");
 }
 
 export function getCases() {
-  return loadJson<CaseItem[]>("cases.json");
+  return readPublic<CaseItem[]>("cases");
 }
 
 export function getPublicCases() {
@@ -230,11 +236,11 @@ export function getPublicCases() {
 }
 
 export function getIndustries() {
-  return loadJson<IndustrySolution[]>("industries.json");
+  return readPublic<IndustrySolution[]>("industries");
 }
 
 export function getBlogPosts() {
-  return loadJson<BlogPost[]>("blog-posts.json");
+  return readPublic<BlogPost[]>("blog-posts");
 }
 
 /** Public content excludes explicitly marked drafts while preserving legacy posts. */
@@ -243,7 +249,7 @@ export function getPublicBlogPosts() {
 }
 
 export function getSettings() {
-  return normalizeSettings(loadJson<Partial<Settings>>("settings.json"));
+  return normalizeSettings(readPublic<Partial<Settings>>("settings"));
 }
 
 export function getSubmissions() {

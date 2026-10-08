@@ -1,0 +1,11 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import {openOperationsDb, resetOperationsDb} from '../../lib/operations/db.ts';
+import {createClient,issueToken,authenticateBearer,updateClient} from '../../lib/operations/auth.ts';
+import {getRecord,patchDraft,transition,readPublic,initializeContent} from '../../lib/operations/content.ts';
+function fixture(){const dir=fs.mkdtempSync(path.join(os.tmpdir(),'hy-governance-'));for(const n of ['blog-posts','cases','industries','customers','capabilities','stats','contacts'])fs.writeFileSync(path.join(dir,n+'.json'),'[]');for(const n of ['company','settings'])fs.writeFileSync(path.join(dir,n+'.json'),'{}');fs.writeFileSync(path.join(dir,'blog-posts.json'),JSON.stringify([{slug:'legacy',title:'Original',excerpt:'E',category:'C',date:'2026-10-08',author:'A',tags:[],sections:[]} ]));return dir;}
+test('token cutoff uses partnership and secret expiry; narrowed current scope is immediate',()=>{const dir=fixture(),db=openOperationsDb(dir);try{const c=createClient(db,{name:'x',scopes:['content:read','content:write'],expiresAt:new Date(Date.now()+120000).toISOString()});const tok=issueToken(db,{clientId:c.client.id,clientSecret:c.clientSecret});assert.ok(tok.expiresIn<=120);updateClient(db,c.client.id,{scopes:['content:read']});assert.deepEqual(authenticateBearer(db,tok.accessToken,'r').scopes,['content:read']);updateClient(db,c.client.id,{expiresAt:new Date(Date.now()-1000).toISOString()});assert.throws(()=>authenticateBearer(db,tok.accessToken,'r'),/expired|invalid/);}finally{resetOperationsDb(dir);fs.rmSync(dir,{recursive:true,force:true});}});
+test('published record can acquire a draft without hiding or replacing public version',()=>{const dir=fixture(),db=openOperationsDb(dir);try{initializeContent(db,dir);const rec=getRecord(db,'blog-posts','legacy',dir)!;patchDraft(db,'blog-posts','legacy',{title:'Draft'}, {type:'admin',id:'session'},rec.etag,'draft-legacy',dir);assert.equal((readPublic('blog-posts',dir) as any[])[0].title,'Original');assert.equal(getRecord(db,'blog-posts','legacy',dir)!.data.title,'Draft');}finally{resetOperationsDb(dir);fs.rmSync(dir,{recursive:true,force:true});}});

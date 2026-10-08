@@ -1,3 +1,5 @@
+
+import { getPageFields, isPageBlockEnabled, getPageSeo } from "@/lib/content/pages";
 import Link from "next/link";
 import { ArrowRight, BarChart3, Bot, FileText, Search, Workflow } from "lucide-react";
 import type { Metadata } from "next";
@@ -9,14 +11,16 @@ const capabilityIconMap = { Bot, FileText, Workflow, BarChart3, Search };
 export function generateMetadata(): Metadata {
   const company = getCompany();
   const stats = getStats();
-  return createMetadata({
+  return createMetadata(getPageSeo("about", {
     title: "关于我们",
     description: `${company.fullName}，面向企业的 AI 转型落地服务商。已服务 ${stats[0].value}+ 企业客户，交付 ${stats[1].value}+ 智能化系统，覆盖 ${stats[2].value} 大行业解决方案。`,
     path: "/about",
-  });
+  }));
 }
 
 export default function AboutPage() {
+  const copy = getPageFields("about-intro");
+  if (!isPageBlockEnabled("about-intro")) return null;
   const company = getCompany();
   const stats = getStats();
   const customers = getCustomers();
@@ -33,24 +37,19 @@ export default function AboutPage() {
           style={{ background: "radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%)", transform: "translate(30%, -30%)" }}
         />
         <div className="container-max">
-          <span className="pill-tag mb-4">关于寰引智能</span>
+          <span className="pill-tag mb-4">{copy.eyebrow}</span>
           <h1
             className="font-bold mb-6 max-w-4xl"
             style={{
               color: "var(--color-text-primary)",
               fontSize: "clamp(2rem, 4vw, 3rem)",
             }}
-          >
-            不是喊 AI 口号，是真正交付过
-          </h1>
+          >{copy.title}</h1>
           <p
             className="text-xl max-w-3xl leading-relaxed"
             style={{ color: "var(--color-text-body)" }}
           >
-            {company.fullName}，定位为面向企业的 AI 转型落地服务商。
-            我们已服务 {stats[0].value}{stats[0].suffix ?? ""} 企业客户、交付 {stats[1].value}{stats[1].suffix ?? ""} 智能化系统、覆盖 {stats[2].value} 大行业解决方案，
-            核心竞争优势是有实际交付能力。
-          </p>
+            {company.fullName}{copy.introLead}{stats[0].value}{stats[0].suffix ?? ""}{copy.customerCountLabel}{stats[1].value}{stats[1].suffix ?? ""}{copy.systemCountLabel}{stats[2].value}{copy.industryCountLabel}</p>
         </div>
       </section>
 
@@ -87,9 +86,7 @@ export default function AboutPage() {
           <h2
             className="text-3xl font-bold mb-12 text-center"
             style={{ color: "var(--color-text-primary)" }}
-          >
-            我们的能力边界
-          </h2>
+          >{copy.capabilitiesTitle}</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {capabilities.map((item) => {
               const Icon = capabilityIconMap[item.icon as keyof typeof capabilityIconMap] || Bot;
@@ -124,9 +121,7 @@ export default function AboutPage() {
           <h2
             className="text-3xl font-bold mb-8"
             style={{ color: "var(--color-text-primary)" }}
-          >
-            行业覆盖
-          </h2>
+          >{copy.industriesTitle}</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {industries.map((ind) => (
               <Link
@@ -156,12 +151,8 @@ export default function AboutPage() {
           <h2
             className="text-3xl font-bold mb-4"
             style={{ color: "var(--color-text-primary)" }}
-          >
-            客户信任
-          </h2>
-          <p className="mb-8" style={{ color: "var(--color-text-muted)" }}>
-            多家真实企业客户选择寰引智能
-          </p>
+          >{copy.customersTitle}</h2>
+          <p className="mb-8" style={{ color: "var(--color-text-muted)" }}>{copy.customersDescription}</p>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {customers.map((customer) => (
               <div
@@ -191,9 +182,7 @@ export default function AboutPage() {
           style={{ background: "radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%)", transform: "translate(-50%, -50%)" }}
         />
         <div className="container-max relative z-10">
-          <Link href="/contact" className="cta-primary">
-            预约免费咨询
-            <ArrowRight size={18} />
+          <Link href={copy.ctaHref} className="cta-primary">{copy.ctaLabel}<ArrowRight size={18} />
           </Link>
         </div>
       </section>

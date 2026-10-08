@@ -1,8 +1,11 @@
+export const dynamic="force-dynamic";
 import type { MetadataRoute } from "next";
-import { getCompany } from "@/lib/data";
+import { getCompany, getSettings } from "@/lib/data";
 
 export default function robots(): MetadataRoute.Robots {
   const company = getCompany();
+  const settings=getSettings();
+  if(settings.robotsIndex===false)return {rules:[{userAgent:"*",disallow:"/"}],sitemap:`${settings.canonicalBase||company.website}/sitemap.xml`};
   return {
     rules: [
       {
@@ -22,6 +25,6 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
       },
     ],
-    sitemap: `${company.website}/sitemap.xml`,
+    sitemap: `${settings.canonicalBase||company.website}/sitemap.xml`,
   };
 }

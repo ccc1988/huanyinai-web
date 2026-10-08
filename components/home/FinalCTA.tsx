@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { getPageFields, isPageBlockEnabled } from "@/lib/content/pages";
 
 export default function FinalCTA() {
+  const content = getPageFields("home-final-cta");
+  if (!isPageBlockEnabled("home-final-cta")) return null;
   return (
     <section
       className="py-16 relative overflow-hidden"
@@ -28,18 +31,18 @@ export default function FinalCTA() {
             fontSize: "clamp(2rem, 4vw, 3rem)",
           }}
         >
-          把 AI 用在关键业务上
+          {content.title}
         </h2>
 
         <p
           className="mx-auto mt-4 max-w-xl text-base leading-7"
           style={{ color: "var(--color-text-body)" }}
         >
-          从内部提效到 AI 搜索增长，告诉我们你的场景，我们给出可执行的方案。
+          {content.description}
         </p>
 
-        <Link href="/contact" className="cta-primary mt-8 justify-center">
-          预约 AI 方案咨询
+        <Link href={content.href} className="cta-primary mt-8 justify-center">
+          {content.label}
           <ArrowRight size={18} />
         </Link>
       </div>

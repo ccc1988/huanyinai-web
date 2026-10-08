@@ -22,7 +22,7 @@ export function GET() {
   const capabilities = getCapabilities();
   const settings = getSettings();
   const stats = getStats();
-  const officialSite = company.website || siteUrl;
+  const officialSite = settings.canonicalBase || company.website || siteUrl;
   const industryNames = industries.map((item) => item.shortTitle || item.title.replace(/ AI 解决方案.*/, ""));
   const serviceNames = capabilities.map((item) => item.module);
   const statValue = (label: string) => {
@@ -31,7 +31,7 @@ export function GET() {
   };
 
   const lines = [
-    "# 寰引智能",
+    `# ${company.shortName}`,
     "",
     `> ${settings.llmsTxtDescription || "寰引智能科技（深圳）有限公司，是面向企业客户的 AI 转型落地服务商。"}`,
     "",
@@ -59,10 +59,10 @@ export function GET() {
     ...posts.map((post) => `- ${post.title}：${post.excerpt}（${siteUrl}/blog/${post.slug}）`),
     "",
     "## 联系方式",
-    "- 公司全称：寰引智能科技（深圳）有限公司",
+    `- 公司全称：${company.fullName}`,
     `- 官网：${officialSite}`,
-    "- 微信：chuhaishigan",
-    "- 邮箱：huanyinai@foxmail.com",
+    `- 微信：${company.wechat}`,
+    `- 邮箱：${company.email}`,
   ];
 
   return new NextResponse(`${lines.join("\n")}\n`, {

@@ -1,3 +1,5 @@
+
+import { getPageFields, isPageBlockEnabled, getPageSeo } from "@/lib/content/pages";
 import type { Metadata } from "next";
 import { Mail, Phone, MessageCircle, MapPin } from "lucide-react";
 import { createMetadata } from "@/lib/seo";
@@ -6,14 +8,16 @@ import ContactForm from "@/components/shared/ContactForm";
 
 export function generateMetadata(): Metadata {
   const company = getCompany();
-  return createMetadata({
+  return createMetadata(getPageSeo("contact", {
     title: "联系我们",
     description: `联系${company.shortName}，预约 AI 解决方案咨询。微信号 ${company.wechat}，邮箱 ${company.email}。`,
     path: "/contact",
-  });
+  }));
 }
 
 export default function ContactPage() {
+  const copy = getPageFields("contact-intro");
+  if (!isPageBlockEnabled("contact-intro")) return null;
   const company = getCompany();
   const contacts = getContacts();
   return (
@@ -27,22 +31,18 @@ export default function ContactPage() {
           style={{ background: "radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%)", transform: "translate(30%, -30%)" }}
         />
         <div className="container-max text-center">
-          <span className="pill-tag mb-4">联系我们</span>
+          <span className="pill-tag mb-4">{copy.eyebrow}</span>
           <h1
             className="font-bold mb-4"
             style={{
               color: "var(--color-text-primary)",
               fontSize: "clamp(2rem, 4vw, 3rem)",
             }}
-          >
-            让 AI 为你的企业创造价值
-          </h1>
+          >{copy.title}</h1>
           <p
             className="max-w-2xl mx-auto text-lg"
             style={{ color: "var(--color-text-body)" }}
-          >
-            告诉我们你的业务场景，我们给出可落地的 AI 方案
-          </p>
+          >{copy.description}</p>
         </div>
       </section>
 
@@ -56,9 +56,7 @@ export default function ContactPage() {
               <h2
                 className="text-2xl font-bold mb-8"
                 style={{ color: "var(--color-text-primary)" }}
-              >
-                联系方式
-              </h2>
+              >{copy.contactDetailsTitle}</h2>
               <div className="glass-card hud-corners rounded-[var(--radius-lg)] p-8">
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
@@ -69,9 +67,7 @@ export default function ContactPage() {
                     <MessageCircle size={20} style={{ color: "var(--color-accent-light)" }} />
                   </div>
                   <div>
-                    <p className="text-sm font-medium mb-1" style={{ color: "var(--color-text-muted)" }}>
-                      微信咨询
-                    </p>
+                    <p className="text-sm font-medium mb-1" style={{ color: "var(--color-text-muted)" }}>{copy.wechatLabel}</p>
                     <p className="text-base" style={{ color: "var(--color-text-body)" }}>
                       {company.wechat}
                     </p>
@@ -86,9 +82,7 @@ export default function ContactPage() {
                     <Mail size={20} style={{ color: "var(--color-accent-light)" }} />
                   </div>
                   <div>
-                    <p className="text-sm font-medium mb-1" style={{ color: "var(--color-text-muted)" }}>
-                      邮箱
-                    </p>
+                    <p className="text-sm font-medium mb-1" style={{ color: "var(--color-text-muted)" }}>{copy.emailLabel}</p>
                     <p className="text-base" style={{ color: "var(--color-text-body)" }}>
                       {company.email}
                     </p>
@@ -103,9 +97,7 @@ export default function ContactPage() {
                     <Phone size={20} style={{ color: "var(--color-accent-light)" }} />
                   </div>
                   <div>
-                    <p className="text-sm font-medium mb-1" style={{ color: "var(--color-text-muted)" }}>
-                      电话
-                    </p>
+                    <p className="text-sm font-medium mb-1" style={{ color: "var(--color-text-muted)" }}>{copy.phoneLabel}</p>
                     <p className="text-base" style={{ color: "var(--color-text-body)" }}>
                       {company.phone}
                     </p>
@@ -120,9 +112,7 @@ export default function ContactPage() {
                     <MapPin size={20} style={{ color: "var(--color-accent-light)" }} />
                   </div>
                   <div>
-                    <p className="text-sm font-medium mb-1" style={{ color: "var(--color-text-muted)" }}>
-                      公司地址
-                    </p>
+                    <p className="text-sm font-medium mb-1" style={{ color: "var(--color-text-muted)" }}>{copy.addressLabel}</p>
                     <p className="text-base" style={{ color: "var(--color-text-body)" }}>
                       {company.location}
                     </p>
@@ -143,11 +133,10 @@ export default function ContactPage() {
                         style={{ backgroundColor: "rgba(255,255,255,0.05)", border: "1px solid var(--color-border-default)" }}
                       >
                         {contact.qrCode ? (
-                          <img src={contact.qrCode} alt={`${contact.name || "联系人"}二维码`} className="w-full h-full object-cover" />
+                          <img src={contact.qrCode} alt={`${contact.name || copy.contactFallbackName}${copy.qrCodeLabel}`} className="w-full h-full object-cover" />
                         ) : (
                           <span className="text-xs text-center" style={{ color: "var(--color-text-logo)" }}>
-                            {contact.name || "微信"}二维码
-                          </span>
+                            {contact.name || copy.wechatFallbackName}{copy.qrCodeLabel}</span>
                         )}
                       </div>
                       {(contact.name || contact.role) && (
@@ -159,7 +148,7 @@ export default function ContactPage() {
                         <p className="text-xs" style={{ color: "var(--color-text-muted)" }}>{contact.phone}</p>
                       )}
                       {contact.wechat && (
-                        <p className="text-xs" style={{ color: "var(--color-text-muted)" }}>微信：{contact.wechat}</p>
+                        <p className="text-xs" style={{ color: "var(--color-text-muted)" }}>{copy.wechatPrefix}{contact.wechat}</p>
                       )}
                     </div>
                   ))}
@@ -173,9 +162,7 @@ export default function ContactPage() {
               <h2
                 className="text-2xl font-bold mb-8"
                 style={{ color: "var(--color-text-primary)" }}
-              >
-                预约咨询
-              </h2>
+              >{copy.formTitle}</h2>
               <div className="glass-card hud-corners rounded-[var(--radius-lg)] p-8">
                 <ContactForm />
               </div>

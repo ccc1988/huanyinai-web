@@ -1,3 +1,5 @@
+
+import { getPageFields, isPageBlockEnabled, getPageSeo } from "@/lib/content/pages";
 import Link from "next/link";
 import { ArrowRight, ChevronRight, Calendar } from "lucide-react";
 import type { Metadata } from "next";
@@ -5,14 +7,16 @@ import { createMetadata } from "@/lib/seo";
 import { getPublicBlogPosts } from "@/lib/data";
 
 export function generateMetadata(): Metadata {
-  return createMetadata({
+  return createMetadata(getPageSeo("blog", {
     title: "行业洞察与 AI 落地实践",
     description: "寰引智能分享 AI 落地实践经验，涵盖跨境物流 AI、报关文件智能处理、物流轨迹追踪、企微 AI 客服等真实案例。",
     path: "/blog",
-  });
+  }));
 }
 
 export default function BlogPage() {
+  const copy = getPageFields("blog-list");
+  if (!isPageBlockEnabled("blog-list")) return null;
   const blogPosts = getPublicBlogPosts();
   const sortedPosts = [...blogPosts].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
@@ -29,22 +33,18 @@ export default function BlogPage() {
           style={{ background: "radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%)", transform: "translate(30%, -30%)" }}
         />
         <div className="container-max">
-          <span className="pill-tag mb-4">行业洞察</span>
+          <span className="pill-tag mb-4">{copy.eyebrow}</span>
           <h1
             className="font-bold mb-4"
             style={{
               color: "var(--color-text-primary)",
               fontSize: "clamp(2rem, 4vw, 3rem)",
             }}
-          >
-            AI 落地实践
-          </h1>
+          >{copy.title}</h1>
           <p
             className="max-w-2xl text-lg"
             style={{ color: "var(--color-text-body)" }}
-          >
-            真实案例背后的思考与方法论
-          </p>
+          >{copy.description}</p>
         </div>
       </section>
 
@@ -112,9 +112,7 @@ export default function BlogPage() {
                 <div
                   className="mt-4 inline-flex items-center gap-1 text-sm font-medium"
                   style={{ color: "var(--color-accent-light)" }}
-                >
-                  阅读全文
-                  <ArrowRight
+                >{copy.readMoreLabel}<ArrowRight
                     size={14}
                     className="transition-transform group-hover:translate-x-1"
                   />

@@ -1,4 +1,5 @@
 "use client";
+import { adminFetch } from "../_components/operations-admin";
 
 import { useState, useEffect } from "react";
 import { Save, Plus, Trash2, Lock } from "lucide-react";
@@ -13,7 +14,7 @@ export default function AdminSettingsPage() {
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
 
   useEffect(() => {
-    fetch("/api/admin/settings")
+    adminFetch("/api/admin/settings")
       .then((res) => res.json())
       .then((data) => setSettings(data as SiteSettings));
   }, []);
@@ -27,7 +28,7 @@ export default function AdminSettingsPage() {
     if (!settings) return;
     setSaving(true);
     try {
-      const response = await fetch("/api/admin/settings", {
+      const response = await adminFetch("/api/admin/settings", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(settings),
@@ -239,7 +240,7 @@ function ChangePasswordSection() {
     }
     setSaving(true);
     try {
-      const res = await fetch("/api/admin/change-password", {
+      const res = await adminFetch("/api/admin/change-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ currentPassword, newPassword }),

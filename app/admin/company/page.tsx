@@ -1,4 +1,5 @@
 "use client";
+import { adminFetch } from "../_components/operations-admin";
 
 import { useState, useEffect } from "react";
 import { Save, Plus, Trash2, Upload } from "lucide-react";
@@ -19,7 +20,7 @@ export default function AdminCompanyPage() {
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
 
   useEffect(() => {
-    fetch("/api/admin/company")
+    adminFetch("/api/admin/company")
       .then((res) => res.json())
       .then(setData);
   }, []);
@@ -33,7 +34,7 @@ export default function AdminCompanyPage() {
     if (!data) return;
     setSaving(true);
     try {
-      await fetch("/api/admin/company", {
+      await adminFetch("/api/admin/company", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ type: "company", data: data.company }),
@@ -48,7 +49,7 @@ export default function AdminCompanyPage() {
     if (!data) return;
     setSaving(true);
     try {
-      await fetch("/api/admin/company", {
+      await adminFetch("/api/admin/company", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ type: "customers", data: data.customers }),
@@ -63,7 +64,7 @@ export default function AdminCompanyPage() {
     if (!data) return;
     setSaving(true);
     try {
-      await fetch("/api/admin/company", {
+      await adminFetch("/api/admin/company", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ type: "stats", data: data.stats }),
@@ -78,7 +79,7 @@ export default function AdminCompanyPage() {
     if (!data) return;
     setSaving(true);
     try {
-      const response = await fetch("/api/admin/company", {
+      const response = await adminFetch("/api/admin/company", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ type: "capabilities", data: data.capabilities }),
@@ -93,7 +94,7 @@ export default function AdminCompanyPage() {
     if (!data) return;
     setSaving(true);
     try {
-      await fetch("/api/admin/company", {
+      await adminFetch("/api/admin/company", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ type: "contacts", data: data.contacts }),

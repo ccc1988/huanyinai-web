@@ -46,3 +46,15 @@
 - 网站只有管理员与匿名访客两类角色，不建设多角色审批系统。
 - 营销指标由管理员维护，不建设公开证据状态系统。
 - 构建存在 Next.js 对动态文件读取的 NFT 提示，目前不影响构建与运行，后续作为性能维护项处理。
+
+## 全站运营 API v1.8.0
+
+- 机器接入端点：`/api/oauth/token`（兼容别名）与 `/api/integrations/v1/oauth/token`；外部只使用 HTTPS、client credentials、opaque Token。
+- 公开内容读取来自已发布快照；工作草稿/审核/修订/回滚保存在 `DATA_DIR/operations.sqlite3`，JSON 是兼容投影。草稿编辑不改变公开页面。
+- 接入方每次请求校验合作截止、Secret、Token、scope、资源范围和限流；禁用/撤销/权限收缩立即影响既有 Token。Token/Secret 明文不落库；合作 Token 默认 30 分钟，Secret 默认 90 天，合作截止取更早者。
+- 普通内容必须走 draft → submit → approve → publish；明确授予 `autoPublish` 的普通内容可自动发布。品牌、客户、联系方式、统计数字、SEO 主域/robots/法律等保护字段仍需官网管理员近期复核。
+- 内容 API 使用 `If-Match` 和 `Idempotency-Key`；成功写入返回 `operationId`/receipt。`failed`、`pending`、`needs_recovery` 都不能视为成功。
+- 媒体写入使用服务端 MIME/解码/尺寸/大小校验，文件存放在 release 外的 `MEDIA_DIR`；引用中的资产只能软删，替换产生新版本。
+- 运行前需配置 `OPERATIONS_API_ENABLED=true`、`DATA_DIR`、`ADMIN_PASSWORD`、`ADMIN_SESSION_SECRET`；默认未启用，避免未授权打开外部 API。
+- 首次或恢复使用：备份 shared-data/operations.sqlite3 → `DATA_DIR=/var/www/huanyin_web/shared-data node scripts/operations-migrate.mjs`（仅在 release 内执行）→ `node scripts/operations-readiness.mjs`。测试必须使用临时 DATA_DIR，不得指向生产。
+- 本版本不证明 AIGEO 消费方真实联调，也不证明搜索收录、AI 引用、推荐、排名、增长或营收结果。

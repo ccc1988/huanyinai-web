@@ -78,12 +78,13 @@ export function verifySession(token: string | undefined): boolean {
     .update(data)
     .digest("base64url");
 
-  if (signature !== expectedSignature) return false;
+  const a = Buffer.from(signature); const b = Buffer.from(expectedSignature);
+  if (a.length !== b.length || !timingSafeEqual(a, b)) return false;
 
   // 验证过期时间
   try {
     const payload = JSON.parse(Buffer.from(data, "base64url").toString("utf-8"));
-    if (Date.now() > payload.exp) return false;
+    if (!Number.isFinite(payload.exp) || Date.now() > payload.exp) return false;
     return true;
   } catch {
     return false;

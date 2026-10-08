@@ -1,3 +1,5 @@
+
+import { getPageFields, isPageBlockEnabled, getPageSeo } from "@/lib/content/pages";
 import { ArrowRight, BarChart3, Bot, FileText, Search, Workflow } from "lucide-react";
 import Link from "next/link";
 import SectionTitle from "@/components/ui/SectionTitle";
@@ -27,6 +29,8 @@ const iconBgGradients = [
 ];
 
 export default function CapabilityMatrix() {
+  const copy = getPageFields("home-capabilities");
+  if (!isPageBlockEnabled("home-capabilities")) return null;
   const capabilities = getCapabilities();
   const featured = capabilities.find((cap) => cap.module === "AI 搜索增长");
   const standardCapabilities = capabilities.filter((cap) => cap.module !== "AI 搜索增长");
@@ -36,9 +40,7 @@ export default function CapabilityMatrix() {
       <div className="absolute inset-0 grid-bg opacity-50 pointer-events-none" />
 
       <div className="container-max relative">
-        <SectionTitle subtitle="从业务提效到增长获客，为企业提供可落地的 AI 产品与实施服务。">
-          AI 应用与增长服务
-        </SectionTitle>
+        <SectionTitle subtitle={copy.description}>{copy.title}</SectionTitle>
 
         {featured && (
           <div className="ai-capability-featured glass-card glass-card-accent mb-8 rounded-[var(--radius-lg)] p-6 sm:p-7 relative overflow-hidden">
@@ -49,12 +51,11 @@ export default function CapabilityMatrix() {
                     <Search size={28} style={{ color: "#67e8f9" }} aria-hidden="true" />
                   </div>
                   <div>
-                    <p className="text-xs font-medium uppercase tracking-[0.12em]" style={{ color: "#67e8f9" }}>AI 搜索增长 · GEO / AEO</p>
+                    <p className="text-xs font-medium uppercase tracking-[0.12em]" style={{ color: "#67e8f9" }}>{copy.featuredEyebrow}</p>
                     <h3 className="sr-only">{featured.module}</h3>
                   </div>
                 </div>
-                <p className="mt-4 text-base leading-7 lg:whitespace-nowrap" style={{ color: "var(--color-text-body)" }}>
-                  让品牌、产品与服务在 <span className="font-semibold underline decoration-cyan-300/60 underline-offset-4" style={{ color: "#67e8f9" }}>AI 搜索</span> 中更容易<span className="font-semibold underline decoration-cyan-300/60 underline-offset-4" style={{ color: "var(--color-text-primary)" }}>被发现</span>；在 <span className="font-semibold underline decoration-cyan-300/60 underline-offset-4" style={{ color: "#67e8f9" }}>AI 提问</span> 的答案中更容易被<span className="font-semibold underline decoration-cyan-300/60 underline-offset-4" style={{ color: "var(--color-text-primary)" }}>理解、引用与推荐</span>。
+                <p className="mt-4 text-base leading-7 lg:whitespace-nowrap" style={{ color: "var(--color-text-body)" }}>{copy.featuredLead}<span className="font-semibold underline decoration-cyan-300/60 underline-offset-4" style={{ color: "#67e8f9" }}>{copy.searchEmphasis}</span>{copy.discoveryLead}<span className="font-semibold underline decoration-cyan-300/60 underline-offset-4" style={{ color: "var(--color-text-primary)" }}>{copy.discoveryEmphasis}</span>{copy.questionLead}<span className="font-semibold underline decoration-cyan-300/60 underline-offset-4" style={{ color: "#67e8f9" }}>{copy.questionEmphasis}</span>{copy.recommendationLead}<span className="font-semibold underline decoration-cyan-300/60 underline-offset-4" style={{ color: "var(--color-text-primary)" }}>{copy.recommendationEmphasis}</span>。
                 </p>
                 <div className="mt-4 flex flex-wrap gap-2">
                   {featured.products.map((product) => (
@@ -62,9 +63,7 @@ export default function CapabilityMatrix() {
                   ))}
                 </div>
               </div>
-              <Link href="/solutions/ai-geo-aeo" className="cta-secondary whitespace-nowrap justify-center">
-                查看方案
-                <ArrowRight size={17} aria-hidden="true" />
+              <Link href={copy.ctaHref} className="cta-secondary whitespace-nowrap justify-center">{copy.ctaLabel}<ArrowRight size={17} aria-hidden="true" />
               </Link>
             </div>
           </div>

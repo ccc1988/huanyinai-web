@@ -1,3 +1,5 @@
+
+import { getPageFields, isPageBlockEnabled, getPageSeo } from "@/lib/content/pages";
 import Link from "next/link";
 import { ArrowRight, ChevronRight, Layers } from "lucide-react";
 import { getIndustries, getCasesByIndustry, getPublicCases } from "@/lib/data";
@@ -8,14 +10,16 @@ import { getIndustryIcon } from "@/lib/industryIcons";
 export function generateMetadata() {
   const industries = getIndustries();
   const industryNames = industries.map((item) => item.title.replace(/\s*AI\s*解决方案$/, "")).join("、");
-  return createMetadata({
+  return createMetadata(getPageSeo("solutions", {
     title: "行业 AI 解决方案｜企业智能体与自动化落地",
     description: `寰引智能面向${industryNames}等 ${industries.length} 个行业方向，提供 AI 智能体、AI 文档处理、RPA 自动化和企业系统集成方案。`,
     path: "/solutions",
-  });
+  }));
 }
 
 export default function SolutionsPage() {
+  const copy = getPageFields("solutions-list");
+  if (!isPageBlockEnabled("solutions-list")) return null;
   const industries = getIndustries();
 
   return (
@@ -54,13 +58,11 @@ export default function SolutionsPage() {
             }}
           >
             <Link
-              href="/"
+              href={copy.homeHref}
               className="hover:text-[var(--color-text-body)] transition-colors"
-            >
-              首页
-            </Link>
+            >{copy.homeLabel}</Link>
             <ChevronRight size={14} />
-            <span style={{ color: "var(--color-text-body)" }}>解决方案</span>
+            <span style={{ color: "var(--color-text-body)" }}>{copy.breadcrumbLabel}</span>
           </nav>
 
           {/* Title */}
@@ -80,16 +82,13 @@ export default function SolutionsPage() {
                 color: "var(--color-text-primary)",
                 fontSize: "clamp(2rem, 4vw, 3rem)",
               }}
-            >
-              行业 AI 解决方案
-            </h1>
+            >{copy.title}</h1>
           </div>
           <p
             className="text-xl max-w-3xl"
             style={{ color: "var(--color-text-body)" }}
           >
-            {industries.length} 大行业全覆盖，精选 {getPublicCases().length} 个公开案例，从痛点诊断到智能体交付的全链路服务
-          </p>
+            {industries.length}{copy.industryCountLabel}{getPublicCases().length}{copy.caseCountLabel}</p>
         </div>
       </section>
 
@@ -191,15 +190,12 @@ export default function SolutionsPage() {
                         className="text-xs font-medium"
                         style={{ color: "var(--color-text-muted)" }}
                       >
-                        {caseCount} 个关联案例
-                      </span>
+                        {caseCount}{copy.relatedCaseCountLabel}</span>
                     )}
                     <span
                       className="inline-flex items-center gap-1 text-sm font-medium transition-colors ml-auto"
                       style={{ color: "var(--color-accent-light)" }}
-                    >
-                      查看方案
-                      <ArrowRight
+                    >{copy.viewSolutionLabel}<ArrowRight
                         size={14}
                         className="transition-transform group-hover:translate-x-1"
                       />
@@ -230,18 +226,12 @@ export default function SolutionsPage() {
           <h2
             className="text-3xl font-bold mb-4"
             style={{ color: "var(--color-text-primary)" }}
-          >
-            不确定哪个方案适合你？
-          </h2>
+          >{copy.ctaTitle}</h2>
           <p
             className="mb-8"
             style={{ color: "var(--color-text-body)" }}
-          >
-            告诉我们你的业务场景，我们给出可落地的 AI 方案
-          </p>
-          <Link href="/contact" className="cta-primary">
-            预约免费咨询
-            <ArrowRight size={18} />
+          >{copy.ctaDescription}</p>
+          <Link href={copy.ctaHref} className="cta-primary">{copy.ctaLabel}<ArrowRight size={18} />
           </Link>
         </div>
       </section>

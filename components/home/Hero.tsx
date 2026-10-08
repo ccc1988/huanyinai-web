@@ -2,8 +2,11 @@ import Link from "next/link";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import type { StatItem } from "@/lib/data";
 import NeuralBackground from "./NeuralBackground";
+import { getPageFields, isPageBlockEnabled } from "@/lib/content/pages";
 
 export default function Hero({ stats }: { stats: StatItem[] }) {
+  const content = getPageFields("home-hero");
+  if (!isPageBlockEnabled("home-hero")) return null;
   const hudMetrics = stats.map((s) => ({
     label: s.label,
     value: `${s.value}${s.suffix || ""}`,
@@ -55,10 +58,10 @@ export default function Hero({ stats }: { stats: StatItem[] }) {
               WebkitTextFillColor: "transparent",
             }}
           >
-            AI 智能体与 AI 搜索获客
+            {content.titlePrimary}
           </span>
           <span className="block mt-2" style={{ color: "var(--color-text-primary)" }}>
-            重构业务流程，连接增长入口
+            {content.titleSecondary}
           </span>
         </h1>
 
@@ -72,17 +75,17 @@ export default function Hero({ stats }: { stats: StatItem[] }) {
             lineHeight: 1.8,
           }}
         >
-          为物流、跨境、制造、电商、金融等行业提供可落地的 AI 解决方案。
+          {content.description}
         </p>
 
         {/* CTA buttons */}
         <div className="hero-fade hero-delay-2 mt-10 flex flex-col sm:flex-row gap-4">
-          <Link href="/contact" className="cta-primary">
-            预约 AI 解决方案咨询
+          <Link href={content.primaryHref} className="cta-primary">
+            {content.primaryLabel}
             <ArrowRight size={18} />
           </Link>
-          <Link href="/cases/customs-document-ai" className="cta-secondary">
-            查看案例
+          <Link href={content.secondaryHref} className="cta-secondary">
+            {content.secondaryLabel}
           </Link>
         </div>
 

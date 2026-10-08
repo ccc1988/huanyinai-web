@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, DM_Sans } from "next/font/google";
 import "./globals.css";
+import { getPageChrome } from "@/lib/content/pages";
 import AppShell from "@/components/ui/AppShell";
 import { getOrganizationJsonLd } from "@/lib/geo";
 import { getCompany, getNavItems, getSettings, getContacts, getStats, getIndustries, getPublicCases } from "@/lib/data";
@@ -30,7 +31,7 @@ export function generateMetadata(): Metadata {
     },
     description: settings.seoDescription,
     keywords: settings.seoKeywords,
-    metadataBase: new URL(company.website),
+    metadataBase: new URL(settings.canonicalBase || company.website),
     alternates: {
       canonical: "/",
     },
@@ -40,7 +41,7 @@ export function generateMetadata(): Metadata {
       siteName: company.shortName,
       locale: "zh_CN",
       type: "website",
-      images: [{ url: "/og/default.svg", width: 1200, height: 630, alt: company.shortName }],
+      images: [{ url: settings.ogImage || "/og/default.svg", width: 1200, height: 630, alt: company.shortName }],
     },
     icons: {
       icon: "/favicon.svg",
@@ -48,8 +49,8 @@ export function generateMetadata(): Metadata {
       apple: "/favicon.svg",
     },
     robots: {
-      index: true,
-      follow: true,
+      index: settings.robotsIndex !== false,
+      follow: settings.robotsIndex !== false,
     },
   };
 }
@@ -74,7 +75,7 @@ export default function RootLayout({
             __html: JSON.stringify(getOrganizationJsonLd()),
           }}
         />
-        <AppShell navItems={navItems} company={company} contacts={contacts} stats={stats} industries={industries} cases={cases}>{children}</AppShell>
+        <AppShell chrome={getPageChrome()} navItems={navItems} company={company} contacts={contacts} stats={stats} industries={industries} cases={cases}>{children}</AppShell>
       </body>
     </html>
   );

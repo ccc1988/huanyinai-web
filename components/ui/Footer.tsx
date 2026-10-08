@@ -1,3 +1,5 @@
+
+import { PAGE_FIELDS, type PageFields } from "@/lib/content/pageFields";
 import Link from "next/link";
 import nextDynamic from "next/dynamic";
 import Logo from "./Logo";
@@ -6,7 +8,8 @@ import type { Contact, StatItem, IndustrySolution, CaseItem } from "@/lib/data";
 // 二维码区域：不参与 SSR，base64 数据不进入首屏 HTML
 const LazyQRContacts = nextDynamic(() => import("./LazyQRContacts"), { ssr: false });
 
-export default function Footer({ company, contacts, stats, industries, cases }: { company: Record<string, string>; contacts: Contact[]; stats: StatItem[]; industries: IndustrySolution[]; cases: CaseItem[] }) {
+export default function Footer({ company, contacts, stats, industries, cases, enabled = true, copy = PAGE_FIELDS["site-footer"].props }: { company: Record<string, string>; contacts: Contact[]; stats: StatItem[]; industries: IndustrySolution[]; cases: CaseItem[] ; enabled?: boolean; copy?: PageFields<"site-footer"> }) {
+  if (!enabled) return null;
   return (
     <footer
       className="border-t pt-16 pb-8"
@@ -66,9 +69,7 @@ export default function Footer({ company, contacts, stats, industries, cases }: 
             <h3
               className="text-sm font-semibold mb-4"
               style={{ color: "var(--color-text-muted)" }}
-            >
-              解决方案
-            </h3>
+            >{copy.solutionsTitle}</h3>
             <ul className="space-y-3">
               {industries.filter((ind) => ind.slug !== "ecommerce-service").map((ind) => (
                 <li key={ind.slug}>
@@ -83,12 +84,10 @@ export default function Footer({ company, contacts, stats, industries, cases }: 
               ))}
               <li>
                 <Link
-                  href="/solutions"
+                  href={copy.solutionsHref}
                   className="text-sm cursor-pointer font-medium transition-colors inline-flex items-center gap-1"
                   style={{ color: "var(--color-accent-light)" }}
-                >
-                  查看全部
-                  <span aria-hidden="true">→</span>
+                >{copy.solutionsAllLabel}<span aria-hidden="true">→</span>
                 </Link>
               </li>
             </ul>
@@ -99,9 +98,7 @@ export default function Footer({ company, contacts, stats, industries, cases }: 
             <h3
               className="text-sm font-semibold mb-4"
               style={{ color: "var(--color-text-muted)" }}
-            >
-              客户案例
-            </h3>
+            >{copy.casesTitle}</h3>
             <ul className="space-y-3">
               {cases.slice(0, 5).map((c) => (
                 <li key={c.slug}>
@@ -116,12 +113,10 @@ export default function Footer({ company, contacts, stats, industries, cases }: 
               ))}
               <li>
                 <Link
-                  href="/cases"
+                  href={copy.casesHref}
                   className="text-sm cursor-pointer font-medium transition-colors inline-flex items-center gap-1"
                   style={{ color: "var(--color-accent-light)" }}
-                >
-                  查看全部
-                  <span aria-hidden="true">→</span>
+                >{copy.casesAllLabel}<span aria-hidden="true">→</span>
                 </Link>
               </li>
             </ul>
@@ -132,12 +127,10 @@ export default function Footer({ company, contacts, stats, industries, cases }: 
             <h3
               className="text-sm font-semibold mb-4"
               style={{ color: "var(--color-text-muted)" }}
-            >
-              联系我们
-            </h3>
+            >{copy.contactsTitle}</h3>
             <ul className="space-y-3 text-sm" style={{ color: "var(--color-text-muted)" }}>
               <li className="flex flex-col gap-0.5">
-                <span className="text-xs" style={{ color: "var(--color-text-copyright)" }}>邮箱</span>
+                <span className="text-xs" style={{ color: "var(--color-text-copyright)" }}>{copy.emailLabel}</span>
                 <a
                   href={`mailto:${company.email}`}
                   className="cursor-pointer transition-colors hover:text-[var(--color-text-primary)]"
@@ -147,7 +140,7 @@ export default function Footer({ company, contacts, stats, industries, cases }: 
                 </a>
               </li>
               <li className="flex flex-col gap-0.5">
-                <span className="text-xs" style={{ color: "var(--color-text-copyright)" }}>微信</span>
+                <span className="text-xs" style={{ color: "var(--color-text-copyright)" }}>{copy.wechatLabel}</span>
                 <span style={{ color: "var(--color-text-body)" }}>{company.wechat}</span>
               </li>
             </ul>

@@ -1,4 +1,5 @@
 "use client";
+import { adminFetch } from "../_components/operations-admin";
 
 import { useState, useEffect, useCallback } from "react";
 import { Plus, Edit3, Trash2 } from "lucide-react";
@@ -27,7 +28,7 @@ export default function AdminBlogPage() {
 
   const fetchPosts = useCallback(async () => {
     try {
-      const res = await fetch("/api/admin/blog");
+      const res = await adminFetch("/api/admin/blog");
       setPosts(await res.json());
     } finally {
       setLoading(false);
@@ -41,7 +42,7 @@ export default function AdminBlogPage() {
     setSaving(true);
     setSaveError("");
     try {
-      const response = await fetch("/api/admin/blog", {
+      const response = await adminFetch("/api/admin/blog", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editing),
@@ -59,7 +60,7 @@ export default function AdminBlogPage() {
 
   const handleDelete = async (slug: string) => {
     if (!confirm("确定删除这篇文章？")) return;
-    const response = await fetch("/api/admin/blog", {
+    const response = await adminFetch("/api/admin/blog", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ slug }),

@@ -1,5 +1,7 @@
 "use client";
 
+import { PAGE_FIELDS, type PageFields } from "@/lib/content/pageFields";
+
 import { useEffect, useRef, useState } from "react";
 import { useInView } from "framer-motion";
 import { Building2, Monitor, Globe, TrendingUp } from "lucide-react";
@@ -57,7 +59,7 @@ function CountUp({ value, suffix }: { value: number; suffix?: string }) {
   );
 }
 
-export default function StatsWall({ stats }: { stats: StatItem[] }) {
+export default function StatsWall({ stats , copy = PAGE_FIELDS["home-stats-copy"].props }: { stats: StatItem[] ; copy?: PageFields<"home-stats-copy"> }) {
   return (
     <section className="py-24 relative overflow-hidden" style={{ backgroundColor: "var(--color-bg-elevated)" }}>
       {/* 背景装饰层 */}
@@ -75,12 +77,8 @@ export default function StatsWall({ stats }: { stats: StatItem[] }) {
           <h2
             className="text-[clamp(1.75rem,4vw,2.5rem)] font-bold"
             style={{ color: "var(--color-text-primary)" }}
-          >
-            用数据证明实力
-          </h2>
-          <p className="mt-3 text-base" style={{ color: "var(--color-text-muted)" }}>
-            持续为企业创造可量化的 AI 价值
-          </p>
+          >{copy.title}</h2>
+          <p className="mt-3 text-base" style={{ color: "var(--color-text-muted)" }}>{copy.description}</p>
         </div>
 
         {/* 数据卡片网格 */}

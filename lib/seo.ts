@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getCompany } from "./data";
+import { getCompany, getSettings } from "./data";
 
 /** 生成基础 metadata */
 export function createMetadata({
@@ -14,7 +14,8 @@ export function createMetadata({
   keywords?: string[];
 }): Metadata {
   const company = getCompany();
-  const url = `${company.website}${path}`;
+  const settings=getSettings();
+  const url = `${settings.canonicalBase || company.website}${path}`;
   return {
     title,
     description,

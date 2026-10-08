@@ -1,3 +1,5 @@
+
+import { getPageFields, isPageBlockEnabled, getPageSeo } from "@/lib/content/pages";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowRight, ChevronRight, Calendar, Tag } from "lucide-react";
@@ -13,12 +15,12 @@ export function generateMetadata({ params }: { params: Promise<{ slug: string }>
   return params.then(({ slug }) => {
     const post = getPublicBlogPostBySlug(slug);
     if (!post) return {};
-    return createMetadata({
+    return createMetadata(getPageSeo("blog-detail", {
       title: post.title,
       description: post.excerpt,
       path: `/blog/${slug}`,
       keywords: post.tags,
-    });
+    }));
   });
 }
 
@@ -27,6 +29,8 @@ export default async function BlogDetailPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
+  const copy = getPageFields("blog-detail-copy");
+  if (!isPageBlockEnabled("blog-detail-copy")) return null;
   const { slug } = await params;
   const post = getPublicBlogPostBySlug(slug);
 
@@ -57,9 +61,9 @@ export default async function BlogDetailPage({
           <div className="container-max max-w-3xl">
             {/* Breadcrumb */}
             <nav className="inline-flex items-center gap-2 text-sm mb-8 px-4 py-2 rounded-full" style={{ color: "var(--color-text-muted)", backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
-              <Link href="/" className="hover:text-[var(--color-text-body)] transition-colors">首页</Link>
+              <Link href={copy.homeHref} className="hover:text-[var(--color-text-body)] transition-colors">{copy.homeLabel}</Link>
               <ChevronRight size={14} />
-              <Link href="/blog" className="hover:text-[var(--color-text-body)] transition-colors">博客</Link>
+              <Link href={copy.blogHref} className="hover:text-[var(--color-text-body)] transition-colors">{copy.blogLabel}</Link>
               <ChevronRight size={14} />
               <span style={{ color: "var(--color-text-body)" }} className="truncate">{post!.category}</span>
             </nav>
@@ -82,7 +86,7 @@ export default async function BlogDetailPage({
                 <Calendar size={14} />
                 {post!.date}
               </span>
-              <span>作者：{post!.author}</span>
+              <span>{copy.authorPrefix}{post!.author}</span>
             </div>
 
             {/* Excerpt */}
@@ -137,19 +141,18 @@ export default async function BlogDetailPage({
 
             {(post!.sources?.length || post!.reviewStatus) && (
               <aside className="mt-12 border-t pt-6" style={{ borderColor: "var(--color-border-default)" }}>
-                <h2 className="text-base font-bold" style={{ color: "var(--color-text-primary)" }}>资料来源与内容审核</h2>
+                <h2 className="text-base font-bold" style={{ color: "var(--color-text-primary)" }}>{copy.sourcesTitle}</h2>
                 {post!.sources && post!.sources.length > 0 && (
                   <ul className="mt-3 space-y-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
                     {post!.sources.map((source) => (
                       <li key={source.url}>
                         <a href={source.url} target="_blank" rel="noreferrer" className="underline underline-offset-2 hover:text-[var(--color-text-primary)]">{source.title}</a>
-                        <span>（访问：{source.accessedAt}）</span>
+                        <span>{copy.sourceAccessedPrefix}{source.accessedAt}）</span>
                       </li>
                     ))}
                   </ul>
                 )}
-                <p className="mt-3 text-xs" style={{ color: "var(--color-text-muted)" }}>
-                  内容状态：{post!.reviewStatus === "reviewed" ? `已审核${post!.reviewer ? `（${post!.reviewer}）` : ""}` : "待审核"}
+                <p className="mt-3 text-xs" style={{ color: "var(--color-text-muted)" }}>{copy.reviewStatusPrefix}{post!.reviewStatus === "reviewed" ? `${copy.reviewedLabel}${post!.reviewer ? `（${post!.reviewer}）` : ""}` : copy.pendingReviewLabel}
                   {post!.reviewedAt ? ` · ${post!.reviewedAt}` : ""}
                 </p>
               </aside>
@@ -162,15 +165,9 @@ export default async function BlogDetailPage({
               <h3
                 className="text-xl font-bold mb-3"
                 style={{ color: "var(--color-text-primary)" }}
-              >
-                想了解更多 AI 落地方案？
-              </h3>
-              <p className="mb-6" style={{ color: "var(--color-text-body)" }}>
-                告诉我们你的业务场景，我们给出可落地的 AI 方案
-              </p>
-              <Link href={post!.tags.includes("GEO") || post!.tags.includes("AI 搜索") ? "/contact?service=ai-geo-aeo" : "/contact"} className="cta-primary">
-                预约免费咨询
-                <ArrowRight size={18} />
+              >{copy.ctaTitle}</h3>
+              <p className="mb-6" style={{ color: "var(--color-text-body)" }}>{copy.ctaDescription}</p>
+              <Link href={post!.tags.includes("GEO") || post!.tags.includes("AI 搜索") ? "/contact?service=ai-geo-aeo" : "/contact"} className="cta-primary">{copy.ctaLabel}<ArrowRight size={18} />
               </Link>
             </div>
           </div>
@@ -184,9 +181,7 @@ export default async function BlogDetailPage({
           <h2
             className="text-2xl font-bold mb-8"
             style={{ color: "var(--color-text-primary)" }}
-          >
-            继续阅读
-          </h2>
+          >{copy.relatedPostsTitle}</h2>
           <div className="grid sm:grid-cols-2 gap-6">
             {relatedPosts.map((rp) => (
               <Link
@@ -209,9 +204,7 @@ export default async function BlogDetailPage({
                 <div
                   className="inline-flex items-center gap-1 text-sm font-medium mt-2"
                   style={{ color: "var(--color-accent-light)" }}
-                >
-                  阅读全文
-                  <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+                >{copy.readMoreLabel}<ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
                 </div>
               </Link>
             ))}

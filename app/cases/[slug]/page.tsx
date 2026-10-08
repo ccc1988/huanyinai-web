@@ -1,3 +1,5 @@
+
+import { getPageFields, isPageBlockEnabled, getPageSeo } from "@/lib/content/pages";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowRight, ChevronRight, Target, Lightbulb, TrendingUp, Wrench } from "lucide-react";
@@ -14,11 +16,11 @@ export function generateMetadata({ params }: { params: Promise<{ slug: string }>
   return params.then(({ slug }) => {
     const caseItem = getPublicCaseBySlug(slug);
     if (!caseItem) return {};
-    return createMetadata({
+    return createMetadata(getPageSeo("case-detail", {
       title: caseItem.title,
       description: caseItem.oneLiner,
       path: `/cases/${slug}`,
-    });
+    }));
   });
 }
 
@@ -27,6 +29,8 @@ export default async function CaseDetailPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
+  const copy = getPageFields("case-detail-copy");
+  if (!isPageBlockEnabled("case-detail-copy")) return null;
   const { slug } = await params;
   const caseItem = getPublicCaseBySlug(slug);
 
@@ -60,9 +64,9 @@ export default async function CaseDetailPage({
         <div className="container-max relative z-10">
           {/* Breadcrumb */}
           <nav className="inline-flex items-center gap-2 text-sm mb-8 px-4 py-2 rounded-full" style={{ color: "var(--color-text-muted)", backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
-            <Link href="/" className="hover:text-[var(--color-text-body)] transition-colors">首页</Link>
+            <Link href={copy.homeHref} className="hover:text-[var(--color-text-body)] transition-colors">{copy.homeLabel}</Link>
             <ChevronRight size={14} />
-            <Link href="/cases" className="hover:text-[var(--color-text-body)] transition-colors">案例</Link>
+            <Link href={copy.casesHref} className="hover:text-[var(--color-text-body)] transition-colors">{copy.casesLabel}</Link>
             <ChevronRight size={14} />
             <span style={{ color: "var(--color-text-body)" }}>{caseItem!.industry}</span>
           </nav>
@@ -105,8 +109,7 @@ export default async function CaseDetailPage({
 
 
           {/* Customers */}
-          <p className="mt-6 text-sm" style={{ color: "var(--color-text-muted)" }}>
-            关联客户：{caseItem!.relatedCustomers.join("、")}
+          <p className="mt-6 text-sm" style={{ color: "var(--color-text-muted)" }}>{copy.relatedCustomersPrefix}{caseItem!.relatedCustomers.join("、")}
           </p>
         </div>
       </section>
@@ -122,9 +125,7 @@ export default async function CaseDetailPage({
             >
               <Target size={20} style={{ color: "var(--color-accent-light)" }} />
             </div>
-            <h2 className="text-2xl font-bold" style={{ color: "var(--color-text-primary)" }}>
-              客户痛点
-            </h2>
+            <h2 className="text-2xl font-bold" style={{ color: "var(--color-text-primary)" }}>{copy.painPointsTitle}</h2>
           </div>
           <ul className="space-y-4">
             {caseItem!.painPoints.map((point, i) => (
@@ -154,9 +155,7 @@ export default async function CaseDetailPage({
             >
               <Lightbulb size={20} style={{ color: "var(--color-accent-light)" }} />
             </div>
-            <h2 className="text-2xl font-bold" style={{ color: "var(--color-text-primary)" }}>
-              解决方案
-            </h2>
+            <h2 className="text-2xl font-bold" style={{ color: "var(--color-text-primary)" }}>{copy.solutionTitle}</h2>
           </div>
           <div className="glass-card rounded-[var(--radius-lg)] p-8">
             <p
@@ -180,9 +179,7 @@ export default async function CaseDetailPage({
             >
               <TrendingUp size={20} style={{ color: "var(--color-accent-light)" }} />
             </div>
-            <h2 className="text-2xl font-bold" style={{ color: "var(--color-text-primary)" }}>
-              客户价值
-            </h2>
+            <h2 className="text-2xl font-bold" style={{ color: "var(--color-text-primary)" }}>{copy.customerValueTitle}</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-4">
             {caseItem!.customerValue.map((value, i) => (
@@ -218,9 +215,7 @@ export default async function CaseDetailPage({
               >
                 <Wrench size={20} style={{ color: "var(--color-accent-light)" }} />
               </div>
-              <h2 className="text-2xl font-bold" style={{ color: "var(--color-text-primary)" }}>
-                数据指标
-              </h2>
+              <h2 className="text-2xl font-bold" style={{ color: "var(--color-text-primary)" }}>{copy.metricsTitle}</h2>
             </div>
             <div className="space-y-3">
               {caseItem!.metrics.map((metric, i) => (
@@ -240,9 +235,7 @@ export default async function CaseDetailPage({
       {/* Scenarios */}
       <section className="py-20" style={{ backgroundColor: "var(--color-bg-elevated)" }}>
         <div className="container-max max-w-4xl">
-          <h2 className="text-2xl font-bold mb-8" style={{ color: "var(--color-text-primary)" }}>
-            适用场景
-          </h2>
+          <h2 className="text-2xl font-bold mb-8" style={{ color: "var(--color-text-primary)" }}>{copy.scenariosTitle}</h2>
           <div className="space-y-3">
             {caseItem!.scenarios.map((scenario, i) => (
               <p key={i} style={{ color: "var(--color-text-body)" }}>
@@ -274,15 +267,9 @@ export default async function CaseDetailPage({
           <h2
             className="text-3xl font-bold mb-4"
             style={{ color: "var(--color-text-primary)" }}
-          >
-            你的企业也有类似需求？
-          </h2>
-          <p className="mb-8" style={{ color: "var(--color-text-body)" }}>
-            告诉我们你的业务场景，我们给出可落地的 AI 方案
-          </p>
-          <Link href="/contact" className="cta-primary">
-            预约免费咨询
-            <ArrowRight size={18} />
+          >{copy.ctaTitle}</h2>
+          <p className="mb-8" style={{ color: "var(--color-text-body)" }}>{copy.ctaDescription}</p>
+          <Link href={copy.ctaHref} className="cta-primary">{copy.ctaLabel}<ArrowRight size={18} />
           </Link>
         </div>
       </section>

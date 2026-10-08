@@ -1,5 +1,7 @@
 "use client";
 
+import { PAGE_FIELDS, type PageFields } from "@/lib/content/pageFields";
+
 import { useRef, useState, useCallback } from "react";
 import type { Customer } from "@/lib/data";
 import { getCustomerIcon } from "@/lib/customerIcons";
@@ -30,7 +32,7 @@ function LogoCard({ customer }: { customer: Customer }) {
   );
 }
 
-export default function ClientLogos({ customers }: { customers: Customer[] }) {
+export default function ClientLogos({ customers , copy = PAGE_FIELDS["home-clients"].props }: { customers: Customer[] ; copy?: PageFields<"home-clients"> }) {
   /* 提取去重后的行业标签 */
   const industryTags = [...new Set(customers.map((c) => c.industry))];
   const rowReverse = makeReverse(customers);
@@ -74,9 +76,7 @@ export default function ClientLogos({ customers }: { customers: Customer[] }) {
       {/* 标题区 */}
       <div className="container-max relative z-20">
         <div className="text-center mb-10">
-          <p className="text-sm font-medium" style={{ color: "var(--color-text-muted)" }}>
-            跨行业服务经验 — 真实客户与典型业务场景
-          </p>
+          <p className="text-sm font-medium" style={{ color: "var(--color-text-muted)" }}>{copy.description}</p>
           <div className="flex flex-wrap items-center justify-center gap-2 mt-4">
             {industryTags.map((tag) => (
               <span

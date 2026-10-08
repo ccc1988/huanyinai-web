@@ -17,6 +17,11 @@ import {
   Inbox,
   Bell,
   LineChart,
+  Plug,
+  FileCog,
+  Image,
+  ShieldCheck,
+  Workflow,
 } from "lucide-react";
 
 const menuItems = [
@@ -29,6 +34,11 @@ const menuItems = [
   { label: "公司信息", href: "/admin/company", icon: Building2 },
   { label: "邮件通知", href: "/admin/notifications", icon: Bell },
   { label: "站点设置", href: "/admin/settings", icon: Settings },
+  { label: "集成授权", href: "/admin/integrations", icon: Plug },
+  { label: "内容运营", href: "/admin/content", icon: FileCog },
+  { label: "媒体资源", href: "/admin/media", icon: Image },
+  { label: "审计日志", href: "/admin/audit", icon: ShieldCheck },
+  { label: "操作回执", href: "/admin/operations", icon: Workflow },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

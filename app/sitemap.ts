@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getCompany, getIndustries, getPublicCases, getPublicBlogPosts } from "@/lib/data";
+import { getSettings, getCompany, getIndustries, getPublicCases, getPublicBlogPosts } from "@/lib/data";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -18,7 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const industries = getIndustries();
   const cases = getPublicCases();
   const blogPosts = getPublicBlogPosts();
-  const baseUrl = company.website;
+  const baseUrl = getSettings().canonicalBase || company.website;
   const staticPages: MetadataRoute.Sitemap = [
     { url: `${baseUrl}/`, changeFrequency: "weekly", priority: 1.0 },
     { url: `${baseUrl}/about`, changeFrequency: "monthly", priority: 0.8 },

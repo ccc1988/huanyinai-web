@@ -1,5 +1,7 @@
 "use client";
 
+import { PAGE_FIELDS, type PageFields } from "@/lib/content/pageFields";
+
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -7,7 +9,7 @@ import { Menu, X } from "lucide-react";
 import Logo from "./Logo";
 import type { Settings } from "@/lib/data";
 
-export default function Navbar({ navItems }: { navItems: Settings["navItems"] }) {
+export default function Navbar({ navItems, enabled = true, copy = PAGE_FIELDS["site-navbar"].props }: { navItems: Settings["navItems"] ; enabled?: boolean; copy?: PageFields<"site-navbar"> }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
@@ -21,6 +23,8 @@ export default function Navbar({ navItems }: { navItems: Settings["navItems"] })
   useEffect(() => {
     setMobileOpen(false);
   }, [pathname]);
+
+  if (!enabled) return null;
 
   return (
     <nav
@@ -42,7 +46,7 @@ export default function Navbar({ navItems }: { navItems: Settings["navItems"] })
         }}
       >
         {/* Logo */}
-        <Link href="/" className="flex items-center shrink-0">
+        <Link href={copy.homeHref} className="flex items-center shrink-0">
           <Logo />
         </Link>
 
@@ -65,16 +69,14 @@ export default function Navbar({ navItems }: { navItems: Settings["navItems"] })
               </Link>
             );
           })}
-          <Link href="/contact" className="cta-primary text-sm">
-            预约咨询
-          </Link>
+          <Link href={copy.desktopCtaHref} className="cta-primary text-sm">{copy.desktopCtaLabel}</Link>
         </div>
 
         {/* Mobile hamburger */}
         <button
           className="md:hidden cursor-pointer p-2"
           onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label="切换菜单"
+          aria-label={copy.menuAriaLabel}
           aria-expanded={mobileOpen}
         >
           {mobileOpen ? (
@@ -107,11 +109,9 @@ export default function Navbar({ navItems }: { navItems: Settings["navItems"] })
             </Link>
           ))}
           <Link
-            href="/contact"
+            href={copy.mobileCtaHref}
             className="cta-primary text-sm justify-center"
-          >
-            预约咨询
-          </Link>
+          >{copy.mobileCtaLabel}</Link>
         </div>
       )}
     </nav>
