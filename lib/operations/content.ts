@@ -41,7 +41,8 @@ export function initializeContent(db: DatabaseSync, dataDir = getDataDir()) { if
         fail(503, 'resource_data_missing', { resource: r });
     const source = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : DEFAULT_PAGES;
     const values = Array.isArray(source) ? source : [source];
-    db.prepare('INSERT OR IGNORE INTO projections(resource,data_json,updated_at) VALUES(?,?,?)').run(r, JSON.stringify(source), now);
+    const publicSource = singleton.has(r) ? (values.find((x: any) => !(r === 'blog-posts' && x.reviewStatus === 'draft')) ?? values[0] ?? {}) : values.filter((x: any) => !(r === 'blog-posts' && x.reviewStatus === 'draft'));
+    db.prepare('INSERT OR IGNORE INTO projections(resource,data_json,updated_at) VALUES(?,?,?)').run(r, JSON.stringify(publicSource), now);
     for (let i = 0; i < values.length; i++) {
         const d = values[i];
         const id = singleton.has(r) ? 'singleton' : String(d.slug ?? d.pageKey ?? `${r}-${i + 1}`), status = (r === 'blog-posts' && d.reviewStatus === 'draft') ? 'draft' : 'published', json = JSON.stringify(d);
@@ -75,12 +76,13 @@ export function listRecords(db: DatabaseSync, r: string, opts: {
     sort?: string;
     actor?: Actor;
 } = {}, dir = getDataDir()) { seedResource(db, r, dir); let items = (db.prepare('SELECT * FROM records WHERE resource=? ORDER BY position,id').all(r) as Record<string, any>[]).map(asRecord); if (opts.actor?.type === 'client')
-    items = items.filter(x => canAccess(db, opts.actor!, r, x.id, 'read')); if (opts.status && opts.status !== 'all')
+    items = items.filter(x => canAccess(db, opts.actor!, r, x.id, 'read')); if (!opts.includeDraft) {
+    items = items.filter(x => x.publicStatus === 'published' && (!opts.status || opts.status === 'all' || opts.status === 'published')).map(x => { const row = rawRecord(db, r, x.id)!; return { ...x, data: JSON.parse(String(row.published_json)), version: Number(row.published_version), etag: jsonHash(JSON.parse(String(row.published_json))), status: 'published' as const }; });
+} else if (opts.status && opts.status !== 'all') {
     items = items.filter(x => x.status === opts.status);
-else if (!opts.includeDraft)
-    items = items.filter(x => x.publicStatus === 'published').map(x => { const row = rawRecord(db, r, x.id)!; return { ...x, data: JSON.parse(String(row.published_json)), version: Number(row.published_version), etag: jsonHash(JSON.parse(String(row.published_json))), status: 'published' as const }; });
-else if (opts.status !== 'all')
-    items = items.filter(x => x.status !== 'archived'); if (opts.query)
+} else {
+    items = items.filter(x => x.status !== 'archived');
+} if (opts.query)
     items = items.filter(x => JSON.stringify(x.data).toLowerCase().includes(opts.query!.toLowerCase())); if (opts.sort === 'updated-desc')
     items.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)); if (opts.cursor) {
     const i = items.findIndex(x => x.id === opts.cursor);

@@ -1,3 +1,4 @@
+import {readSubmissions,replaceSubmissions} from "./submissionsStore.ts";
 import fs from "fs";
 import path from "path";
 import { readPublic, legacySave } from "./operations/content.ts";
@@ -30,7 +31,7 @@ export const readData = {
   contacts: () => readPublic<Contact[]>("contacts"),
   blogPosts: () => readPublic<BlogPost[]>("blog-posts"),
   settings: () => normalizeSettings(readPublic<Partial<Settings>>("settings")),
-  submissions: () => { try { return readJson<Submission[]>("submissions.json"); } catch { return []; } },
+  submissions: () => readSubmissions(),
   smtpConfig: () => { try { return readJson<SmtpConfig>("smtp-config.json"); } catch { return { enabled: false, host: "", port: 465, secure: true, username: "", encryptedPassword: null, fromName: "寰引智能官网", fromEmail: "", recipients: [], subjectTemplate: "【新咨询】{company} - {name}" } as SmtpConfig; } },
   adminConfig: () => { try { return readJson<AdminConfig>("admin-config.json"); } catch { return { passwordHash: null, passwordSalt: null, updatedAt: null } as AdminConfig; } },
 };
@@ -46,7 +47,7 @@ export const writeData = {
   contacts: (data: Contact[]) => legacySave(openOperationsDb(), "contacts", data, { type: "admin", id: "session" }),
   blogPosts: (data: BlogPost[]) => legacySave(openOperationsDb(), "blog-posts", data, { type: "admin", id: "session" }),
   settings: (data: Settings) => legacySave(openOperationsDb(), "settings", data, { type: "admin", id: "session" }),
-  submissions: (data: Submission[]) => writeJson("submissions.json", data),
+  submissions: (data: Submission[]) => replaceSubmissions(data),
   smtpConfig: (data: SmtpConfig) => writeJson("smtp-config.json", data),
   adminConfig: (data: AdminConfig) => writeJson("admin-config.json", data),
 };

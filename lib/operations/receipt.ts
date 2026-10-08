@@ -35,9 +35,12 @@ export function recoverPendingOperations(db: DatabaseSync, dataDir = getDataDir(
     if (!current)
         continue;
     try {
+        const projectedHash = jsonHash(JSON.parse(String(current.data_json)));
+        const isCurrent = projectedHash === String(item.after_hash);
         writeJsonFileAtomic(dataDir, String(item.resource) + '.json', JSON.parse(String(current.data_json)));
-        db.prepare("UPDATE outbox SET status='committed' WHERE operation_id=?").run(String(item.operation_id));
-        completeOperation(db, String(item.operation_id), item.before_hash ? String(item.before_hash) : null, item.after_hash ? String(item.after_hash) : null);
+        db.prepare("UPDATE outbox SET status=? WHERE operation_id=?").run(isCurrent ? 'committed' : 'superseded', String(item.operation_id));
+        if (isCurrent) completeOperation(db, String(item.operation_id), item.before_hash ? String(item.before_hash) : null, item.after_hash ? String(item.after_hash) : null);
+        else failOperation(db, String(item.operation_id), 'superseded_projection', 'A newer public projection superseded this receipt', 'needs_recovery');
     }
     catch {
         failOperation(db, String(item.operation_id), 'projection_pending', 'Published snapshot is durable; compatibility projection awaits retry', 'needs_recovery');

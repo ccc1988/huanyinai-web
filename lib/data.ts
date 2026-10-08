@@ -1,3 +1,4 @@
+import {readSubmissions} from "./submissionsStore.ts";
 // ============================================================
 // 寰引智能官网 — 集中数据管理
 // 数据源：/data/*.json（可通过管理后台在线编辑）
@@ -254,7 +255,7 @@ export function getSettings() {
 
 export function getSubmissions() {
   try {
-    return loadJson<Submission[]>("submissions.json");
+    return readSubmissions();
   } catch {
     return [];
   }

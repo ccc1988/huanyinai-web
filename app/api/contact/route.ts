@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { readData, writeData } from "@/lib/dataStore";
+import { createSubmission, updateSubmission } from "@/lib/submissionsStore";
 import { sendNotificationEmail } from "@/lib/email";
 import type { Submission } from "@/lib/data";
 import { normalizeAttribution, normalizeSource, recordAnalyticsEvent } from "@/lib/siteAnalytics";
@@ -67,9 +68,7 @@ export async function POST(request: NextRequest) {
 
     let submissionPersisted = false;
     try {
-      const submissions = readData.submissions();
-      submissions.unshift(submission);
-      writeData.submissions(submissions);
+      createSubmission(submission);
       submissionPersisted = true;
     } catch (err) {
       console.error("[Contact] Failed to persist submission:", err);
@@ -93,13 +92,7 @@ export async function POST(request: NextRequest) {
       if (smtpConfig.enabled && smtpConfig.recipients.length > 0) {
         const result = await sendNotificationEmail(smtpConfig, submission);
         if (result.success) {
-          const submissions = readData.submissions();
-          const idx = submissions.findIndex((s) => s.id === submission.id);
-          if (idx >= 0) {
-            submissions[idx].emailSent = true;
-            submissions[idx].emailSentAt = new Date().toISOString();
-            writeData.submissions(submissions);
-          }
+          updateSubmission(submission.id, { emailSent: true, emailSentAt: new Date().toISOString() });
         } else {
           console.error("[Contact] Email send failed:", result.error);
         }
