@@ -2,7 +2,11 @@
 
 面向企业的 AI 转型落地服务商官网，基于 Next.js 16 + Tailwind CSS 4 构建。
 
-当前封板版本：`v1.7.0`（2026-09-17）。生产事实以服务器 `current` 指向、Git SHA 和线上健康检查共同确认，不能只依据版本号判断。
+当前应用版本：`v1.8.1`（2026-10-09 API 提供方交付，生产发布状态见 `docs/releases/v1.8.1.md`）。生产事实以服务器 `current` 指向、Git SHA 和线上健康检查共同确认，不能只依据版本号判断。
+
+## 第三方官网代运营 API
+
+官网提供 `/api/integrations/v1` 供第三方服务端维护已授权内容。见 [接入指南](docs/api/third-party-operations-guide.md)、[OpenAPI](docs/api/full-site-operations.openapi.json)、`sdk/site-operations.mjs` 和 `sdk/example-draft.mjs`。第三方不能获取管理员审核权；草稿与公开版本分离。真实合作方接入另外发放最小权限凭据，不作为提供方开发前置。
 
 ## 技术栈
 

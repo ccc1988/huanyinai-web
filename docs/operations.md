@@ -58,3 +58,13 @@
 - 运行前需配置 `OPERATIONS_API_ENABLED=true`、`DATA_DIR`、`ADMIN_PASSWORD`、`ADMIN_SESSION_SECRET`；默认未启用，避免未授权打开外部 API。
 - 首次或恢复使用：备份 shared-data/operations.sqlite3 → `DATA_DIR=/var/www/huanyin_web/shared-data node scripts/operations-migrate.mjs`（仅在 release 内执行）→ `node scripts/operations-readiness.mjs`。测试必须使用临时 DATA_DIR，不得指向生产。
 - 本版本不证明 AIGEO 消费方真实联调，也不证明搜索收录、AI 引用、推荐、排名、增长或营收结果。
+
+
+## v1.8.1 提供方交付与受控验证
+
+- 对外材料：`docs/api/third-party-operations-guide.md`、`docs/api/full-site-operations.openapi.json`、`sdk/site-operations.mjs`、`sdk/example-draft.mjs`。提供方验证与真实第三方联调分别记录。
+- 验证先在隔离 worktree 使用专用测试环境构建，再执行 `node --experimental-strip-types scripts/operations-http-acceptance.mjs`；脚本使用临时 DATA_DIR 和 127.0.0.1:18501，不能把正式 shared-data 作为测试目录。
+- `DATA_DIR=/var/www/huanyin_web/shared-data node --experimental-strip-types scripts/operations-readiness.mjs` 用于正式 read model 检查；必须在当前 source/release 对应脚本下执行，health 单独不能替代。
+- 发布前 `DATA_DIR=/var/www/huanyin_web/shared-data node --experimental-strip-types scripts/operations-backup.mjs /var/www/huanyin_web/backups/<独立时间戳目录>`；备份目录不能已存在。记录旧 current 与保护 JSON hash，按既有 deploy.sh 发布和回滚。
+- 兼容：接口路径 v1 保持；SDK 不自动重放写请求；失败时保存 requestId/operationId/receipt，恢复后沿用原幂等键。普通自动发布仍需已有治理条件。
+- 访问凭据处理：定向读取 Keychain 输出时仅去掉工具追加的换行，不 trim/strip 密码本身，避免误改首尾空白。秘密不落盘、不回显。

@@ -1,5 +1,6 @@
 import {RESOURCE_SCHEMAS} from '../lib/operations/schema.ts';
 import fs from 'node:fs';
+import {PAGE_FIELDS,PAGE_TEMPLATE_ORDER} from '../lib/content/pageFields.ts';
 const resources=['blog-posts','cases','industries','company','customers','capabilities','stats','contacts','settings','pages'];
 const schema=(ref)=>({$ref:'#/components/schemas/'+ref});
 const response=(ref,description=ref)=>({description,content:{'application/json':{schema:schema(ref)}}});
@@ -27,4 +28,89 @@ for(const [r,fields] of Object.entries(RESOURCE_SCHEMAS)){const properties={},re
 // Actual media route contract: PUT replace, PATCH metadata, DELETE soft delete, POST restore.
 delete spec.paths['/media/{id}/replace'];delete spec.paths['/media/{id}/metadata'];delete spec.paths['/media/{id}/delete'];
 spec.paths['/media/{id}']={get:{parameters:[params[1]],responses:responses('Media')},put:{parameters:[params[1],idem],requestBody:spec.paths['/media'].post.requestBody,responses:responses('Media')},patch:{parameters:[params[1],idem],requestBody:{required:true,content:{'application/json':{schema:{type:'object',additionalProperties:false,properties:{alt:{type:'string',maxLength:500},description:{type:'string',maxLength:2000}}}}}},responses:responses('Media')},delete:{parameters:[params[1],idem],responses:responses('Media')}};
+// Provider contract: concrete resource paths let clients choose the exact data schema.
+// A generic oneOf alone is ambiguous when PATCH contains just one shared field.
+const copy = value => structuredClone(value);
+const object = properties => ({type:'object',additionalProperties:false,required:Object.keys(properties),properties});
+sc.Directory = object({resources:{type:'array',items:object({name:{enum:resources},read:{type:'boolean'},write:{type:'boolean'},publish:{type:'boolean'},autoPublish:{type:'boolean'},protected:{type:'boolean'},fields:{type:'object',additionalProperties:{type:'string',pattern:'^[snbaro]\\??$'}}})},media:object({read:{type:'boolean'},write:{type:'boolean'}}),analytics:{type:'boolean'},submissions:{type:'boolean'}});
+sc['blog-posts'].properties.slug.pattern = '^[a-z0-9]+(?:-[a-z0-9]+)*$';
+for (const r of ['cases','industries']) sc[r].properties.slug.pattern = sc['blog-posts'].properties.slug.pattern;
+sc['blog-posts'].properties.sections.items = object({heading:{type:'string'},body:{type:'string'}});
+sc['blog-posts'].properties.sources.items = object({title:{type:'string'},url:{type:'string',format:'uri'},accessedAt:{type:'string',description:'Date.parse-compatible date or timestamp'}});
+sc['blog-posts'].properties.reviewStatus.enum = ['draft','reviewed'];
+sc.industries.properties.faq.items = object({q:{type:'string'},a:{type:'string'}});
+sc.ResourcePatch = {type:'object',description:'Use the concrete resource endpoint for its exact patch schema. The server merges partial fields then validates the full document; slug/pageKey are immutable.'};
+sc.Record.properties.position = {type:'integer'};
+for (const r of resources) {
+ sc[r+'Patch'] = copy(sc[r]); delete sc[r+'Patch'].required;
+ delete sc[r+'Patch'].properties.slug; delete sc[r+'Patch'].properties.pageKey;
+ sc[r+'Patch'].description = 'Partial top-level update. Nested arrays/objects replace that field, not a deep merge. Unknown and immutable fields are rejected; full merged record must satisfy runtime validation.';
+ for (const [template, destination] of [['/{resource}','/'+r],['/{resource}/{id}','/'+r+'/{id}']]) {
+  const item = copy(spec.paths[template]);
+  for (const op of Object.values(item)) op.parameters = op.parameters.filter(p => p.name !== 'resource');
+  if (item.post) item.post.requestBody = body(r);
+  if (item.patch) item.patch.requestBody = body(r+'Patch');
+  spec.paths[destination] = item;
+ }
+ for (const action of ['submit','publish','unpublish','archive','restore','rollback','revisions','diff']) {
+  const item = copy(spec.paths['/{resource}/{id}/'+action]);
+  for (const op of Object.values(item)) op.parameters = op.parameters.filter(p => p.name !== 'resource');
+  spec.paths['/'+r+'/{id}/'+action] = item;
+ }
+}
+// Failed writes return a durable receipt (not just the ordinary error envelope).
+for (const item of Object.values(spec.paths)) for (const [method,op] of Object.entries(item)) {
+ if (['post','patch'].includes(method) && op.responses?.['202']) op.responses['503'] = {description:'Service unavailable, or mutation receipt with failed/needs_recovery. Preserve operationId and query its receipt before retrying.',content:{'application/json':{schema:{oneOf:[schema('Error'),schema('Operation')]}}}};
+ for (const code of Object.keys(op.responses ?? {})) {
+  op.responses[code].headers = {'X-Request-Id':{schema:{type:'string'},description:'Correlation ID when supplied by this endpoint'}};
+  if (code === '429') op.responses[code].headers['Retry-After'] = {schema:{type:'string'},description:'Seconds until retry; do not retry a mutation with a new idempotency key'};
+ }
+ if (op.requestBody?.content?.['application/json']?.schema?.$ref === '#/components/schemas/ActionBody') op.requestBody.required = false;
+}
+sc.Operation.description = 'Only committed is completed. pending requires polling; failed/needs_recovery require receipt inspection and administrator recovery. A receipt is not search indexing or AI visibility evidence.';
+sc.ActionBody.description = 'rollback requires revision. Protected lifecycle actions remain subject to administrator verification.';
+spec.paths['/{resource}/{id}/approve'].post.description = 'Documented denial boundary, not an integration capability. Third-party bearer credentials always receive 403.';
+spec.info.version = '1.8.1';
+spec.info.description += ' Concrete resource paths define strict create and partial PATCH contracts. Nested safety/template validation also applies; GET resources advertises top-level field rules.';
+// Typed responses for all separate integration endpoints.
+const str = {type:'string'}, integer = {type:'integer'};
+sc.Media = object({id:str,filename:str,mime:{enum:['image/png','image/jpeg','image/webp']},bytes:integer,version:integer,status:str,url:str,width:integer,height:integer,alt:str,description:str,sha256:str,createdAt:str,updatedAt:str,deletedAt:{type:['string','null']},publicReferenceCount:integer});
+sc.Media.properties.operationId = str; sc.Media.properties.receipt = schema('Operation');
+sc.MediaList = object({items:{type:'array',items:schema('Media')}});
+sc.Analytics = object({generatedAt:{type:'string',format:'date-time'},pages:{type:'array',items:object({path:str,contentType:str,visits:integer,engagedViews:integer,ctaClicks:integer,inquiries:integer,source:str})},operations:{type:'array',items:schema('Operation')},evidenceBoundary:str});
+sc.Leads = object({items:{type:'array',items:{type:'object',additionalProperties:false,properties:Object.fromEntries(['id','name','company','phone','email','message','createdAt','status'].map(key=>[key,str]))}},hasMore:{type:'boolean'}});
+sc.RevisionList = object({items:{type:'array',items:{type:'object',description:'Revision metadata and complete validated content snapshot; requires content:write.',additionalProperties:true}}});
+sc.Diff = {type:'object',description:'Diff between working revisions, not proof of public publication. Requires content:write.',additionalProperties:true};
+sc.settings.properties.navItems.items = object({label:str,href:str});
+sc.settings.properties.aiSearchGrowth = object(Object.fromEntries(['eyebrow','title','description','flow','primaryCtaLabel','primaryCtaHref','secondaryCtaLabel','secondaryCtaHref'].map(key=>[key,key==='flow'?{type:'array',items:str,maxItems:5}:str])));
+sc.industries.properties.servicePackages.items = {type:'object',required:['title','description','deliverables'],properties:{title:str,description:str,deliverables:{type:'array',items:str}}};
+// Generate page/block allowlists from the same renderer field definitions used by runtime validation.
+const sampleSchema = (sample, partial=false) => {
+ if (typeof sample === 'string') return {type:'string',maxLength:12000};
+ if (Array.isArray(sample)) return {type:'array',maxItems:100,items:sample.length?sampleSchema(sample[0]):{}};
+ const properties=Object.fromEntries(Object.entries(sample).map(([key,value])=>[key,sampleSchema(value)]));
+ return {type:'object',additionalProperties:false,properties,...(partial?{}:{required:Object.keys(properties)})};
+};
+const pageKeys=[...new Set(Object.values(PAGE_FIELDS).map(field=>field.pageKey))];
+sc.pages.properties.pageKey.enum=pageKeys;
+sc.pages.properties.seo={type:'object',additionalProperties:false,properties:{title:{type:'string',maxLength:300},description:{type:'string',maxLength:3000}},description:'home and site-chrome must use empty seo; their SEO is owned by settings.'};
+sc.pages.properties.blocks={type:'array',maxItems:50,items:{oneOf:Object.entries(PAGE_FIELDS).map(([id,field])=>object({id:{const:id},type:{const:field.type},enabled:{type:'boolean'},order:{const:PAGE_TEMPLATE_ORDER[id]},props:sampleSchema(field.props,true)}))},description:'Blocks must belong to pageKey, have unique IDs, and stay in increasing fixed template order. Internal hrefs only; runtime also checks fixed row/service slot counts.'};
+for(const r of resources){const existing=sc[r+'Patch'];sc[r+'Patch']={...copy(sc[r]),description:existing.description};delete sc[r+'Patch'].required;for(const name of ['slug','pageKey'])if(sc[r+'Patch'].properties[name])sc[r+'Patch'].properties[name].description='Immutable: omit this field, or send the unchanged value. Changing it returns 409 immutable_id.';}
+// Avoid ambiguous generic endpoint schemas: finite resource paths are authoritative.
+// Keep generic paths for v1 backward compatibility; concrete resource paths above provide strict schemas.
+for(const item of Object.values(spec.paths))for(const op of Object.values(item))for(const code of ['413','415','500'])if(!op.responses[code])op.responses[code]=response('Error');
+spec.components.securitySchemes.clientBasic={type:'http',scheme:'basic',description:'OAuth client ID and secret, individually form-URL-encoded before joining with colon.'};
+// Form credentials remain supported without HTTP Basic; never send both forms of credentials.
+spec.paths['/oauth/token'].post.security=[{clientBasic:[]},{}];
+
+sc.RevisionList = object({items:{type:'array',items:object({revision:{type:'integer'},status:{enum:['draft','submitted','approved','published','unpublished','archived']},etag:{type:'string'},createdAt:{type:'string'},createdBy:{type:'string'},data:schema('ResourceData')})}});
+sc.Diff = object({from:{type:'integer'},to:{type:'integer'},changes:{type:'array',items:{type:'object',additionalProperties:false,required:['path'],properties:{path:{type:'string'},before:{},after:{}}}}});
+for(const item of Object.values(spec.paths))for(const op of Object.values(item)) {
+ for(const parameter of op.parameters ?? [])if(parameter.name==='sort')parameter.description='updated-desc sorts by updatedAt descending; other values retain template position/id order.';
+ if(op.responses?.['200']?.content?.['application/json']?.schema?.$ref==='#/components/schemas/Record')op.responses['200'].headers={...(op.responses['200'].headers??{}),ETag:{schema:{type:'string'},description:'Record hash for If-Match on a subsequent PATCH'}};
+}
+
+const mediaIdempotency={name:'Idempotency-Key',in:'header',required:true,schema:{type:'string',minLength:1,maxLength:200,pattern:'^[\\x21-\\x7e]+$'},description:'Mandatory for media writes; printable ASCII excluding space. Content writes use their separate 8–128-character rule.'};
+for(const [path,method] of [['/media','post'],['/media/{id}','put'],['/media/{id}','patch'],['/media/{id}','delete'],['/media/{id}/restore','post']])spec.paths[path][method].parameters=spec.paths[path][method].parameters.map(parameter=>parameter.name==='Idempotency-Key'?mediaIdempotency:parameter);
+spec.components.parameters.MediaIdempotencyKey=mediaIdempotency;
 fs.writeFileSync('docs/api/full-site-operations.openapi.json',JSON.stringify(spec,null,2)+'\n');
