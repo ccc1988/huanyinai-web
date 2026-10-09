@@ -16,7 +16,7 @@
 
 `POST /oauth/token`，Content-Type 为 `application/x-www-form-urlencoded`，body 为 `grant_type=client_credentials`。HTTP Basic 使用 Client ID 和 Client Secret，分别 URL 编码后用冒号连接再 Base64；也支持 body 中的 client_id/client_secret，但不能同时发送 Basic 和表单凭据。可传 scope 申请已授权范围的子集。
 
-返回 access_token、token_type=Bearer、expires_in（秒）和 scope。后续请求发送 `Authorization: Bearer <token>`。SDK 会缓存 Token、到期前刷新并合并并发鉴权；401 会清除缓存，下一次显式调用重新鉴权。SDK 不自动重放失败的写请求。
+返回 access_token、token_type=Bearer、expires_in（秒）和 scope。后续请求发送 `Authorization: Bearer <token>`。机器客户端明确声明集成 User-Agent（例如 `Huanyin-SiteOperations/1.8.1`）；默认 Python urllib UA 在本次公网探测中被边缘层拒绝，而 Node 原生 fetch 与该集成 UA 通过。收到 HTML/无 requestId 的边缘错误时，不能当成应用的权限 JSON 错误。SDK 会缓存 Token、到期前刷新并合并并发鉴权；401 会清除缓存，下一次显式调用重新鉴权。SDK 不自动重放失败的写请求。
 
 `GET /resources` 是当前身份可用资源目录，不是公开 CMS 字段编辑入口。返回资源字段顶层规则和读/写/发布标识；最终每次请求仍校验实际授权。
 
